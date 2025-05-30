@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class IngredientPrice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "ingredient_id")
@@ -25,4 +25,5 @@ public class IngredientPrice {
 
     private float pricePerUnitWithoutTax;
     private LocalDateTime receivedDate;
+
 }

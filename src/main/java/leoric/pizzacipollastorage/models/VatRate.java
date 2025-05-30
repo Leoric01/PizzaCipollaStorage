@@ -13,7 +13,7 @@ import java.util.List;
 public class VatRate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String name;
     private float rate;

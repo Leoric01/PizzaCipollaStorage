@@ -13,7 +13,7 @@ import java.util.List;
 public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String name;
     private String unit;
@@ -32,4 +32,5 @@ public class Ingredient {
 
     @OneToMany(mappedBy = "ingredient")
     private List<InventorySnapshot> inventorySnapshots;
+
 }

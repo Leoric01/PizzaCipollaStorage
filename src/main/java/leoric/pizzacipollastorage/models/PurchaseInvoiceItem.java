@@ -11,7 +11,7 @@ import lombok.*;
 public class PurchaseInvoiceItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "purchase_invoice_id")

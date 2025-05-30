@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class IntermediateProductInventorySnapshot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "intermediate_product_id")
@@ -21,4 +21,5 @@ public class IntermediateProductInventorySnapshot {
 
     private LocalDateTime timestamp;
     private float measuredQuantity;
+
 }

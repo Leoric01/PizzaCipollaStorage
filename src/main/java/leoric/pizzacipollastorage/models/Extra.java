@@ -11,7 +11,7 @@ import lombok.*;
 public class Extra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String name;
 
@@ -20,4 +20,5 @@ public class Extra {
     private Ingredient ingredient;
 
     private float baseQuantity;
+
 }

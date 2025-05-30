@@ -1,0 +1,30 @@
+package leoric.pizzacipollastorage.controllers;
+
+import leoric.pizzacipollastorage.DTOs.PizzaCreateDto;
+import leoric.pizzacipollastorage.DTOs.RecipeIngredientCreateDto;
+import leoric.pizzacipollastorage.models.Pizza;
+import leoric.pizzacipollastorage.models.RecipeIngredient;
+import leoric.pizzacipollastorage.services.interfaces.PizzaService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api/pizzas")
+@RequiredArgsConstructor
+public class PizzaController {
+    private final PizzaService pizzaService;
+
+    @PostMapping
+    public ResponseEntity<Pizza> createPizza(@RequestBody PizzaCreateDto dto) {
+        return ResponseEntity.ok(pizzaService.createPizza(dto));
+    }
+
+    @PostMapping("/recipes")
+    public ResponseEntity<RecipeIngredient> addIngredientToPizza(@RequestBody RecipeIngredientCreateDto dto) {
+        return ResponseEntity.ok(pizzaService.addIngredientToPizza(dto));
+    }
+}

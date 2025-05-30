@@ -11,7 +11,7 @@ import lombok.*;
 public class PizzaSaleExtra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "pizza_sale_id")

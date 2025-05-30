@@ -11,7 +11,7 @@ import lombok.*;
 public class IntermediateProductIngredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "intermediate_product_id")

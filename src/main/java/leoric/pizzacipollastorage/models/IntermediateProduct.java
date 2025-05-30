@@ -13,11 +13,12 @@ import java.util.List;
 public class IntermediateProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String name;
     private String unit;
 
     @OneToMany(mappedBy = "intermediateProduct")
     private List<IntermediateProductIngredient> ingredients;
+
 }
