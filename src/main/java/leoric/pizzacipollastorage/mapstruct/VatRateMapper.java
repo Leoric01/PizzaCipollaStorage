@@ -1,8 +1,8 @@
 package leoric.pizzacipollastorage.mapstruct;
 
-import leoric.pizzacipollastorage.DTOs.IngredientCreateDto;
-import leoric.pizzacipollastorage.DTOs.IngredientResponseDto;
-import leoric.pizzacipollastorage.DTOs.VatRateShortDto;
+import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientCreateDto;
+import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientResponseDto;
+import leoric.pizzacipollastorage.DTOs.Vat.VatRateShortDto;
 import leoric.pizzacipollastorage.models.Ingredient;
 import leoric.pizzacipollastorage.models.VatRate;
 import org.mapstruct.Mapper;

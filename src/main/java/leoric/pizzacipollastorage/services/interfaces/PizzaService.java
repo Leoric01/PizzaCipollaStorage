@@ -1,8 +1,8 @@
 package leoric.pizzacipollastorage.services.interfaces;
 
-import leoric.pizzacipollastorage.DTOs.PizzaCreateDto;
-import leoric.pizzacipollastorage.DTOs.PizzaResponseDto;
-import leoric.pizzacipollastorage.DTOs.RecipeIngredientCreateDto;
+import leoric.pizzacipollastorage.DTOs.Pizza.PizzaCreateDto;
+import leoric.pizzacipollastorage.DTOs.Pizza.PizzaResponseDto;
+import leoric.pizzacipollastorage.DTOs.Pizza.RecipeIngredientCreateDto;
 import leoric.pizzacipollastorage.models.Pizza;
 import leoric.pizzacipollastorage.models.RecipeIngredient;
 import org.springframework.stereotype.Service;

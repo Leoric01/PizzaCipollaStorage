@@ -1,6 +1,7 @@
-package leoric.pizzacipollastorage.DTOs;
+package leoric.pizzacipollastorage.DTOs.Inventory;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientResponseDto;
 import lombok.Data;
 
 import java.time.LocalDateTime;

@@ -1,8 +1,8 @@
 package leoric.pizzacipollastorage.services;
 
 import jakarta.persistence.EntityNotFoundException;
-import leoric.pizzacipollastorage.DTOs.IngredientCreateDto;
-import leoric.pizzacipollastorage.DTOs.IngredientResponseDto;
+import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientCreateDto;
+import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientResponseDto;
 import leoric.pizzacipollastorage.handler.exceptions.DuplicateIngredientNameException;
 import leoric.pizzacipollastorage.mapstruct.IngredientMapper;
 import leoric.pizzacipollastorage.models.Ingredient;

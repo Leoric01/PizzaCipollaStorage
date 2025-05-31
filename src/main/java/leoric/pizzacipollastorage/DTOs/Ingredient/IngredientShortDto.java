@@ -1,4 +1,4 @@
-package leoric.pizzacipollastorage.DTOs;
+package leoric.pizzacipollastorage.DTOs.Ingredient;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class VatRateShortDto {
+public class IngredientShortDto {
     private Long id;
     private String name;
-    private float rate;
+    private String unit;
 }

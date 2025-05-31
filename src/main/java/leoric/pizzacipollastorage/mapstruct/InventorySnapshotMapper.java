@@ -1,6 +1,6 @@
 package leoric.pizzacipollastorage.mapstruct;
 
-import leoric.pizzacipollastorage.DTOs.InventorySnapshotResponseDto;
+import leoric.pizzacipollastorage.DTOs.Inventory.InventorySnapshotResponseDto;
 import leoric.pizzacipollastorage.models.InventorySnapshot;
 import org.mapstruct.Mapper;
 

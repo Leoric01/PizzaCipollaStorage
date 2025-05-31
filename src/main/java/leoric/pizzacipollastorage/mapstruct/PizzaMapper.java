@@ -1,8 +1,8 @@
 package leoric.pizzacipollastorage.mapstruct;
 
-import leoric.pizzacipollastorage.DTOs.IngredientShortDto;
-import leoric.pizzacipollastorage.DTOs.PizzaResponseDto;
-import leoric.pizzacipollastorage.DTOs.RecipeIngredientShortDto;
+import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientShortDto;
+import leoric.pizzacipollastorage.DTOs.Pizza.PizzaResponseDto;
+import leoric.pizzacipollastorage.DTOs.Pizza.RecipeIngredientShortDto;
 import leoric.pizzacipollastorage.models.Ingredient;
 import leoric.pizzacipollastorage.models.Pizza;
 import leoric.pizzacipollastorage.models.RecipeIngredient;

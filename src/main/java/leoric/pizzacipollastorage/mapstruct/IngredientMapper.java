@@ -1,11 +1,13 @@
 package leoric.pizzacipollastorage.mapstruct;
 
-import leoric.pizzacipollastorage.DTOs.IngredientCreateDto;
-import leoric.pizzacipollastorage.DTOs.IngredientResponseDto;
-import leoric.pizzacipollastorage.DTOs.VatRateShortDto;
+import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientCreateDto;
+import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientInventoryDto;
+import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientResponseDto;
+import leoric.pizzacipollastorage.DTOs.Vat.VatRateShortDto;
 import leoric.pizzacipollastorage.models.Ingredient;
 import leoric.pizzacipollastorage.models.VatRate;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
@@ -18,5 +20,8 @@ public interface IngredientMapper {
     VatRateShortDto toShortDto(VatRate vatRate);
 
     List<IngredientResponseDto> toDtoList(List<Ingredient> ingredients);
+
+    @Mapping(target = "measuredQuantity", ignore = true)
+    IngredientInventoryDto toInventoryDto(Ingredient ingredient);
 
 }

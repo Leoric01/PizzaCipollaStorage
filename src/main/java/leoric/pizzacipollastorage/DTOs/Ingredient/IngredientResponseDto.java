@@ -1,5 +1,6 @@
-package leoric.pizzacipollastorage.DTOs;
+package leoric.pizzacipollastorage.DTOs.Ingredient;
 
+import leoric.pizzacipollastorage.DTOs.Vat.VatRateShortDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package leoric.pizzacipollastorage.DTOs;
+package leoric.pizzacipollastorage.DTOs.Pizza;
 
 import lombok.Data;
 @Data

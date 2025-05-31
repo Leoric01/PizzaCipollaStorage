@@ -1,7 +1,7 @@
 package leoric.pizzacipollastorage.controllers;
 
-import leoric.pizzacipollastorage.DTOs.IngredientCreateDto;
-import leoric.pizzacipollastorage.DTOs.IngredientResponseDto;
+import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientCreateDto;
+import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientResponseDto;
 import leoric.pizzacipollastorage.services.interfaces.IngredientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

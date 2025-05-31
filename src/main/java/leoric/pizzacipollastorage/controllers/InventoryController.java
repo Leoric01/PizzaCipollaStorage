@@ -1,14 +1,14 @@
 package leoric.pizzacipollastorage.controllers;
 
-import leoric.pizzacipollastorage.DTOs.InventorySnapshotCreateDto;
-import leoric.pizzacipollastorage.DTOs.InventorySnapshotResponseDto;
+import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientInventoryDto;
+import leoric.pizzacipollastorage.DTOs.Inventory.InventorySnapshotCreateDto;
+import leoric.pizzacipollastorage.DTOs.Inventory.InventorySnapshotResponseDto;
 import leoric.pizzacipollastorage.services.interfaces.InventoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/inventory")
@@ -19,5 +19,10 @@ public class InventoryController {
     @PostMapping("/snapshot")
     public ResponseEntity<InventorySnapshotResponseDto> createSnapshot(@RequestBody InventorySnapshotCreateDto dto) {
         return ResponseEntity.ok(inventoryService.createSnapshot(dto));
+    }
+
+    @GetMapping("/current-status")
+    public ResponseEntity<List<IngredientInventoryDto>> getCurrentInventoryStatus() {
+        return ResponseEntity.ok(inventoryService.getCurrentInventoryStatus());
     }
 }

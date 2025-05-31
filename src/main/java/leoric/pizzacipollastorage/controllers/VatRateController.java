@@ -1,8 +1,8 @@
 package leoric.pizzacipollastorage.controllers;
 
-import leoric.pizzacipollastorage.DTOs.VatRateCreateDto;
-import leoric.pizzacipollastorage.DTOs.VatRateDeleteResponseDto;
-import leoric.pizzacipollastorage.DTOs.VatRateShortDto;
+import leoric.pizzacipollastorage.DTOs.Vat.VatRateCreateDto;
+import leoric.pizzacipollastorage.DTOs.Vat.VatRateDeleteResponseDto;
+import leoric.pizzacipollastorage.DTOs.Vat.VatRateShortDto;
 import leoric.pizzacipollastorage.models.VatRate;
 import leoric.pizzacipollastorage.services.interfaces.VatRateService;
 import lombok.RequiredArgsConstructor;

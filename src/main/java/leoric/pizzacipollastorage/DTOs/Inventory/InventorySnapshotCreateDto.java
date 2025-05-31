@@ -1,4 +1,4 @@
-package leoric.pizzacipollastorage.DTOs;
+package leoric.pizzacipollastorage.DTOs.Inventory;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;

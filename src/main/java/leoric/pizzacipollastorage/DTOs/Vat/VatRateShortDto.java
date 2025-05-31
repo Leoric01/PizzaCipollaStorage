@@ -1,18 +1,16 @@
-package leoric.pizzacipollastorage.DTOs;
+package leoric.pizzacipollastorage.DTOs.Vat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PizzaResponseDto {
+public class VatRateShortDto {
     private Long id;
     private String name;
-    private List<RecipeIngredientShortDto> ingredients;
+    private float rate;
 }
