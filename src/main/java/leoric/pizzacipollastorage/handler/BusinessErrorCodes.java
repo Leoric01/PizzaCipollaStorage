@@ -13,7 +13,13 @@ public enum BusinessErrorCodes {
     ACCOUNT_LOCKED(302, FORBIDDEN, "User account is locked"),
     ACCOUNT_DISABLED(303, FORBIDDEN, "User account is disabled"),
     BAD_CREDENTIALS(304, FORBIDDEN, "Login and / or Password is incorrect"),
+    ENTITY_NOT_FOUND(404, NOT_FOUND, "Requested entity was not found"),
+    DUPLICATE_VAT_NAME(306, CONFLICT, "VAT rate with this name already exists"),
+    DUPLICATE_INGREDIENT_NAME(307, CONFLICT, "Ingredient with this name already exists"),
+    SNAPSHOT_ALREADY_EXISTS(308, CONFLICT, "Snapshot for this ingredient already exists in the last 6 hours"),
+
     EMAIL_ALREADY_IN_USE(305, CONFLICT, "Email is already in use");
+
     private final int code;
     private final String description;
     private final HttpStatus httpStatus;

@@ -1,16 +1,16 @@
 package leoric.pizzacipollastorage.controllers;
 
 import leoric.pizzacipollastorage.DTOs.PizzaCreateDto;
+import leoric.pizzacipollastorage.DTOs.PizzaResponseDto;
 import leoric.pizzacipollastorage.DTOs.RecipeIngredientCreateDto;
 import leoric.pizzacipollastorage.models.Pizza;
 import leoric.pizzacipollastorage.models.RecipeIngredient;
 import leoric.pizzacipollastorage.services.interfaces.PizzaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/pizzas")
@@ -26,5 +26,10 @@ public class PizzaController {
     @PostMapping("/recipes")
     public ResponseEntity<RecipeIngredient> addIngredientToPizza(@RequestBody RecipeIngredientCreateDto dto) {
         return ResponseEntity.ok(pizzaService.addIngredientToPizza(dto));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<PizzaResponseDto>> getAllPizzas() {
+        return ResponseEntity.ok(pizzaService.getAllPizzas());
     }
 }

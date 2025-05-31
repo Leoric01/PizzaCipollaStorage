@@ -1,6 +1,8 @@
 package leoric.pizzacipollastorage.handler;
 
 import jakarta.mail.MessagingException;
+import jakarta.persistence.EntityNotFoundException;
+import leoric.pizzacipollastorage.handler.exceptions.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.security.authentication.BadCredentialsException;
@@ -29,6 +31,56 @@ public class GlobalExceptionHandler {
                         ExceptionResponse.builder()
                                 .businessErrorCode(BusinessErrorCodes.EMAIL_ALREADY_IN_USE.getCode())
                                 .businessErrorDescription(BusinessErrorCodes.EMAIL_ALREADY_IN_USE.getDescription())
+                                .error(ex.getMessage())
+                                .build()
+                );
+    }
+    @ExceptionHandler(DuplicateIngredientNameException.class)
+    public ResponseEntity<ExceptionResponse> handleDuplicateIngredientNameException(DuplicateIngredientNameException ex) {
+        return ResponseEntity
+                .status(CONFLICT)
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorCode(BusinessErrorCodes.DUPLICATE_INGREDIENT_NAME.getCode())
+                                .businessErrorDescription(BusinessErrorCodes.DUPLICATE_INGREDIENT_NAME.getDescription())
+                                .error(ex.getMessage())
+                                .build()
+                );
+    }
+    @ExceptionHandler(SnapshotTooRecentException.class)
+    public ResponseEntity<ExceptionResponse> handleSnapshotTooRecentException(SnapshotTooRecentException ex) {
+        return ResponseEntity
+                .status(BusinessErrorCodes.SNAPSHOT_ALREADY_EXISTS.getHttpStatus())
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorCode(BusinessErrorCodes.SNAPSHOT_ALREADY_EXISTS.getCode())
+                                .businessErrorDescription(BusinessErrorCodes.SNAPSHOT_ALREADY_EXISTS.getDescription())
+                                .error(ex.getMessage())
+                                .build()
+                );
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleEntityNotFoundException(EntityNotFoundException ex) {
+        return ResponseEntity
+                .status(NOT_FOUND)
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorCode(ENTITY_NOT_FOUND.getCode())
+                                .businessErrorDescription(ENTITY_NOT_FOUND.getDescription())
+                                .error(ex.getMessage())
+                                .build()
+                );
+    }
+
+    @ExceptionHandler(DuplicateVatRateNameException.class)
+    public ResponseEntity<ExceptionResponse> handleDuplicateVatRateNameException(DuplicateVatRateNameException ex) {
+        return ResponseEntity
+                .status(CONFLICT)
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorCode(BusinessErrorCodes.DUPLICATE_VAT_NAME.getCode())
+                                .businessErrorDescription(BusinessErrorCodes.DUPLICATE_VAT_NAME.getDescription())
                                 .error(ex.getMessage())
                                 .build()
                 );

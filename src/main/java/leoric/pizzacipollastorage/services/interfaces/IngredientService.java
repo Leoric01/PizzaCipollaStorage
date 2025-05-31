@@ -1,10 +1,14 @@
 package leoric.pizzacipollastorage.services.interfaces;
 
 import leoric.pizzacipollastorage.DTOs.IngredientCreateDto;
-import leoric.pizzacipollastorage.models.Ingredient;
+import leoric.pizzacipollastorage.DTOs.IngredientResponseDto;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public interface IngredientService {
-    Ingredient createIngredient(IngredientCreateDto dto);
+    IngredientResponseDto createIngredient(IngredientCreateDto dto);
+
+    List<IngredientResponseDto> getAllIngredients();
 }

@@ -1,7 +1,7 @@
 package leoric.pizzacipollastorage.controllers;
 
 import leoric.pizzacipollastorage.DTOs.InventorySnapshotCreateDto;
-import leoric.pizzacipollastorage.models.InventorySnapshot;
+import leoric.pizzacipollastorage.DTOs.InventorySnapshotResponseDto;
 import leoric.pizzacipollastorage.services.interfaces.InventoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ public class InventoryController {
     private final InventoryService inventoryService;
 
     @PostMapping("/snapshot")
-    public ResponseEntity<InventorySnapshot> createSnapshot(@RequestBody InventorySnapshotCreateDto dto) {
+    public ResponseEntity<InventorySnapshotResponseDto> createSnapshot(@RequestBody InventorySnapshotCreateDto dto) {
         return ResponseEntity.ok(inventoryService.createSnapshot(dto));
     }
 }

@@ -1,6 +1,11 @@
 package leoric.pizzacipollastorage.services;
 
+import jakarta.persistence.EntityNotFoundException;
 import leoric.pizzacipollastorage.DTOs.VatRateCreateDto;
+import leoric.pizzacipollastorage.DTOs.VatRateDeleteResponseDto;
+import leoric.pizzacipollastorage.DTOs.VatRateShortDto;
+import leoric.pizzacipollastorage.handler.exceptions.DuplicateVatRateNameException;
+import leoric.pizzacipollastorage.mapstruct.VatRateMapper;
 import leoric.pizzacipollastorage.models.VatRate;
 import leoric.pizzacipollastorage.repositories.VatRateRepository;
 import leoric.pizzacipollastorage.services.interfaces.VatRateService;
@@ -14,9 +19,15 @@ import java.util.List;
 public class VatRateServiceImpl implements VatRateService {
 
     private final VatRateRepository vatRateRepository;
+    private final VatRateMapper vatRateMapper;
 
     @Override
     public VatRate createVatRate(VatRateCreateDto dto) {
+        boolean exists = vatRateRepository.existsByName(dto.getName());
+        if (exists) {
+            throw new DuplicateVatRateNameException("VAT rate with name '" + dto.getName() + "' already exists");
+        }
+
         VatRate vatRate = new VatRate();
         vatRate.setName(dto.getName());
         vatRate.setRate(dto.getRate());
@@ -24,7 +35,22 @@ public class VatRateServiceImpl implements VatRateService {
     }
 
     @Override
-    public List<VatRate> getAll() {
-        return vatRateRepository.findAll();
+    public List<VatRateShortDto> getAll() {
+        List<VatRate> vatRates = vatRateRepository.findAll();
+        return vatRateMapper.toShortDtoList(vatRates);
+    }
+
+    @Override
+    public VatRateDeleteResponseDto deleteVatRateById(Long id) {
+        VatRate vatRate = vatRateRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Vat rate with ID " + id + " not found"));
+
+        vatRateRepository.delete(vatRate);
+
+        VatRateDeleteResponseDto dto = new VatRateDeleteResponseDto();
+        dto.setId(vatRate.getId());
+        dto.setName(vatRate.getName());
+        dto.setRate(vatRate.getRate());
+        return dto;
     }
 }

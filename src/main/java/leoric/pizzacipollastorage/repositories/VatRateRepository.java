@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface VatRateRepository extends JpaRepository<VatRate, Long> {
+
+    boolean existsByName(String name);
+
 }
