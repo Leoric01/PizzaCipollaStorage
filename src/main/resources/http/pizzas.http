@@ -1,0 +1,21 @@
+### Create Pizza
+POST http://localhost:8080/api/pizzas
+Content-Type: application/json
+
+{
+  "name": "Margherita",
+  "description": "Klasická pizza s rajčatovou omáčkou a mozzarellou"
+}
+###
+// @sleep 30
+
+###
+POST http://localhost:8080/api/pizzas
+Content-Type: application/json
+
+{
+  "name": "Prosciutto",
+  "description": "Pizza se šunkou, rajčatovou omáčkou a mozzarellou"
+}
+###
+// @sleep 30

@@ -1,0 +1,68 @@
+POST http://localhost:8080/api/ingredients
+Content-Type: application/json
+
+{
+  "name": "Mouka",
+  "unit": "kg",
+  "lossCleaningFactor": 0.05,
+  "lossUsageFactor": 0.02,
+  "vatRateId": 1
+}
+###
+// @sleep 30
+
+###
+POST http://localhost:8080/api/ingredients
+Content-Type: application/json
+
+{
+  "name": "Mozzarella",
+  "unit": "g",
+  "lossCleaningFactor": 0.01,
+  "lossUsageFactor": 0.03,
+  "vatRateId": 1
+}
+###
+// @sleep 30
+
+###
+POST http://localhost:8080/api/ingredients
+Content-Type: application/json
+
+{
+  "name": "Rajčatová omáčka",
+  "unit": "g",
+  "lossCleaningFactor": 0.0,
+  "lossUsageFactor": 0.05,
+  "vatRateId": 1
+}
+###
+// @sleep 30
+
+###
+POST http://localhost:8080/api/ingredients
+Content-Type: application/json
+
+{
+  "name": "Bazalka",
+  "unit": "g",
+  "lossCleaningFactor": 0.1,
+  "lossUsageFactor": 0.1,
+  "vatRateId": 1
+}
+###
+// @sleep 30
+
+###
+POST http://localhost:8080/api/ingredients
+Content-Type: application/json
+
+{
+  "name": "Šunka",
+  "unit": "g",
+  "lossCleaningFactor": 0.15,
+  "lossUsageFactor": 0.1,
+  "vatRateId": 1
+}
+###
+// @sleep 30

@@ -4,7 +4,9 @@ import jakarta.persistence.EntityNotFoundException;
 import leoric.pizzacipollastorage.DTOs.Pizza.PizzaCreateDto;
 import leoric.pizzacipollastorage.DTOs.Pizza.PizzaResponseDto;
 import leoric.pizzacipollastorage.DTOs.Pizza.RecipeIngredientCreateDto;
+import leoric.pizzacipollastorage.DTOs.Pizza.RecipeIngredientShortDto;
 import leoric.pizzacipollastorage.mapstruct.PizzaMapper;
+import leoric.pizzacipollastorage.mapstruct.RecipeIngredientMapper;
 import leoric.pizzacipollastorage.models.Ingredient;
 import leoric.pizzacipollastorage.models.Pizza;
 import leoric.pizzacipollastorage.models.RecipeIngredient;
@@ -24,6 +26,7 @@ public class PizzaServiceImpl implements PizzaService {
     private final IngredientRepository ingredientRepository;
     private final RecipeIngredientRepository recipeIngredientRepository;
     private final PizzaMapper pizzaMapper;
+    private final RecipeIngredientMapper recipeIngredientMapper;
 
 
     public Pizza createPizza(PizzaCreateDto dto) {
@@ -33,7 +36,7 @@ public class PizzaServiceImpl implements PizzaService {
         return pizzaRepository.save(pizza);
     }
 
-    public RecipeIngredient addIngredientToPizza(RecipeIngredientCreateDto dto) {
+    public RecipeIngredientShortDto addIngredientToPizza(RecipeIngredientCreateDto dto) {
         Pizza pizza = pizzaRepository.findById(dto.getPizzaId())
                 .orElseThrow(() -> new EntityNotFoundException("Pizza not found"));
         Ingredient ingredient = ingredientRepository.findById(dto.getIngredientId())
@@ -43,7 +46,8 @@ public class PizzaServiceImpl implements PizzaService {
         recipeIngredient.setPizza(pizza);
         recipeIngredient.setIngredient(ingredient);
         recipeIngredient.setQuantity(dto.getQuantity());
-        return recipeIngredientRepository.save(recipeIngredient);
+
+        return recipeIngredientMapper.toShortDto(recipeIngredientRepository.save(recipeIngredient));
     }
     @Override
     public List<PizzaResponseDto> getAllPizzas() {

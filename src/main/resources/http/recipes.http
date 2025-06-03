@@ -1,0 +1,91 @@
+### Add Ingredients to Pizzas (Recipes)
+POST http://localhost:8080/api/pizzas/recipes
+Content-Type: application/json
+
+{
+  "pizzaId": 1,
+  "ingredientId": 1,
+  "quantity": 0.25
+}
+###
+// @sleep 30
+
+###
+POST http://localhost:8080/api/pizzas/recipes
+Content-Type: application/json
+
+{
+  "pizzaId": 1,
+  "ingredientId": 2,
+  "quantity": 110
+}
+###
+// @sleep 30
+
+###
+POST http://localhost:8080/api/pizzas/recipes
+Content-Type: application/json
+
+{
+  "pizzaId": 1,
+  "ingredientId": 3,
+  "quantity": 80
+}
+###
+// @sleep 30
+###
+POST http://localhost:8080/api/pizzas/recipes
+Content-Type: application/json
+
+{
+  "pizzaId": 1,
+  "ingredientId": 4,
+  "quantity": 5
+}
+###
+// @sleep 30
+###
+POST http://localhost:8080/api/pizzas/recipes
+Content-Type: application/json
+
+{
+  "pizzaId": 2,
+  "ingredientId": 1,
+  "quantity": 0.25
+}
+###
+// @sleep 30
+###
+POST http://localhost:8080/api/pizzas/recipes
+Content-Type: application/json
+
+{
+  "pizzaId": 2,
+  "ingredientId": 2,
+  "quantity": 110
+}
+###
+// @sleep 30
+###
+POST http://localhost:8080/api/pizzas/recipes
+Content-Type: application/json
+
+{
+  "pizzaId": 2,
+  "ingredientId": 3,
+  "quantity": 80
+}
+###
+// @sleep 30
+###
+POST http://localhost:8080/api/pizzas/recipes
+Content-Type: application/json
+
+{
+  "pizzaId": 2,
+  "ingredientId": 5,
+  "quantity": 90
+}
+
+###
+// @sleep 30

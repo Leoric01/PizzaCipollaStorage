@@ -18,6 +18,7 @@ public interface PizzaMapper {
 
     List<PizzaResponseDto> toDtoList(List<Pizza> pizzas);
 
+    @Mapping(source = "quantity", target = "amount")
     @Mapping(source = "ingredient", target = "ingredient")
     RecipeIngredientShortDto toShortDto(RecipeIngredient recipeIngredient);
 

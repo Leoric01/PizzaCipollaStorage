@@ -1,0 +1,11 @@
+### Get all VAT rates
+GET http://localhost:8080/api/vat-rates
+
+### Get all ingredients
+GET http://localhost:8080/api/ingredients
+
+### Get current inventory status
+GET http://localhost:8080/api/inventory/current-status
+
+### Get all pizzas
+GET http://localhost:8080/api/pizzas
