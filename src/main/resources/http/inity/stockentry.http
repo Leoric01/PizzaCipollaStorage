@@ -1,0 +1,22 @@
+### Přidání zboží do skladu
+POST http://localhost:8080/api/stock-entries
+Content-Type: application/json
+
+{
+  "ingredientId": 1,
+  "supplierId": 1,
+  "quantityReceived": 8.5,
+  "pricePerUnitWithoutTax": 98.00,
+  "receivedDate": "04/06/2025 14:45"
+}
+###
+POST http://localhost:8080/api/stock-entries
+Content-Type: application/json
+
+{
+  "ingredientId": 1,
+  "supplierId": 2,
+  "quantityReceived": 9,
+  "pricePerUnitWithoutTax": 119.00,
+  "receivedDate": "04/06/2025 14:45"
+}

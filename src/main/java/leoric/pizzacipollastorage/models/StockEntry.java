@@ -23,6 +23,10 @@ public class StockEntry {
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 
+    @ManyToOne
+    @JoinColumn(name = "purchase_invoice_item_id")
+    private PurchaseInvoiceItem purchaseInvoiceItem;
+
     private float quantityReceived;
     private float pricePerUnitWithoutTax;
     private LocalDateTime receivedDate;

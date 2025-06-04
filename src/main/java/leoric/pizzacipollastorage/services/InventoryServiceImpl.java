@@ -18,7 +18,10 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -72,5 +75,28 @@ public class InventoryServiceImpl implements InventoryService {
         }
 
         return inventory;
+    }
+
+    @Override
+    public void addToInventory(Long ingredientId, float addedQuantity) {
+        IngredientInventoryDto current = getCurrentInventoryStatusMap().get(ingredientId);
+        float newQuantity = current.getMeasuredQuantity() + addedQuantity;
+
+        InventorySnapshot snapshot = InventorySnapshot.builder()
+                .ingredient(ingredientRepository.getReferenceById(ingredientId))
+                .timestamp(LocalDateTime.now())
+                .measuredQuantity(newQuantity)
+                .note("Stock received")
+                .build();
+
+        snapshotRepository.save(snapshot);
+    }
+
+    public Map<Long, IngredientInventoryDto> getCurrentInventoryStatusMap() {
+        return getCurrentInventoryStatus().stream()
+                .collect(Collectors.toMap(
+                        IngredientInventoryDto::getId,
+                        Function.identity()
+                ));
     }
 }

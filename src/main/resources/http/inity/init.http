@@ -296,4 +296,21 @@ Content-Type: application/json
   "name": "Velká",
   "factor": 1.7
 }
+
+### Přidání dodavatele
+POST http://localhost:8080/api/suppliers
+Content-Type: application/json
+
+{
+  "name": "Nowaco s.r.o.",
+  "contactInfo": "kontakt@nowaco.cz"
+}
+
 ###
+POST http://localhost:8080/api/suppliers
+Content-Type: application/json
+
+{
+"name": "Cortelazzi s.r.o.",
+"contactInfo": "kontakt@cortellazi.cz"
+}

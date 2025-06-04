@@ -12,3 +12,6 @@ GET http://localhost:8080/api/pizzas
 
 ### Get All Dish Sizes
 GET http://localhost:8080/api/dish-sizes
+
+### Get All Suppliers
+GET http://localhost:8080/api/suppliers
