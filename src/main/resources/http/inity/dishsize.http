@@ -1,0 +1,18 @@
+### Create default dish size (Base)
+POST http://localhost:8080/api/dish-sizes
+Content-Type: application/json
+
+{
+  "name": "mala/base",
+  "factor": 1.0
+}
+###
+### Create large size
+POST http://localhost:8080/api/dish-sizes
+Content-Type: application/json
+
+{
+  "name": "Velká",
+  "factor": 1.7
+}
+###

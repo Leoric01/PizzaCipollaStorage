@@ -225,7 +225,7 @@ Content-Type: application/json
 
 {
   "ingredientId": 1,
-  "timestamp": "2025-05-31T14:00:00",
+  "timestamp": "31/05/2025 14",
   "measuredQuantity": 100.0,
   "note": "Start"
 }
@@ -237,7 +237,7 @@ Content-Type: application/json
 
 {
   "ingredientId": 2,
-  "timestamp": "2025-05-31T14:00:00",
+  "timestamp": "31/05/2025 14",
   "measuredQuantity": 5000.0,
   "note": "Start"
 }
@@ -249,7 +249,7 @@ Content-Type: application/json
 
 {
   "ingredientId": 3,
-  "timestamp": "2025-05-31T14:00:00",
+  "timestamp": "31/05/2025 14",
   "measuredQuantity": 3000.0,
   "note": "Start"
 }
@@ -261,7 +261,7 @@ Content-Type: application/json
 
 {
   "ingredientId": 4,
-  "timestamp": "2025-05-31T14:00:00",
+  "timestamp": "31/05/2025 14",
   "measuredQuantity": 200.0,
   "note": "Start"
 }
@@ -273,9 +273,27 @@ Content-Type: application/json
 
 {
   "ingredientId": 5,
-  "timestamp": "2025-05-31T14:00:00",
+  "timestamp": "31/05/2025 14",
   "measuredQuantity": 4000.0,
   "note": "Start"
 }
 ###
 // @sleep 30
+### Create default dish size (Base)
+POST http://localhost:8080/api/dish-sizes
+Content-Type: application/json
+
+{
+  "name": "mala/base",
+  "factor": 1.0
+}
+###
+### Create large size
+POST http://localhost:8080/api/dish-sizes
+Content-Type: application/json
+
+{
+  "name": "Velká",
+  "factor": 1.7
+}
+###

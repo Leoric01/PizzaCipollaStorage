@@ -1,0 +1,10 @@
+### Create Pizza Sale
+POST http://localhost:8080/api/pizza-sales
+Content-Type: application/json
+
+{
+  "pizzaId": 1,
+  "dishSizeId": 1,
+  "quantitySold": 2,
+  "cookName": "Karel"
+}

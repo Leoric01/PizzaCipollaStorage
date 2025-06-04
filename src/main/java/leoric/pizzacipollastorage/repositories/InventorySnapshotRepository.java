@@ -13,4 +13,5 @@ public interface InventorySnapshotRepository extends JpaRepository<InventorySnap
     boolean existsByIngredientAndTimestampBetween(Ingredient ingredient, LocalDateTime from, LocalDateTime to);
     Optional<InventorySnapshot> findTopByIngredientOrderByTimestampDesc(Ingredient ingredient);
 
+    Optional<InventorySnapshot> findTopByIngredientIdOrderByTimestampDesc(Long id);
 }
