@@ -1,5 +1,7 @@
 package leoric.pizzacipollastorage.controllers;
 
+import jakarta.persistence.EntityNotFoundException;
+import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientAlias.IngredientAliasOverviewDto;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientCreateDto;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientResponseDto;
 import leoric.pizzacipollastorage.services.interfaces.IngredientService;
@@ -23,5 +25,12 @@ public class IngredientController {
     @GetMapping
     public ResponseEntity<List<IngredientResponseDto>> getAllIngredients() {
         return ResponseEntity.ok(ingredientService.getAllIngredients());
+    }
+
+    @GetMapping("/by-name/{name}")
+    public ResponseEntity<IngredientAliasOverviewDto> getAliasOverviewByName(@PathVariable String name) {
+        return ingredientService.getAliasOverviewByName(name)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new EntityNotFoundException("Ingredient not found for name or alias: " + name));
     }
 }

@@ -33,4 +33,6 @@ public class Ingredient {
     @OneToMany(mappedBy = "ingredient")
     private List<InventorySnapshot> inventorySnapshots;
 
+    @OneToMany(mappedBy = "ingredient", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<IngredientAlias> aliases;
 }

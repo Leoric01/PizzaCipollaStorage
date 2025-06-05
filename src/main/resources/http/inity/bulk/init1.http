@@ -10,7 +10,6 @@ Content-Type: application/json
 ###
 // @sleep 30
 
-###
 POST http://localhost:8080/api/vat-rates
 Content-Type: application/json
 
@@ -22,7 +21,6 @@ Content-Type: application/json
 ###
 // @sleep 30
 
-###
 POST http://localhost:8080/api/vat-rates
 Content-Type: application/json
 
@@ -31,10 +29,29 @@ Content-Type: application/json
   "rate": 0.21
 }
 
+### Create default dish size (Base)
+// @sleep 30
+POST http://localhost:8080/api/dish-sizes
+Content-Type: application/json
+
+{
+  "name": "mala/base",
+  "factor": 1.0
+}
+
 ###
 // @sleep 30
+POST http://localhost:8080/api/dish-sizes
+Content-Type: application/json
+
+{
+  "name": "Velká",
+  "factor": 1.7
+}
+
 
 ### Create Ingredients
+// @sleep 30
 POST http://localhost:8080/api/ingredients
 Content-Type: application/json
 
@@ -45,6 +62,7 @@ Content-Type: application/json
   "lossUsageFactor": 0.02,
   "vatRateId": 1
 }
+
 ###
 // @sleep 30
 
@@ -59,6 +77,7 @@ Content-Type: application/json
   "lossUsageFactor": 0.03,
   "vatRateId": 1
 }
+
 ###
 // @sleep 30
 
@@ -73,6 +92,7 @@ Content-Type: application/json
   "lossUsageFactor": 0.05,
   "vatRateId": 1
 }
+
 ###
 // @sleep 30
 
@@ -87,6 +107,7 @@ Content-Type: application/json
   "lossUsageFactor": 0.1,
   "vatRateId": 1
 }
+
 ###
 // @sleep 30
 
@@ -101,10 +122,26 @@ Content-Type: application/json
   "lossUsageFactor": 0.1,
   "vatRateId": 1
 }
-###
-// @sleep 30
+
+### Přidání více aliasů najednou
+POST http://localhost:8080/api/ingredient-aliases/batch
+Content-Type: application/json
+
+[
+  { "aliasName": "rajčatova omacka", "ingredientId": 3 },
+  { "aliasName": "rajcatová", "ingredientId": 3 },
+  { "aliasName": "rajcatova", "ingredientId": 3 },
+  { "aliasName": "sugo", "ingredientId": 3 },
+  { "aliasName": "sugo di pomodoro", "ingredientId": 3 },
+  { "aliasName": "paradajkova omacka", "ingredientId": 3 },
+  { "aliasName": "paradajkova", "ingredientId": 3 },
+  { "aliasName": "tomato sauce", "ingredientId": 3 },
+  { "aliasName": "omacka z rajcat", "ingredientId": 3 },
+  { "aliasName": "z rajcat", "ingredientId": 3 }
+]
 
 ### Create Pizza
+// @sleep 30
 POST http://localhost:8080/api/pizzas
 Content-Type: application/json
 
@@ -112,6 +149,7 @@ Content-Type: application/json
   "name": "Margherita",
   "description": "Klasická pizza s rajčatovou omáčkou a mozzarellou"
 }
+
 ###
 // @sleep 30
 
@@ -123,10 +161,9 @@ Content-Type: application/json
   "name": "Prosciutto",
   "description": "Pizza se šunkou, rajčatovou omáčkou a mozzarellou"
 }
-###
-// @sleep 30
 
 ### Add Ingredients to Pizzas (Recipes)
+// @sleep 30
 POST http://localhost:8080/api/pizzas/recipes
 Content-Type: application/json
 
@@ -135,6 +172,7 @@ Content-Type: application/json
   "ingredientId": 1,
   "quantity": 0.25
 }
+
 ###
 // @sleep 30
 
@@ -147,6 +185,7 @@ Content-Type: application/json
   "ingredientId": 2,
   "quantity": 110
 }
+
 ###
 // @sleep 30
 
@@ -159,6 +198,7 @@ Content-Type: application/json
   "ingredientId": 3,
   "quantity": 80
 }
+
 ###
 // @sleep 30
 ###
@@ -170,6 +210,7 @@ Content-Type: application/json
   "ingredientId": 4,
   "quantity": 5
 }
+
 ###
 // @sleep 30
 ###
@@ -181,6 +222,7 @@ Content-Type: application/json
   "ingredientId": 1,
   "quantity": 0.25
 }
+
 ###
 // @sleep 30
 ###
@@ -192,6 +234,7 @@ Content-Type: application/json
   "ingredientId": 2,
   "quantity": 110
 }
+
 ###
 // @sleep 30
 ###
@@ -203,6 +246,7 @@ Content-Type: application/json
   "ingredientId": 3,
   "quantity": 80
 }
+
 ###
 // @sleep 30
 ###
@@ -215,11 +259,8 @@ Content-Type: application/json
   "quantity": 90
 }
 
-###
-// @sleep 30
-
-
 ### Create Inventory Snapshots
+// @sleep 30
 POST http://localhost:8080/api/inventory/snapshot
 Content-Type: application/json
 
@@ -229,6 +270,7 @@ Content-Type: application/json
   "measuredQuantity": 100.0,
   "note": "Start"
 }
+
 ###
 // @sleep 30
 ###
@@ -241,6 +283,7 @@ Content-Type: application/json
   "measuredQuantity": 5000.0,
   "note": "Start"
 }
+
 ###
 // @sleep 30
 ###
@@ -253,6 +296,7 @@ Content-Type: application/json
   "measuredQuantity": 3000.0,
   "note": "Start"
 }
+
 ###
 // @sleep 30
 ###
@@ -265,6 +309,7 @@ Content-Type: application/json
   "measuredQuantity": 200.0,
   "note": "Start"
 }
+
 ###
 // @sleep 30
 ###
@@ -277,27 +322,9 @@ Content-Type: application/json
   "measuredQuantity": 4000.0,
   "note": "Start"
 }
-###
-// @sleep 30
-### Create default dish size (Base)
-POST http://localhost:8080/api/dish-sizes
-Content-Type: application/json
-
-{
-  "name": "mala/base",
-  "factor": 1.0
-}
-###
-### Create large size
-POST http://localhost:8080/api/dish-sizes
-Content-Type: application/json
-
-{
-  "name": "Velká",
-  "factor": 1.7
-}
 
 ### Přidání dodavatele
+// @sleep 30
 POST http://localhost:8080/api/suppliers
 Content-Type: application/json
 
@@ -311,6 +338,6 @@ POST http://localhost:8080/api/suppliers
 Content-Type: application/json
 
 {
-"name": "Cortelazzi s.r.o.",
-"contactInfo": "kontakt@cortellazi.cz"
+  "name": "Cortelazzi s.r.o.",
+  "contactInfo": "kontakt@cortellazi.cz"
 }
