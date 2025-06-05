@@ -7,6 +7,7 @@ import leoric.pizzacipollastorage.handler.exceptions.SnapshotTooRecentException;
 import leoric.pizzacipollastorage.mapstruct.InventorySnapshotMapper;
 import leoric.pizzacipollastorage.models.Ingredient;
 import leoric.pizzacipollastorage.models.InventorySnapshot;
+import leoric.pizzacipollastorage.models.enums.IngredientForm;
 import leoric.pizzacipollastorage.models.enums.SnapshotType;
 import leoric.pizzacipollastorage.repositories.IngredientRepository;
 import leoric.pizzacipollastorage.repositories.InventorySnapshotRepository;
@@ -43,28 +44,36 @@ public class InventoryServiceImpl implements InventoryService {
             throw new SnapshotTooRecentException("Snapshot for this ingredient already exists in the last 6 hours.");
         }
 
+        // Výpočet efektivního množství na základě formy
+        Float measured = dto.getMeasuredQuantity();
+        IngredientForm form = dto.getForm() != null ? dto.getForm() : IngredientForm.RAW;
+
+        if (form == IngredientForm.PREPARED) {
+            float lossFactor = ingredient.getLossCleaningFactor();
+            if (lossFactor < 0f || lossFactor >= 1f) {
+                throw new IllegalArgumentException("Invalid lossCleaningFactor: must be between 0 and 1");
+            }
+            measured = measured / (1 - lossFactor);
+        }
+
+        // Očekávané množství pro výpočet discrepancy
         InventorySnapshot lastSnapshot = snapshotRepository
                 .findTopByIngredientOrderByTimestampDesc(ingredient)
                 .orElse(null);
 
-        Float discrepancy = null;
-        if (dto.getMeasuredQuantity() != null) {
-            Float oldExpected = lastSnapshot != null
-                    ? (lastSnapshot.getExpectedQuantity() != null
-                    ? lastSnapshot.getExpectedQuantity()
-                    : lastSnapshot.getMeasuredQuantity())
-                    : null;
+        Float oldExpected = lastSnapshot != null
+                ? (lastSnapshot.getExpectedQuantity() != null
+                ? lastSnapshot.getExpectedQuantity()
+                : lastSnapshot.getMeasuredQuantity())
+                : null;
 
-            discrepancy = oldExpected != null
-                    ? dto.getMeasuredQuantity() - oldExpected
-                    : null;
-        }
+        Float discrepancy = oldExpected != null ? measured - oldExpected : null;
 
         InventorySnapshot snapshot = InventorySnapshot.builder()
                 .ingredient(ingredient)
                 .timestamp(dto.getTimestamp())
-                .measuredQuantity(dto.getMeasuredQuantity())
-                .expectedQuantity(dto.getMeasuredQuantity()) // reset očekávaného množství na realitu
+                .measuredQuantity(measured)
+                .expectedQuantity(measured)
                 .note(dto.getNote() != null
                         ? dto.getNote() + (discrepancy != null ? String.format(" | Discrepancy: %.2f", discrepancy) : "")
                         : (discrepancy != null ? String.format("Discrepancy: %.2f", discrepancy) : "Manual measurement"))
@@ -74,6 +83,7 @@ public class InventoryServiceImpl implements InventoryService {
         InventorySnapshot saved = snapshotRepository.save(snapshot);
         return snapshotMapper.toDto(saved);
     }
+
 
     @Override
     public List<InventorySnapshotResponseDto> getCurrentInventoryStatus() {

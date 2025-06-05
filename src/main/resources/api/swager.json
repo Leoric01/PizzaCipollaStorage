@@ -1,0 +1,1529 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Pizza ERP API",
+    "description": "Swagger dokumentace pro Pizza ERP backend",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/api/vat-rates": {
+      "get": {
+        "tags": [
+          "vat-rate-controller"
+        ],
+        "operationId": "getAll",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VatRateShortDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "vat-rate-controller"
+        ],
+        "operationId": "createVatRate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VatRateCreateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/VatRate"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/suppliers": {
+      "get": {
+        "tags": [
+          "supplier-controller"
+        ],
+        "operationId": "getAllSuppliers",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SupplierResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "supplier-controller"
+        ],
+        "operationId": "createSupplier",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SupplierCreateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/SupplierResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/stock-entries": {
+      "post": {
+        "tags": [
+          "stock-entry-controller"
+        ],
+        "operationId": "create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StockEntryCreateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/StockEntryResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/purchase-invoices": {
+      "get": {
+        "tags": [
+          "purchase-invoice-controller"
+        ],
+        "operationId": "getLatestInvoices",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PurchaseInvoiceResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "purchase-invoice-controller"
+        ],
+        "operationId": "createInvoice",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PurchaseInvoiceCreateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseInvoiceResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/pizzas": {
+      "get": {
+        "tags": [
+          "pizza-controller"
+        ],
+        "operationId": "getAllPizzas",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PizzaResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "pizza-controller"
+        ],
+        "operationId": "createPizza",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PizzaCreateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pizza"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/pizzas/recipes": {
+      "post": {
+        "tags": [
+          "pizza-controller"
+        ],
+        "operationId": "addIngredientToPizza",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecipeIngredientCreateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecipeIngredientShortDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/pizza-sales": {
+      "post": {
+        "tags": [
+          "pizza-sale-controller"
+        ],
+        "operationId": "createSale",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PizzaSaleCreateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PizzaSaleResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/inventory/snapshot": {
+      "post": {
+        "tags": [
+          "inventory-controller"
+        ],
+        "operationId": "createSnapshot",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventorySnapshotCreateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventorySnapshotResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ingredients": {
+      "get": {
+        "tags": [
+          "ingredient-controller"
+        ],
+        "operationId": "getAllIngredients",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IngredientResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "ingredient-controller"
+        ],
+        "operationId": "createIngredient",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IngredientCreateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/IngredientResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ingredient-aliases": {
+      "post": {
+        "tags": [
+          "ingredient-alias-controller"
+        ],
+        "operationId": "addAlias",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IngredientAliasDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/IngredientAliasDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ingredient-aliases/batch": {
+      "post": {
+        "tags": [
+          "ingredient-alias-controller"
+        ],
+        "operationId": "addAliases",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/IngredientAliasDto"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IngredientAliasDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/dish-sizes": {
+      "get": {
+        "tags": [
+          "dish-size-controller"
+        ],
+        "operationId": "getAll_1",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DishSizeResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "dish-size-controller"
+        ],
+        "operationId": "create_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DishSizeCreateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DishSizeResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/purchase-invoices/{id}": {
+      "get": {
+        "tags": [
+          "purchase-invoice-controller"
+        ],
+        "operationId": "getById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseInvoiceResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/inventory/current-status": {
+      "get": {
+        "tags": [
+          "inventory-controller"
+        ],
+        "operationId": "getCurrentInventoryStatus",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InventorySnapshotResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ingredients/by-name/{name}": {
+      "get": {
+        "tags": [
+          "ingredient-controller"
+        ],
+        "operationId": "getAliasOverviewByName",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/IngredientAliasOverviewDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ingredient-aliases/ingredient/{ingredientId}": {
+      "get": {
+        "tags": [
+          "ingredient-alias-controller"
+        ],
+        "operationId": "getAliases",
+        "parameters": [
+          {
+            "name": "ingredientId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IngredientAliasDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/vat-rates/{id}": {
+      "delete": {
+        "tags": [
+          "vat-rate-controller"
+        ],
+        "operationId": "deleteVatRate",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/VatRateDeleteResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ingredient-aliases/{aliasId}": {
+      "delete": {
+        "tags": [
+          "ingredient-alias-controller"
+        ],
+        "operationId": "deleteAlias",
+        "parameters": [
+          {
+            "name": "aliasId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "VatRateCreateDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "rate": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "Ingredient": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "lossCleaningFactor": {
+            "type": "number",
+            "format": "float"
+          },
+          "lossUsageFactor": {
+            "type": "number",
+            "format": "float"
+          },
+          "vatRate": {
+            "$ref": "#/components/schemas/VatRate"
+          },
+          "prices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IngredientPrice"
+            }
+          },
+          "stockEntries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StockEntry"
+            }
+          },
+          "inventorySnapshots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InventorySnapshot"
+            }
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IngredientAlias"
+            }
+          }
+        }
+      },
+      "IngredientAlias": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "aliasName": {
+            "type": "string"
+          },
+          "ingredient": {
+            "$ref": "#/components/schemas/Ingredient"
+          }
+        }
+      },
+      "IngredientPrice": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ingredient": {
+            "$ref": "#/components/schemas/Ingredient"
+          },
+          "supplier": {
+            "$ref": "#/components/schemas/Supplier"
+          },
+          "pricePerUnitWithoutTax": {
+            "type": "number",
+            "format": "float"
+          },
+          "receivedDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "InventorySnapshot": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ingredient": {
+
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "measuredQuantity": {
+            "type": "number",
+            "format": "float"
+          },
+          "expectedQuantity": {
+            "type": "number",
+            "format": "float"
+          },
+          "note": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "SYSTEM",
+              "INVENTORY",
+              "STOCK_IN"
+            ]
+          },
+          "form": {
+            "type": "string",
+            "enum": [
+              "PREPARED",
+              "RAW"
+            ]
+          },
+          "discrepancy": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "PurchaseInvoice": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "invoiceNumber": {
+            "type": "string"
+          },
+          "supplier": {
+
+          },
+          "issuedDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "receivedDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "note": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PurchaseInvoiceItem"
+            }
+          }
+        }
+      },
+      "PurchaseInvoiceItem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "purchaseInvoice": {
+            "$ref": "#/components/schemas/PurchaseInvoice"
+          },
+          "ingredient": {
+
+          },
+          "quantity": {
+            "type": "number",
+            "format": "float"
+          },
+          "unitPriceWithoutTax": {
+            "type": "number",
+            "format": "float"
+          },
+          "vatRate": {
+            "$ref": "#/components/schemas/VatRate"
+          }
+        }
+      },
+      "StockEntry": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ingredient": {
+
+          },
+          "supplier": {
+            "$ref": "#/components/schemas/Supplier"
+          },
+          "purchaseInvoiceItem": {
+            "$ref": "#/components/schemas/PurchaseInvoiceItem"
+          },
+          "quantityReceived": {
+            "type": "number",
+            "format": "float"
+          },
+          "pricePerUnitWithoutTax": {
+            "type": "number",
+            "format": "float"
+          },
+          "receivedDate": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "Supplier": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "contactInfo": {
+            "type": "string"
+          },
+          "stockEntries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StockEntry"
+            }
+          },
+          "prices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IngredientPrice"
+            }
+          }
+        }
+      },
+      "VatRate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "rate": {
+            "type": "number",
+            "format": "float"
+          },
+          "ingredients": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Ingredient"
+            }
+          }
+        }
+      },
+      "SupplierCreateDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "contactInfo": {
+            "type": "string"
+          }
+        }
+      },
+      "SupplierResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "contactInfo": {
+            "type": "string"
+          }
+        }
+      },
+      "StockEntryCreateDto": {
+        "type": "object",
+        "properties": {
+          "ingredientId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "supplierId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "quantityReceived": {
+            "type": "number",
+            "format": "float"
+          },
+          "pricePerUnitWithoutTax": {
+            "type": "number",
+            "format": "float"
+          },
+          "receivedDate": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "IngredientShortDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "string"
+          }
+        }
+      },
+      "StockEntryResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ingredient": {
+            "$ref": "#/components/schemas/IngredientShortDto"
+          },
+          "supplier": {
+            "$ref": "#/components/schemas/SupplierShortDto"
+          },
+          "quantityReceived": {
+            "type": "number",
+            "format": "float"
+          },
+          "pricePerUnitWithoutTax": {
+            "type": "number",
+            "format": "float"
+          },
+          "receivedDate": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "SupplierShortDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "PurchaseInvoiceCreateDto": {
+        "type": "object",
+        "properties": {
+          "invoiceNumber": {
+            "type": "string"
+          },
+          "supplierName": {
+            "type": "string"
+          },
+          "issuedDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "receivedDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "note": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PurchaseInvoiceItemCreateDto"
+            }
+          }
+        }
+      },
+      "PurchaseInvoiceItemCreateDto": {
+        "type": "object",
+        "properties": {
+          "ingredientName": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number",
+            "format": "float"
+          },
+          "unitPriceWithoutTax": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "PurchaseInvoiceItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ingredient": {
+            "$ref": "#/components/schemas/IngredientShortDto"
+          },
+          "quantity": {
+            "type": "number",
+            "format": "float"
+          },
+          "unitPriceWithoutTax": {
+            "type": "number",
+            "format": "float"
+          },
+          "vatRate": {
+            "$ref": "#/components/schemas/VatRateShortDto"
+          }
+        }
+      },
+      "PurchaseInvoiceResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "invoiceNumber": {
+            "type": "string"
+          },
+          "supplier": {
+            "$ref": "#/components/schemas/SupplierShortDto"
+          },
+          "issuedDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "receivedDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "note": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PurchaseInvoiceItemDto"
+            }
+          }
+        }
+      },
+      "VatRateShortDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "rate": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "PizzaCreateDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "Pizza": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "ingredients": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RecipeIngredient"
+            }
+          }
+        }
+      },
+      "RecipeIngredient": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "pizza": {
+            "$ref": "#/components/schemas/Pizza"
+          },
+          "ingredient": {
+            "$ref": "#/components/schemas/Ingredient"
+          },
+          "quantity": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "RecipeIngredientCreateDto": {
+        "type": "object",
+        "properties": {
+          "pizzaId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ingredientId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "quantity": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "RecipeIngredientShortDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ingredient": {
+            "$ref": "#/components/schemas/IngredientShortDto"
+          },
+          "amount": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "PizzaSaleCreateDto": {
+        "type": "object",
+        "properties": {
+          "pizzaId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dishSizeId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "quantitySold": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "cookName": {
+            "type": "string"
+          }
+        }
+      },
+      "PizzaSaleResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "pizzaName": {
+            "type": "string"
+          },
+          "dishSize": {
+            "type": "string"
+          },
+          "quantitySold": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "cookName": {
+            "type": "string"
+          },
+          "saleDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "InventorySnapshotCreateDto": {
+        "type": "object",
+        "properties": {
+          "ingredientId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "measuredQuantity": {
+            "type": "number",
+            "format": "float"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "note": {
+            "type": "string"
+          },
+          "form": {
+            "type": "string",
+            "enum": [
+              "PREPARED",
+              "RAW"
+            ]
+          }
+        }
+      },
+      "IngredientResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "lossCleaningFactor": {
+            "type": "number",
+            "format": "float"
+          },
+          "lossUsageFactor": {
+            "type": "number",
+            "format": "float"
+          },
+          "vatRate": {
+            "$ref": "#/components/schemas/VatRateShortDto"
+          }
+        }
+      },
+      "InventorySnapshotResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "measuredQuantity": {
+            "type": "number",
+            "format": "float"
+          },
+          "note": {
+            "type": "string"
+          },
+          "expectedQuantity": {
+            "type": "number",
+            "format": "float"
+          },
+          "discrepancy": {
+            "type": "number",
+            "format": "float"
+          },
+          "ingredient": {
+            "$ref": "#/components/schemas/IngredientResponseDto"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "SYSTEM",
+              "INVENTORY",
+              "STOCK_IN"
+            ]
+          }
+        }
+      },
+      "IngredientCreateDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "lossCleaningFactor": {
+            "type": "number",
+            "format": "float"
+          },
+          "lossUsageFactor": {
+            "type": "number",
+            "format": "float"
+          },
+          "vatRateId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "IngredientAliasDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "aliasName": {
+            "type": "string"
+          },
+          "ingredientId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "DishSizeCreateDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "factor": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "DishSizeResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "factor": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "PizzaResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "ingredients": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RecipeIngredientShortDto"
+            }
+          }
+        }
+      },
+      "IngredientAliasOverviewDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "VatRateDeleteResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "rate": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      }
+    }
+  }
+}
