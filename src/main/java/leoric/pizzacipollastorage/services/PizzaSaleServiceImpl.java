@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import leoric.pizzacipollastorage.DTOs.PizzaSale.PizzaSaleCreateDto;
 import leoric.pizzacipollastorage.DTOs.PizzaSale.PizzaSaleResponseDto;
 import leoric.pizzacipollastorage.models.*;
+import leoric.pizzacipollastorage.models.enums.SnapshotType;
 import leoric.pizzacipollastorage.repositories.*;
 import leoric.pizzacipollastorage.services.interfaces.PizzaSaleService;
 import lombok.RequiredArgsConstructor;
@@ -49,23 +50,28 @@ public class PizzaSaleServiceImpl implements PizzaSaleService {
 
         for (RecipeIngredient ri : recipe) {
             Ingredient ingredient = ri.getIngredient();
-
             float usedQuantity = ri.getQuantity() * sizeFactor * dto.getQuantitySold();
 
             InventorySnapshot lastSnapshot = inventorySnapshotRepository
                     .findTopByIngredientIdOrderByTimestampDesc(ingredient.getId())
                     .orElseThrow(() -> new RuntimeException("Missing inventory snapshot for ingredient: " + ingredient.getName()));
 
-            float newQuantity = lastSnapshot.getMeasuredQuantity() - usedQuantity;
+            Float lastExpected = lastSnapshot.getExpectedQuantity() != null
+                    ? lastSnapshot.getExpectedQuantity()
+                    : lastSnapshot.getMeasuredQuantity(); // první snapshot ještě nemusí mít expected
 
-            InventorySnapshot newSnapshot = InventorySnapshot.builder()
+            float newExpected = lastExpected - usedQuantity;
+
+            InventorySnapshot expectedUpdate = InventorySnapshot.builder()
                     .ingredient(ingredient)
                     .timestamp(LocalDateTime.now())
-                    .measuredQuantity(newQuantity)
-                    .note("Pizza sale ID: " + sale.getId())
+                    .expectedQuantity(newExpected)
+                    .measuredQuantity(lastSnapshot.getMeasuredQuantity()) // neměníme
+                    .note("Expected deduction - sale ID: " + sale.getId())
+                    .type(SnapshotType.SYSTEM)
                     .build();
 
-            inventorySnapshotRepository.save(newSnapshot);
+            inventorySnapshotRepository.save(expectedUpdate);
         }
 
         return PizzaSaleResponseDto.builder()

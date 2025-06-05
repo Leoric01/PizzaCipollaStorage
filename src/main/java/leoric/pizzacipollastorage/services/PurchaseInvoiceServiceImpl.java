@@ -13,6 +13,9 @@ import leoric.pizzacipollastorage.services.interfaces.PurchaseInvoiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class PurchaseInvoiceServiceImpl implements PurchaseInvoiceService {
@@ -23,7 +26,6 @@ public class PurchaseInvoiceServiceImpl implements PurchaseInvoiceService {
     private final PurchaseInvoiceRepository purchaseInvoiceRepository;
     private final PurchaseInvoiceItemRepository purchaseInvoiceItemRepository;
     private final StockEntryRepository stockEntryRepository;
-    private final VatRateRepository vatRateRepository;
     private final IngredientRepository ingredientRepository;
 
     private final PurchaseInvoiceMapper purchaseInvoiceMapper;
@@ -31,8 +33,8 @@ public class PurchaseInvoiceServiceImpl implements PurchaseInvoiceService {
     @Override
     @Transactional
     public PurchaseInvoiceResponseDto createInvoice(PurchaseInvoiceCreateDto dto) {
-        Supplier supplier = supplierRepository.findById(dto.getSupplierId())
-                .orElseThrow(() -> new EntityNotFoundException("Supplier not found"));
+        Supplier supplier = supplierRepository.findByNameIgnoreCase(dto.getSupplierName())
+                .orElseThrow(() -> new EntityNotFoundException("Dodavatel '" + dto.getSupplierName() + "' nebyl nalezen."));
 
         PurchaseInvoice invoice = PurchaseInvoice.builder()
                 .invoiceNumber(dto.getInvoiceNumber())
@@ -43,12 +45,14 @@ public class PurchaseInvoiceServiceImpl implements PurchaseInvoiceService {
                 .build();
 
         purchaseInvoiceRepository.save(invoice);
-        for (PurchaseInvoiceItemCreateDto itemDto : dto.getItems()) {
-            Ingredient ingredient = ingredientRepository.findById(itemDto.getIngredientId())
-                    .orElseThrow(() -> new EntityNotFoundException("Ingredient not found"));
 
-            VatRate vatRate = vatRateRepository.findById(itemDto.getVatRateId())
-                    .orElseThrow(() -> new EntityNotFoundException("VAT rate not found"));
+        List<PurchaseInvoiceItem> savedItems = new ArrayList<>();
+
+        for (PurchaseInvoiceItemCreateDto itemDto : dto.getItems()) {
+            Ingredient ingredient = ingredientRepository.findByNameIgnoreCase(itemDto.getIngredientName())
+                    .orElseThrow(() -> new EntityNotFoundException("Ingredience '" + itemDto.getIngredientName() + "' nebyla nalezena."));
+
+            VatRate vatRate = ingredient.getVatRate();
 
             PurchaseInvoiceItem item = PurchaseInvoiceItem.builder()
                     .purchaseInvoice(invoice)
@@ -59,24 +63,23 @@ public class PurchaseInvoiceServiceImpl implements PurchaseInvoiceService {
                     .build();
 
             purchaseInvoiceItemRepository.save(item);
+            savedItems.add(item);
 
-            // stock entry
             StockEntry entry = StockEntry.builder()
                     .ingredient(ingredient)
                     .supplier(supplier)
                     .quantityReceived(itemDto.getQuantity())
                     .pricePerUnitWithoutTax(itemDto.getUnitPriceWithoutTax())
                     .receivedDate(dto.getReceivedDate())
-                    .purchaseInvoiceItem(item) // pokud přidáš tuto referenci
+                    .purchaseInvoiceItem(item)
                     .build();
 
             stockEntryRepository.save(entry);
-
-            // inventory snapshot
             inventoryService.addToInventory(ingredient.getId(), itemDto.getQuantity());
         }
+        invoice.setItems(savedItems);
 
-        return purchaseInvoiceMapper.toDto(invoice); // případně jiný response
+        return purchaseInvoiceMapper.toDto(invoice);
     }
 
     @Override
@@ -85,5 +88,15 @@ public class PurchaseInvoiceServiceImpl implements PurchaseInvoiceService {
                 .orElseThrow(() -> new EntityNotFoundException("Purchase invoice not found"));
 
         return purchaseInvoiceMapper.toDto(invoice);
+    }
+
+    @Override
+    public List<PurchaseInvoiceResponseDto> getLatestInvoices(int limit) {
+        List<PurchaseInvoice> invoices = purchaseInvoiceRepository
+                .findTop10ByOrderByIssuedDateDesc();
+
+        return invoices.stream()
+                .map(purchaseInvoiceMapper::toDto)
+                .toList();
     }
 }

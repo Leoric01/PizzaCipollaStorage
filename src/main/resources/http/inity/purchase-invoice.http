@@ -1,0 +1,61 @@
+### Vytvoření nákupní faktury
+POST http://localhost:8080/api/purchase-invoices
+Content-Type: application/json
+
+{
+  "invoiceNumber": "INV-2025-0001",
+  "supplierName": "Nowaco s.r.o.",
+  "issuedDate": "04/06/2025",
+  "receivedDate": "04/06/2025",
+  "note": "První faktura s více ingrediencemi",
+  "items": [
+    {
+      "ingredientName": "Mouka",
+      "quantity": 25.0,
+      "unitPriceWithoutTax": 15.50
+    },
+    {
+      "ingredientName": "Mozzarella",
+      "quantity": 5000.0,
+      "unitPriceWithoutTax": 0.26
+    },
+    {
+      "ingredientName": "Rajčatová omáčka",
+      "quantity": 3000.0,
+      "unitPriceWithoutTax": 0.18
+    },
+    {
+      "ingredientName": "Bazalka",
+      "quantity": 200.0,
+      "unitPriceWithoutTax": 0.50
+    }
+  ]
+}
+### Vytvoření druhé nákupní faktury
+POST http://localhost:8080/api/purchase-invoices
+Content-Type: application/json
+
+{
+  "invoiceNumber": "INV-2025-0002",
+  "supplierName": "Cortelazzi s.r.o.",
+  "issuedDate": "02/06/2025",
+  "receivedDate": "02/06/2025",
+  "note": "Druhá faktura – ingredience pro šunkovou pizzu",
+  "items": [
+    {
+      "ingredientName": "Šunka",
+      "quantity": 3000.0,
+      "unitPriceWithoutTax": 0.32
+    },
+    {
+      "ingredientName": "Mozzarella",
+      "quantity": 2000.0,
+      "unitPriceWithoutTax": 0.28
+    },
+    {
+      "ingredientName": "Rajčatová omáčka",
+      "quantity": 2500.0,
+      "unitPriceWithoutTax": 0.17
+    }
+  ]
+}

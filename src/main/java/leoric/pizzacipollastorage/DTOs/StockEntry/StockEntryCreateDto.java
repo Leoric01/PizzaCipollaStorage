@@ -3,7 +3,7 @@ package leoric.pizzacipollastorage.DTOs.StockEntry;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 public class StockEntryCreateDto {
@@ -12,6 +12,6 @@ public class StockEntryCreateDto {
     private float quantityReceived;
     private float pricePerUnitWithoutTax;
 
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
-    private LocalDateTime receivedDate;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate receivedDate;
 }

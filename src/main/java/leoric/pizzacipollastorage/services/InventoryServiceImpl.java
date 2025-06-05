@@ -1,14 +1,13 @@
 package leoric.pizzacipollastorage.services;
 
 import jakarta.persistence.EntityNotFoundException;
-import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientInventoryDto;
 import leoric.pizzacipollastorage.DTOs.Inventory.InventorySnapshotCreateDto;
 import leoric.pizzacipollastorage.DTOs.Inventory.InventorySnapshotResponseDto;
 import leoric.pizzacipollastorage.handler.exceptions.SnapshotTooRecentException;
-import leoric.pizzacipollastorage.mapstruct.IngredientMapper;
 import leoric.pizzacipollastorage.mapstruct.InventorySnapshotMapper;
 import leoric.pizzacipollastorage.models.Ingredient;
 import leoric.pizzacipollastorage.models.InventorySnapshot;
+import leoric.pizzacipollastorage.models.enums.SnapshotType;
 import leoric.pizzacipollastorage.repositories.IngredientRepository;
 import leoric.pizzacipollastorage.repositories.InventorySnapshotRepository;
 import leoric.pizzacipollastorage.services.interfaces.InventoryService;
@@ -23,13 +22,13 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class InventoryServiceImpl implements InventoryService {
+
     private final InventorySnapshotRepository snapshotRepository;
     private final IngredientRepository ingredientRepository;
     private final InventorySnapshotMapper snapshotMapper;
-    private final IngredientMapper ingredientMapper;
 
     @Override
     public InventorySnapshotResponseDto createSnapshot(InventorySnapshotCreateDto dto) {
@@ -44,11 +43,32 @@ public class InventoryServiceImpl implements InventoryService {
             throw new SnapshotTooRecentException("Snapshot for this ingredient already exists in the last 6 hours.");
         }
 
+        InventorySnapshot lastSnapshot = snapshotRepository
+                .findTopByIngredientOrderByTimestampDesc(ingredient)
+                .orElse(null);
+
+        Float discrepancy = null;
+        if (dto.getMeasuredQuantity() != null) {
+            Float oldExpected = lastSnapshot != null
+                    ? (lastSnapshot.getExpectedQuantity() != null
+                    ? lastSnapshot.getExpectedQuantity()
+                    : lastSnapshot.getMeasuredQuantity())
+                    : null;
+
+            discrepancy = oldExpected != null
+                    ? dto.getMeasuredQuantity() - oldExpected
+                    : null;
+        }
+
         InventorySnapshot snapshot = InventorySnapshot.builder()
                 .ingredient(ingredient)
                 .timestamp(dto.getTimestamp())
                 .measuredQuantity(dto.getMeasuredQuantity())
-                .note(dto.getNote())
+                .expectedQuantity(dto.getMeasuredQuantity()) // reset očekávaného množství na realitu
+                .note(dto.getNote() != null
+                        ? dto.getNote() + (discrepancy != null ? String.format(" | Discrepancy: %.2f", discrepancy) : "")
+                        : (discrepancy != null ? String.format("Discrepancy: %.2f", discrepancy) : "Manual measurement"))
+                .type(SnapshotType.INVENTORY)
                 .build();
 
         InventorySnapshot saved = snapshotRepository.save(snapshot);
@@ -56,46 +76,60 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    public List<IngredientInventoryDto> getCurrentInventoryStatus() {
+    public List<InventorySnapshotResponseDto> getCurrentInventoryStatus() {
         List<Ingredient> ingredients = ingredientRepository.findAll();
-        List<IngredientInventoryDto> inventory = new ArrayList<>();
+        List<InventorySnapshotResponseDto> result = new ArrayList<>();
 
         for (Ingredient ingredient : ingredients) {
-            Optional<InventorySnapshot> latestSnapshotOpt = snapshotRepository.findTopByIngredientOrderByTimestampDesc(ingredient);
+            Optional<InventorySnapshot> snapshotOpt = snapshotRepository.findTopByIngredientOrderByTimestampDesc(ingredient);
 
-            IngredientInventoryDto dto = ingredientMapper.toInventoryDto(ingredient);
-
-            if (latestSnapshotOpt.isPresent()) {
-                dto.setMeasuredQuantity(latestSnapshotOpt.get().getMeasuredQuantity());
+            if (snapshotOpt.isPresent()) {
+                InventorySnapshot snapshot = snapshotOpt.get();
+                result.add(snapshotMapper.toDto(snapshot));
             } else {
-                dto.setMeasuredQuantity(0);
-            }
+                // pokud nemám snapshot, můžu vytvořit „prázdný“ DTO s nulovým množstvím
+                InventorySnapshot emptySnapshot = InventorySnapshot.builder()
+                        .ingredient(ingredient)
+                        .timestamp(LocalDateTime.now())
+                        .measuredQuantity(0f)
+                        .expectedQuantity(null)
+                        .note("No snapshot available")
+                        .build();
 
-            inventory.add(dto);
+                result.add(snapshotMapper.toDto(emptySnapshot));
+            }
         }
 
-        return inventory;
+        return result;
     }
 
     @Override
     public void addToInventory(Long ingredientId, float addedQuantity) {
-        IngredientInventoryDto current = getCurrentInventoryStatusMap().get(ingredientId);
-        float newQuantity = current.getMeasuredQuantity() + addedQuantity;
+        InventorySnapshotResponseDto current = getCurrentInventoryStatusMap().get(ingredientId);
+
+        float prevExpected = current.getExpectedQuantity() != null
+                ? current.getExpectedQuantity()
+                : current.getMeasuredQuantity();
+
+        float newExpected = prevExpected + addedQuantity;
+        float newMeasured = current.getMeasuredQuantity() + addedQuantity;
 
         InventorySnapshot snapshot = InventorySnapshot.builder()
                 .ingredient(ingredientRepository.getReferenceById(ingredientId))
                 .timestamp(LocalDateTime.now())
-                .measuredQuantity(newQuantity)
+                .expectedQuantity(newExpected)
+                .measuredQuantity(newMeasured)
                 .note("Stock received")
+                .type(SnapshotType.STOCK_IN)
                 .build();
 
         snapshotRepository.save(snapshot);
     }
 
-    public Map<Long, IngredientInventoryDto> getCurrentInventoryStatusMap() {
+    public Map<Long, InventorySnapshotResponseDto> getCurrentInventoryStatusMap() {
         return getCurrentInventoryStatus().stream()
                 .collect(Collectors.toMap(
-                        IngredientInventoryDto::getId,
+                        dto -> dto.getIngredient().getId(),
                         Function.identity()
                 ));
     }

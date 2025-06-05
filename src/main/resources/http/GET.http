@@ -15,3 +15,6 @@ GET http://localhost:8080/api/dish-sizes
 
 ### Get All Suppliers
 GET http://localhost:8080/api/suppliers
+
+### Získání posledních 10 faktur od nejmladší po nejstarší
+GET http://localhost:8080/api/purchase-invoices

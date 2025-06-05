@@ -3,7 +3,7 @@ POST http://localhost:8080/api/stock-entries
 Content-Type: application/json
 
 {
-  "ingredientId": 1,
+  "ingredientId": 2,
   "supplierId": 1,
   "quantityReceived": 8.5,
   "pricePerUnitWithoutTax": 98.00,
@@ -14,7 +14,7 @@ POST http://localhost:8080/api/stock-entries
 Content-Type: application/json
 
 {
-  "ingredientId": 1,
+  "ingredientId": 2,
   "supplierId": 2,
   "quantityReceived": 9,
   "pricePerUnitWithoutTax": 119.00,

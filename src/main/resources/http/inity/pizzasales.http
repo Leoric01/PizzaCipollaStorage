@@ -5,6 +5,6 @@ Content-Type: application/json
 {
   "pizzaId": 1,
   "dishSizeId": 1,
-  "quantitySold": 2,
+  "quantitySold": 10,
   "cookName": "Karel"
 }

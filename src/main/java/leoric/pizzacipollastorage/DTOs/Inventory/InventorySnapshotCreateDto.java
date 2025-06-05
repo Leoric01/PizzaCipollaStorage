@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Data
 public class InventorySnapshotCreateDto {
     private Long ingredientId;
-    private float measuredQuantity;
+    private Float measuredQuantity;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH")
     private LocalDateTime timestamp;

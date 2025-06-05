@@ -2,6 +2,7 @@ package leoric.pizzacipollastorage.DTOs.Inventory;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientResponseDto;
+import leoric.pizzacipollastorage.models.enums.SnapshotType;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,8 @@ public class InventorySnapshotResponseDto {
 
     private float measuredQuantity;
     private String note;
-
+    private Float expectedQuantity;
+    private Float discrepancy;
     private IngredientResponseDto ingredient;
+    private SnapshotType type;
 }

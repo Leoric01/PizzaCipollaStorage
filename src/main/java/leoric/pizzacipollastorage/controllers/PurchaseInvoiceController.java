@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/purchase-invoices")
 @RequiredArgsConstructor
@@ -24,5 +26,9 @@ public class PurchaseInvoiceController {
     @GetMapping("/{id}")
     public ResponseEntity<PurchaseInvoiceResponseDto> getById(@PathVariable Long id) {
         return ResponseEntity.ok(purchaseInvoiceService.getById(id));
+    }
+    @GetMapping
+    public ResponseEntity<List<PurchaseInvoiceResponseDto>> getLatestInvoices() {
+        return ResponseEntity.ok(purchaseInvoiceService.getLatestInvoices(10));
     }
 }

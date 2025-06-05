@@ -5,7 +5,7 @@ import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientShortDto;
 import leoric.pizzacipollastorage.DTOs.Supplier.SupplierShortDto;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 public class StockEntryResponseDto {
@@ -14,6 +14,6 @@ public class StockEntryResponseDto {
     private SupplierShortDto supplier;
     private float quantityReceived;
     private float pricePerUnitWithoutTax;
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
-    private LocalDateTime receivedDate;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate receivedDate;
 }

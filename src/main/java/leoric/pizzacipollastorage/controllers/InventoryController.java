@@ -1,6 +1,5 @@
 package leoric.pizzacipollastorage.controllers;
 
-import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientInventoryDto;
 import leoric.pizzacipollastorage.DTOs.Inventory.InventorySnapshotCreateDto;
 import leoric.pizzacipollastorage.DTOs.Inventory.InventorySnapshotResponseDto;
 import leoric.pizzacipollastorage.services.interfaces.InventoryService;
@@ -22,7 +21,7 @@ public class InventoryController {
     }
 
     @GetMapping("/current-status")
-    public ResponseEntity<List<IngredientInventoryDto>> getCurrentInventoryStatus() {
+    public ResponseEntity<List<InventorySnapshotResponseDto>> getCurrentInventoryStatus() {
         return ResponseEntity.ok(inventoryService.getCurrentInventoryStatus());
     }
 }

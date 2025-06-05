@@ -1,9 +1,10 @@
 package leoric.pizzacipollastorage.DTOs.PurchaseInvoice;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import leoric.pizzacipollastorage.DTOs.Supplier.SupplierShortDto;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -11,8 +12,10 @@ public class PurchaseInvoiceResponseDto {
     private Long id;
     private String invoiceNumber;
     private SupplierShortDto supplier; // pouze jméno a id
-    private LocalDateTime issuedDate;
-    private LocalDateTime receivedDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    private LocalDate issuedDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    private LocalDate receivedDate;
     private String note;
     private List<PurchaseInvoiceItemDto> items;
 }
