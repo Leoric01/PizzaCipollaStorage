@@ -18,7 +18,6 @@ public enum BusinessErrorCodes {
     DUPLICATE_INGREDIENT_NAME(307, CONFLICT, "Ingredient with this name already exists"),
     MISSING_INGREDIENT_QUANTITY(309, BAD_REQUEST, "Missing quantity for ingredient in base dish size"),
     SNAPSHOT_ALREADY_EXISTS(308, CONFLICT, "Snapshot for this ingredient already exists in the last 6 hours"),
-
     EMAIL_ALREADY_IN_USE(305, CONFLICT, "Email is already in use");
 
     private final int code;
