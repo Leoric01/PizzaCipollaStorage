@@ -16,6 +16,7 @@ public enum BusinessErrorCodes {
     ENTITY_NOT_FOUND(404, NOT_FOUND, "Requested entity was not found"),
     DUPLICATE_VAT_NAME(306, CONFLICT, "VAT rate with this name already exists"),
     DUPLICATE_INGREDIENT_NAME(307, CONFLICT, "Ingredient with this name already exists"),
+    MISSING_INGREDIENT_QUANTITY(309, BAD_REQUEST, "Missing quantity for ingredient in base dish size"),
     SNAPSHOT_ALREADY_EXISTS(308, CONFLICT, "Snapshot for this ingredient already exists in the last 6 hours"),
 
     EMAIL_ALREADY_IN_USE(305, CONFLICT, "Email is already in use");

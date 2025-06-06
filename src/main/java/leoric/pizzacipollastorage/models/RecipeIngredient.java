@@ -21,5 +21,9 @@ public class RecipeIngredient {
     @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
 
-    private float quantity;
+    @ManyToOne
+    @JoinColumn(name = "dish_size_id")
+    private DishSize dishSize;
+
+    private Float quantity;
 }

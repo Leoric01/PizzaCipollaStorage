@@ -123,6 +123,7 @@ Content-Type: application/json
   "vatRateId": 1
 }
 
+
 ### Přidání více aliasů najednou
 POST http://localhost:8080/api/ingredient-aliases/batch
 Content-Type: application/json
@@ -161,7 +162,24 @@ Content-Type: application/json
   "name": "Prosciutto",
   "description": "Pizza se šunkou, rajčatovou omáčkou a mozzarellou"
 }
+###
+// @sleep 30
+POST http://localhost:8080/api/pizzas
+Content-Type: application/json
 
+{
+"name": "Funghi",
+"description": "Pizza se šunkou, rajčatovou omáčkou a mozzarellou"
+}
+###
+// @sleep 30
+POST http://localhost:8080/api/pizzas
+Content-Type: application/json
+
+{
+  "name": "Vesuvio",
+  "description": "Pizza se šunkou, rajčatovou omáčkou a mozzarellou"
+}
 ### Add Ingredients to Pizzas (Recipes)
 // @sleep 30
 POST http://localhost:8080/api/pizzas/recipes
@@ -259,6 +277,36 @@ Content-Type: application/json
   "quantity": 90
 }
 
+### Bulk Add Recipe to Pizza
+// @sleep 30
+POST http://localhost:8080/api/pizzas/recipes/bulk
+Content-Type: application/json
+
+{
+  "pizzaName": "Vesuvio",
+  "dishSizeId": 1,
+  "ingredients": [
+    { "ingredientName": "Mouka", "quantity": 0.25 },
+    { "ingredientName": "Mozzarella", "quantity": 110 },
+    { "ingredientName": "Rajčatová omáčka", "quantity": 80 },
+    { "ingredientName": "Šunka", "quantity": 100 }
+  ]
+}
+###
+// @sleep 30
+POST http://localhost:8080/api/pizzas/recipes/bulk
+Content-Type: application/json
+
+{
+  "pizzaName": "Funghi",
+  "dishSizeId": 1,
+  "ingredients": [
+    { "ingredientName": "Mouka", "quantity": 0.25 },
+    { "ingredientName": "Mozzarella", "quantity": 110 },
+    { "ingredientName": "Rajčatová omáčka", "quantity": 80 },
+    { "ingredientName": "Žampiony", "quantity": 120 }
+  ]
+}
 ### Create Inventory Snapshots
 // @sleep 30
 POST http://localhost:8080/api/inventory/snapshot

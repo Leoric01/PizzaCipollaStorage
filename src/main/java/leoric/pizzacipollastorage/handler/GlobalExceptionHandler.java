@@ -5,9 +5,6 @@ import jakarta.persistence.EntityNotFoundException;
 import leoric.pizzacipollastorage.handler.exceptions.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.authentication.BadCredentialsException;
-//import org.springframework.security.authentication.DisabledException;
-//import org.springframework.security.authentication.LockedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -15,7 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashSet;
 import java.util.Set;
 
-import static leoric.pizzacipollastorage.handler.BusinessErrorCodes.*;
+import static leoric.pizzacipollastorage.handler.BusinessErrorCodes.ENTITY_NOT_FOUND;
 import static org.springframework.http.HttpStatus.*;
 
 @Slf4j
@@ -35,6 +32,7 @@ public class GlobalExceptionHandler {
                                 .build()
                 );
     }
+
     @ExceptionHandler(DuplicateIngredientNameException.class)
     public ResponseEntity<ExceptionResponse> handleDuplicateIngredientNameException(DuplicateIngredientNameException ex) {
         return ResponseEntity
@@ -47,6 +45,20 @@ public class GlobalExceptionHandler {
                                 .build()
                 );
     }
+
+    @ExceptionHandler(MissingQuantityException.class)
+    public ResponseEntity<ExceptionResponse> handleMissingQuantityException(MissingQuantityException ex) {
+        return ResponseEntity
+                .status(BusinessErrorCodes.MISSING_INGREDIENT_QUANTITY.getHttpStatus())
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorCode(BusinessErrorCodes.MISSING_INGREDIENT_QUANTITY.getCode())
+                                .businessErrorDescription(BusinessErrorCodes.MISSING_INGREDIENT_QUANTITY.getDescription())
+                                .error(ex.getMessage())
+                                .build()
+                );
+    }
+
     @ExceptionHandler(SnapshotTooRecentException.class)
     public ResponseEntity<ExceptionResponse> handleSnapshotTooRecentException(SnapshotTooRecentException ex) {
         return ResponseEntity
