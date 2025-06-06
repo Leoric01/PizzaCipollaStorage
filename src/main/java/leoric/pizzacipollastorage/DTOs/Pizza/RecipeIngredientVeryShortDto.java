@@ -1,18 +1,16 @@
 package leoric.pizzacipollastorage.DTOs.Pizza;
 
+import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientShortDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PizzaResponseDto {
-    private Long id;
-    private String name;
-    private List<RecipeIngredientVeryShortDto> ingredients;
+public class RecipeIngredientVeryShortDto {
+    private IngredientShortDto ingredient;
+    private float amount;
 }

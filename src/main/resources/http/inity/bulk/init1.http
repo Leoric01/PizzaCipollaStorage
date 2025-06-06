@@ -1,34 +1,3 @@
-### Create VAT Rates
-POST http://localhost:8080/api/vat-rates
-Content-Type: application/json
-
-{
-  "name": "dph - snizena",
-  "rate": 0.11
-}
-
-###
-// @sleep 30
-
-POST http://localhost:8080/api/vat-rates
-Content-Type: application/json
-
-{
-  "name": "dph - potraviny",
-  "rate": 0.15
-}
-
-###
-// @sleep 30
-
-POST http://localhost:8080/api/vat-rates
-Content-Type: application/json
-
-{
-  "name": "dph - standartni",
-  "rate": 0.21
-}
-
 ### Create default dish size (Base)
 // @sleep 30
 POST http://localhost:8080/api/dish-sizes
