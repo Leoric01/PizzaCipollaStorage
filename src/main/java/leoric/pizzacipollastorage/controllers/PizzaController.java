@@ -1,9 +1,6 @@
 package leoric.pizzacipollastorage.controllers;
 
-import leoric.pizzacipollastorage.DTOs.Pizza.PizzaCreateDto;
-import leoric.pizzacipollastorage.DTOs.Pizza.PizzaResponseDto;
-import leoric.pizzacipollastorage.DTOs.Pizza.RecipeIngredientCreateDto;
-import leoric.pizzacipollastorage.DTOs.Pizza.RecipeIngredientShortDto;
+import leoric.pizzacipollastorage.DTOs.Pizza.*;
 import leoric.pizzacipollastorage.models.Pizza;
 import leoric.pizzacipollastorage.models.RecipeIngredient;
 import leoric.pizzacipollastorage.services.interfaces.PizzaService;
@@ -27,6 +24,11 @@ public class PizzaController {
     @PostMapping("/recipes")
     public ResponseEntity<RecipeIngredientShortDto> addIngredientToPizza(@RequestBody RecipeIngredientCreateDto dto) {
         return ResponseEntity.ok(pizzaService.addIngredientToPizza(dto));
+    }
+
+    @PostMapping("/recipes/bulk")
+    public ResponseEntity<List<RecipeIngredientShortDto>> addIngredientsToPizzaBulk(@RequestBody BulkRecipeCreateDto dto) {
+        return ResponseEntity.ok(pizzaService.addIngredientsToPizzaBulk(dto));
     }
 
     @GetMapping

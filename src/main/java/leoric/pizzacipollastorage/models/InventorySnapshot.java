@@ -1,6 +1,7 @@
 package leoric.pizzacipollastorage.models;
 
 import jakarta.persistence.*;
+import leoric.pizzacipollastorage.models.enums.IngredientForm;
 import leoric.pizzacipollastorage.models.enums.SnapshotType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,6 +33,9 @@ public class InventorySnapshot {
 
     @Enumerated(EnumType.STRING)
     private SnapshotType type;
+
+    @Enumerated(EnumType.STRING)
+    private IngredientForm form;
 
     @Transient
     public Float getDiscrepancy() {
