@@ -24,3 +24,6 @@ GET http://localhost:8080/api/ingredients/by-name/sugo
 
 ### Neexistující ingredience
 GET http://localhost:8080/api/ingredients/by-name/neexistujici
+
+### Zobrazit vsechny pobocky
+GET http://localhost:8080/api/branches

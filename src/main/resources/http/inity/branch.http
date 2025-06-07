@@ -1,0 +1,32 @@
+### Create Branches
+POST http://localhost:8080/api/branches
+Content-Type: application/json
+
+{
+  "name": "PPC Kamýk",
+  "address": "Freiwaldova 627/1, Praha",
+  "contactInfo": "+420 702 201 020"
+}
+
+###
+// @sleep 30
+POST http://localhost:8080/api/branches
+Content-Type: application/json
+
+{
+  "name": "PPC Háje",
+  "address": "Brandlova 2381/1b, Praha",
+  "contactInfo": "+420 721 555 050"
+}
+
+###
+// @sleep 30
+
+POST http://localhost:8080/api/branches
+Content-Type: application/json
+
+{
+  "name": "PPC Smíchov",
+  "address": "U Nikolajky 1097/3, Praha",
+  "contactInfo": "+420 720 696 999"
+}
