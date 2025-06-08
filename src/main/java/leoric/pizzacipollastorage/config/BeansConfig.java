@@ -62,7 +62,8 @@ public class BeansConfig {
                 "http://localhost:1025",
                 "http://localhost:1080",
                 "http://localhost:9090",
-                "http://localhost:80"
+                "http://localhost:80",
+                "https://zradlo-fe.vercel.app/"
         ));
         config.setAllowedHeaders(Arrays.asList(
                 ORIGIN,
