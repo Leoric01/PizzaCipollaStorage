@@ -27,3 +27,8 @@ GET http://localhost:8080/api/ingredients/by-name/neexistujici
 
 ### Zobrazit vsechny pobocky
 GET http://localhost:8080/api/branches
+
+### Zobrazit vsechny pujcky zbozi in/out
+GET http://localhost:8080/api/loans
+
+###

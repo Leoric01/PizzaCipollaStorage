@@ -18,7 +18,7 @@ public class IngredientLoanResponseDto {
     private Long id;
     private String fromBranchName;
     private String toBranchName;
-    private LoanType type;
+    private LoanType loanType;
     private LoanStatus status;
     private LocalDate createdAt;
     private List<IngredientLoanItemDto> items;

@@ -18,11 +18,13 @@ public class SupplierServiceImpl implements SupplierService {
     private final SupplierRepository supplierRepository;
     private final SupplierMapper supplierMapper;
 
+    @Override
     public SupplierResponseDto createSupplier(SupplierCreateDto dto) {
         Supplier supplier = supplierMapper.toEntity(dto);
         return supplierMapper.toDto(supplierRepository.save(supplier));
     }
 
+    @Override
     public List<SupplierResponseDto> getAllSuppliers() {
         return supplierRepository.findAll()
                 .stream()

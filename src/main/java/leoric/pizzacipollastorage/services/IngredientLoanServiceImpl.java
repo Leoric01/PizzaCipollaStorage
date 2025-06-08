@@ -9,10 +9,12 @@ import leoric.pizzacipollastorage.models.Ingredient;
 import leoric.pizzacipollastorage.models.IngredientLoan;
 import leoric.pizzacipollastorage.models.IngredientLoanItem;
 import leoric.pizzacipollastorage.models.enums.LoanStatus;
+import leoric.pizzacipollastorage.models.enums.LoanType;
 import leoric.pizzacipollastorage.repositories.BranchRepository;
 import leoric.pizzacipollastorage.repositories.IngredientLoanRepository;
 import leoric.pizzacipollastorage.services.interfaces.IngredientAliasService;
 import leoric.pizzacipollastorage.services.interfaces.IngredientLoanService;
+import leoric.pizzacipollastorage.services.interfaces.InventoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +27,11 @@ public class IngredientLoanServiceImpl implements IngredientLoanService {
 
     private final IngredientLoanRepository loanRepository;
     private final BranchRepository branchRepository;
+
+    private final InventoryService inventoryService;
     private final IngredientAliasService ingredientAliasService;
+
+
     private final IngredientLoanMapper mapper;
 
     @Override
@@ -38,7 +44,7 @@ public class IngredientLoanServiceImpl implements IngredientLoanService {
         IngredientLoan loan = new IngredientLoan();
         loan.setFromBranch(from);
         loan.setToBranch(to);
-        loan.setLoanType(dto.getType());
+        loan.setLoanType(dto.getLoanType());
         loan.setStatus(LoanStatus.ACTIVE);
         loan.setCreatedAt(LocalDate.now());
 
@@ -53,6 +59,19 @@ public class IngredientLoanServiceImpl implements IngredientLoanService {
         }).toList();
 
         loan.setItems(items);
+
+        for (IngredientLoanItem item : items) {
+            Long ingredientId = item.getIngredient().getId();
+            float qty = item.getQuantity();
+
+            if (dto.getLoanType() == LoanType.OUT) {
+                inventoryService.addToInventory(ingredientId, -qty);
+            } else if (dto.getLoanType() == LoanType.IN) {
+                inventoryService.addToInventory(ingredientId, qty);
+            }
+        }
+
+
         return mapper.toDto(loanRepository.save(loan));
     }
 
@@ -60,6 +79,22 @@ public class IngredientLoanServiceImpl implements IngredientLoanService {
     public IngredientLoanResponseDto markLoanAsReturned(Long loanId) {
         IngredientLoan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new EntityNotFoundException("Loan not found"));
+
+        if (loan.getStatus() == LoanStatus.RETURNED) {
+            throw new IllegalStateException("Loan already returned");
+        }
+
+        for (IngredientLoanItem item : loan.getItems()) {
+            Long ingredientId = item.getIngredient().getId();
+            float qty = item.getQuantity();
+
+            if (loan.getLoanType() == LoanType.OUT) {
+                inventoryService.addToInventory(ingredientId, qty);
+            } else if (loan.getLoanType() == LoanType.IN) {
+                inventoryService.addToInventory(ingredientId, -qty);
+            }
+        }
+
         loan.setStatus(LoanStatus.RETURNED);
         return mapper.toDto(loanRepository.save(loan));
     }

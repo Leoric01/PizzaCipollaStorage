@@ -15,6 +15,6 @@ import java.util.List;
 public class IngredientLoanCreateDto {
     private Long fromBranchId;
     private Long toBranchId;
-    private LoanType type;
+    private LoanType loanType;
     private List<IngredientLoanItemDto> items;
 }

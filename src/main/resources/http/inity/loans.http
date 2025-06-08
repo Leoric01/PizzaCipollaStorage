@@ -1,0 +1,42 @@
+### Create ingredient loan (OUT)
+POST http://localhost:8080/api/loans
+Content-Type: application/json
+
+{
+  "loanType": "OUT",
+  "fromBranchId": 1,
+  "toBranchId": 2,
+  "note": "Půjčka šunky a mozzarelly pro PPC Háje",
+  "items": [
+    {
+      "ingredientName": "Šunka",
+      "quantity": 300
+    },
+    {
+      "ingredientName": "Mozzarella",
+      "quantity": 500
+    }
+  ]
+}
+###
+POST http://localhost:8080/api/loans
+Content-Type: application/json
+
+{
+"loanType": "OUT",
+"fromBranchId": 1,
+"toBranchId": 2,
+"note": "Půjčka šunky a mozzarelly pro PPC Háje",
+"items": [
+{
+"ingredientName": "Šunka",
+"quantity": 30000
+},
+{
+"ingredientName": "Mozzarella",
+"quantity": 50000
+}
+]
+}
+### Mark loan as returned
+PATCH http://localhost:8080/api/loans/1/return
