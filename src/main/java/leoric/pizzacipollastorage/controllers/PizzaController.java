@@ -35,4 +35,8 @@ public class PizzaController {
     public ResponseEntity<List<PizzaResponseDto>> getAllPizzas() {
         return ResponseEntity.ok(pizzaService.getAllPizzas());
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<PizzaResponseDto> getPizzaById(@PathVariable Long id) {
+        return ResponseEntity.ok(pizzaService.getPizzaById(id));
+    }
 }

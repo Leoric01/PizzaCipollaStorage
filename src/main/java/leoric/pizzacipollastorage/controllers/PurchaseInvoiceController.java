@@ -24,7 +24,7 @@ public class PurchaseInvoiceController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PurchaseInvoiceResponseDto> getById(@PathVariable Long id) {
+    public ResponseEntity<PurchaseInvoiceResponseDto> getPurchaseInvoiceById(@PathVariable Long id) {
         return ResponseEntity.ok(purchaseInvoiceService.getById(id));
     }
     @GetMapping

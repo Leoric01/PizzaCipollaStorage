@@ -88,6 +88,14 @@ public class PizzaServiceImpl implements PizzaService {
         return created;
     }
 
+    @Override
+    public PizzaResponseDto getPizzaById(Long id) {
+        Pizza pizza = pizzaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Pizza not found with ID: " + id));
+        return pizzaMapper.toDto(pizza);
+    }
+
+
     public Pizza createPizza(PizzaCreateDto dto) {
         Pizza pizza = new Pizza();
         pizza.setName(dto.getName());

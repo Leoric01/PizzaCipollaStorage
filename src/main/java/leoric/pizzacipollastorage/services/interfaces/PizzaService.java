@@ -17,4 +17,6 @@ public interface PizzaService {
     List<PizzaResponseDto> getAllPizzas();
 
     List<RecipeIngredientShortDto> addIngredientsToPizzaBulk(BulkRecipeCreateDto dto);
+
+    PizzaResponseDto getPizzaById(Long id);
 }
