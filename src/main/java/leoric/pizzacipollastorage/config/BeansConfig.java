@@ -55,6 +55,7 @@ public class BeansConfig {
         // TODO: move values into application.properties
         config.setAllowedOrigins(List.of(
                 "http://localhost:4200",
+                "http://localhost:3000",
                 "http://localhost:8080",
                 "http://localhost:8088",
                 "http://localhost:5432",
