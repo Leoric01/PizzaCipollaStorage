@@ -35,41 +35,42 @@ public class JwtFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        if (!securityEnabled) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-        if (request.getServletPath().contains("/auth") || request.getServletPath().contains("/swagger") || request.getServletPath().contains("/v3/api")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-        final String authHeader = request.getHeader(AUTHORIZATION);
-        final String jwt;
-        final String userEmail;
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid authorization header");
-            filterChain.doFilter(request, response);
-            return;
-        }
-        jwt = authHeader.substring(7);
-        userEmail = jwtService.extractUsername(jwt);
-        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-            if (jwtService.isTokenValid(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                );
-                authToken.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
-                );
-                SecurityContextHolder.getContext().setAuthentication(authToken);
-            } else {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
-                return;
-            }
-        }
         filterChain.doFilter(request, response);
+//        if (!securityEnabled) {
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
+//        if (request.getServletPath().contains("/auth") || request.getServletPath().contains("/swagger") || request.getServletPath().contains("/v3/api")) {
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
+//        final String authHeader = request.getHeader(AUTHORIZATION);
+//        final String jwt;
+//        final String userEmail;
+//        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid authorization header");
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
+//        jwt = authHeader.substring(7);
+//        userEmail = jwtService.extractUsername(jwt);
+//        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+//            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+//            if (jwtService.isTokenValid(jwt, userDetails)) {
+//                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+//                        userDetails,
+//                        null,
+//                        userDetails.getAuthorities()
+//                );
+//                authToken.setDetails(
+//                        new WebAuthenticationDetailsSource().buildDetails(request)
+//                );
+//                SecurityContextHolder.getContext().setAuthentication(authToken);
+//            } else {
+//                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
+//                return;
+//            }
+//        }
+//        filterChain.doFilter(request, response);
     }
 }
