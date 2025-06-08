@@ -1,7 +1,11 @@
 package leoric.pizzacipollastorage;
 
+import leoric.pizzacipollastorage.auth.models.Role;
+import leoric.pizzacipollastorage.auth.repositories.RoleRepository;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class PizzaCipollaStorageApplication {
@@ -9,5 +13,15 @@ public class PizzaCipollaStorageApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PizzaCipollaStorageApplication.class, args);
 	}
-
+	@Bean
+	public CommandLineRunner runner(RoleRepository roleRepository) {
+		return args -> {
+			if (roleRepository.findByName("ADMIN").isEmpty()) {
+				roleRepository.save(Role.builder().name("ADMIN").build());
+			}
+			if (roleRepository.findByName("POKLADNI").isEmpty()) {
+				roleRepository.save(Role.builder().name("POKLADNI").build());
+			}
+		};
+	}
 }
