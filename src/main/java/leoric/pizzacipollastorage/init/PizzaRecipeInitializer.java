@@ -28,7 +28,7 @@ public class PizzaRecipeInitializer {
     public void insertPizzaRecipes() {
         createRecipe("Margherita", Map.of(
                 "Mouka", 0.25f,
-                "Rajčatová omáčka", 0.08f,
+                "sugo", 0.08f,
                 "Mozzarella", 0.11f,
                 "Bazalka", 0.005f
         ));
@@ -44,14 +44,14 @@ public class PizzaRecipeInitializer {
 
         createRecipe("Margherita Bufala", Map.of(
                 "Mouka", 0.25f,
-                "Rajčatová omáčka", 0.08f,
+                "sugo", 0.08f,
                 "Mozzarella di bufala", 0.11f,
                 "Bazalka", 0.005f
         ));
 
         createRecipe("Ai Formaggi", Map.of(
                 "Mouka", 0.25f,
-                "Rajčatová omáčka", 0.08f,
+                "sugo", 0.08f,
                 "Mozzarella", 0.08f,
                 "Uzený eidam", 0.05f,
                 "Gorgonzola", 0.05f
@@ -59,7 +59,7 @@ public class PizzaRecipeInitializer {
 
         createRecipe("Funghi", Map.of(
                 "Mouka", 0.25f,
-                "Rajčatová omáčka", 0.08f,
+                "sugo", 0.08f,
                 "Mozzarella", 0.11f,
                 "Žampiony", 0.09f
         ));
@@ -67,7 +67,7 @@ public class PizzaRecipeInitializer {
 
         createRecipe("Santoška", Map.of(
                 "Mouka", 0.25f,
-                "Rajčatová omáčka", 0.08f,
+                "sugo", 0.08f,
                 "Uzený eidam", 0.05f,
                 "Camembert", 0.05f,
                 "Rajčata", 0.06f,
@@ -76,7 +76,7 @@ public class PizzaRecipeInitializer {
 
         createRecipe("Spinaci", Map.of(
                 "Mouka", 0.25f,
-                "Rajčatová omáčka", 0.08f,
+                "sugo", 0.08f,
                 "Mozzarella", 0.11f,
                 "Špenát", 0.06f,
                 "Vejce", 0.05f
@@ -92,14 +92,14 @@ public class PizzaRecipeInitializer {
 
         createRecipe("Vesuvio", Map.of(
                 "Mouka", 0.25f,
-                "Rajčatová omáčka", 0.08f,
+                "sugo", 0.08f,
                 "Mozzarella", 0.11f,
                 "Šunka", 0.10f
         ));
 
         createRecipe("Capricciosa", Map.of(
                 "Mouka", 0.25f,
-                "Rajčatová omáčka", 0.08f,
+                "sugo", 0.08f,
                 "Mozzarella", 0.11f,
                 "Šunka", 0.08f,
                 "Žampiony", 0.09f
@@ -107,7 +107,7 @@ public class PizzaRecipeInitializer {
 
         createRecipe("Hawaii", Map.of(
                 "Mouka", 0.25f,
-                "Rajčatová omáčka", 0.08f,
+                "sugo", 0.08f,
                 "Mozzarella", 0.11f,
                 "Šunka", 0.08f,
                 "Ananas", 0.07f
@@ -115,7 +115,7 @@ public class PizzaRecipeInitializer {
 
         createRecipe("Al Capone", Map.of(
                 "Mouka", 0.25f,
-                "Rajčatová omáčka", 0.08f,
+                "sugo", 0.08f,
                 "Mozzarella", 0.11f,
                 "Šunka", 0.06f,
                 "Salám", 0.05f,
@@ -124,7 +124,7 @@ public class PizzaRecipeInitializer {
 
         createRecipe("Diavola", Map.of(
                 "Mouka", 0.25f,
-                "Rajčatová omáčka", 0.08f,
+                "sugo", 0.08f,
                 "Mozzarella", 0.11f,
                 "Šunka", 0.06f,
                 "Žampiony", 0.08f,
@@ -141,14 +141,14 @@ public class PizzaRecipeInitializer {
 
         createRecipe("Salame", Map.of(
                 "Mouka", 0.25f,
-                "Rajčatová omáčka", 0.08f,
+                "sugo", 0.08f,
                 "Mozzarella", 0.11f,
                 "Salám", 0.06f
         ));
 
         createRecipe("Piccante", Map.of(
                 "Mouka", 0.25f,
-                "Rajčatová omáčka", 0.08f,
+                "sugo", 0.08f,
                 "Mozzarella", 0.11f,
                 "Salám", 0.05f,
                 "Paprika", 0.05f,
@@ -157,7 +157,7 @@ public class PizzaRecipeInitializer {
         ));
         createRecipe("Mascarpone", Map.of(
                 "Mouka", 0.25f,
-                "Rajčatová omáčka", 0.08f,
+                "sugo", 0.08f,
                 "Mozzarella", 0.11f,
                 "Mascarpone", 0.05f,
                 "Salám", 0.05f,
@@ -166,14 +166,14 @@ public class PizzaRecipeInitializer {
 
         createRecipe("Pancetta", Map.of(
                 "Mouka", 0.25f,
-                "Rajčatová omáčka", 0.08f,
+                "sugo", 0.08f,
                 "Mozzarella", 0.11f,
                 "Pancetta", 0.06f
         ));
 
         createRecipe("Spinaci Pancetta", Map.of(
                 "Mouka", 0.25f,
-                "Rajčatová omáčka", 0.08f,
+                "sugo", 0.08f,
                 "Mozzarella", 0.11f,
                 "Pancetta", 0.06f,
                 "Špenát", 0.05f,
@@ -182,7 +182,7 @@ public class PizzaRecipeInitializer {
 
         createRecipe("Gorgonzola", Map.of(
                 "Mouka", 0.25f,
-                "Rajčatová omáčka", 0.08f,
+                "sugo", 0.08f,
                 "Mozzarella", 0.11f,
                 "Pancetta", 0.06f,
                 "Gorgonzola", 0.04f
@@ -190,7 +190,7 @@ public class PizzaRecipeInitializer {
 
         createRecipe("Mexicana", Map.of(
                 "Mouka", 0.25f,
-                "Rajčatová omáčka", 0.08f,
+                "sugo", 0.08f,
                 "Mozzarella", 0.11f,
                 "Pancetta", 0.06f,
                 "Fazolky", 0.05f,
@@ -200,7 +200,7 @@ public class PizzaRecipeInitializer {
 
         createRecipe("Don Corleone", Map.of(
                 "Mouka", 0.25f,
-                "Rajčatová omáčka", 0.08f,
+                "sugo", 0.08f,
                 "Mozzarella", 0.11f,
                 "Šunka", 0.05f,
                 "Salám", 0.04f,
@@ -233,7 +233,7 @@ public class PizzaRecipeInitializer {
 
         createRecipe("Prosciutto Crudo", Map.of(
                 "Mouka", 0.25f,
-                "Rajčatová omáčka", 0.08f,
+                "sugo", 0.08f,
                 "Mozzarella", 0.1f,
                 "Parmská šunka", 0.05f,
                 "Rukola", 0.015f
@@ -241,7 +241,7 @@ public class PizzaRecipeInitializer {
 
         createRecipe("Marco Polo", Map.of(
                 "Mouka", 0.25f,
-                "Rajčatová omáčka", 0.08f,
+                "sugo", 0.08f,
                 "Mozzarella", 0.11f,
                 "Grilovaná kuřecí prsa", 0.08f,
                 "Rajčata", 0.05f,
@@ -259,7 +259,7 @@ public class PizzaRecipeInitializer {
 
         createRecipe("Pollo", Map.of(
                 "Mouka", 0.25f,
-                "Rajčatová omáčka", 0.08f,
+                "sugo", 0.08f,
                 "Mozzarella", 0.11f,
                 "Grilovaná kuřecí prsa", 0.08f
         ));
@@ -275,7 +275,7 @@ public class PizzaRecipeInitializer {
 
         createRecipe("Siciliana Tonno", Map.of(
                 "Mouka", 0.25f,
-                "Rajčatová omáčka", 0.08f,
+                "sugo", 0.08f,
                 "Mozzarella", 0.11f,
                 "Tuňák", 0.07f,
                 "Červená cibule", 0.03f
@@ -283,7 +283,7 @@ public class PizzaRecipeInitializer {
 
         createRecipe("Napoletana", Map.of(
                 "Mouka", 0.25f,
-                "Rajčatová omáčka", 0.08f,
+                "sugo", 0.08f,
                 "Mozzarella", 0.1f,
                 "Ančovičky", 0.03f,
                 "Rajčata", 0.04f,
@@ -292,7 +292,7 @@ public class PizzaRecipeInitializer {
 
         createRecipe("Carpaccio", Map.of(
                 "Mouka", 0.25f,
-                "Rajčatová omáčka", 0.08f,
+                "sugo", 0.08f,
                 "Mozzarella", 0.1f,
                 "Carpaccio z pravé svíčkové", 0.06f,
                 "Rukola", 0.015f,

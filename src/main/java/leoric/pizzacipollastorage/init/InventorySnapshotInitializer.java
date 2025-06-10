@@ -27,7 +27,7 @@ public class InventorySnapshotInitializer {
     @PostConstruct
     public void insertDefaultSnapshots() {
         create("Mozzarella");
-        create("Rajčatová omáčka");
+        create("sugo");
         create("Horcice");
         create("Parmezán");
         create("Jalapeňos");
