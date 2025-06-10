@@ -1,20 +1,20 @@
 package leoric.pizzacipollastorage.services;
 
 import jakarta.persistence.EntityNotFoundException;
-import leoric.pizzacipollastorage.DTOs.Pizza.*;
+import leoric.pizzacipollastorage.DTOs.MenuItem.*;
 import leoric.pizzacipollastorage.handler.exceptions.MissingQuantityException;
-import leoric.pizzacipollastorage.mapstruct.PizzaMapper;
+import leoric.pizzacipollastorage.mapstruct.MenuItemMapper;
 import leoric.pizzacipollastorage.mapstruct.RecipeIngredientMapper;
 import leoric.pizzacipollastorage.models.DishSize;
 import leoric.pizzacipollastorage.models.Ingredient;
-import leoric.pizzacipollastorage.models.Pizza;
+import leoric.pizzacipollastorage.models.MenuItem;
 import leoric.pizzacipollastorage.models.RecipeIngredient;
 import leoric.pizzacipollastorage.repositories.DishSizeRepository;
 import leoric.pizzacipollastorage.repositories.IngredientRepository;
-import leoric.pizzacipollastorage.repositories.PizzaRepository;
+import leoric.pizzacipollastorage.repositories.MenuItemRepository;
 import leoric.pizzacipollastorage.repositories.RecipeIngredientRepository;
 import leoric.pizzacipollastorage.services.interfaces.IngredientAliasService;
-import leoric.pizzacipollastorage.services.interfaces.PizzaService;
+import leoric.pizzacipollastorage.services.interfaces.MenuItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,9 +25,9 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class PizzaServiceImpl implements PizzaService {
+public class MenuItemServiceImpl implements MenuItemService {
 
-    private final PizzaRepository pizzaRepository;
+    private final MenuItemRepository menuItemRepository;
     private final IngredientRepository ingredientRepository;
     private final RecipeIngredientRepository recipeIngredientRepository;
     private final DishSizeRepository dishSizeRepository;
@@ -35,12 +35,12 @@ public class PizzaServiceImpl implements PizzaService {
 
     private final IngredientAliasService ingredientAliasService;
 
-    private final PizzaMapper pizzaMapper;
+    private final MenuItemMapper menuItemMapper;
 
     @Override
-    public List<RecipeIngredientShortDto> addIngredientsToPizzaBulk(BulkRecipeCreateDto dto) {
-        Pizza pizza = pizzaRepository.findByName(dto.getPizzaName())
-                .orElseThrow(() -> new EntityNotFoundException("Pizza not found: " + dto.getPizzaName()));
+    public List<RecipeIngredientShortDto> addIngredientsToMenuItemBulk(RecipeCreateBulkDto dto) {
+        MenuItem menuItem = menuItemRepository.findByName(dto.getMenuItem())
+                .orElseThrow(() -> new EntityNotFoundException("MenuItem not found: " + dto.getMenuItem()));
 
         // Získání dishSize (z requestu nebo výchozí)
         DishSize dishSize;
@@ -59,7 +59,7 @@ public class PizzaServiceImpl implements PizzaService {
 
         List<RecipeIngredientShortDto> created = new ArrayList<>();
 
-        for (BulkRecipeIngredientDto ing : dto.getIngredients()) {
+        for (RecipeIngredientBulkDto ing : dto.getIngredients()) {
             // Najít ingredienci podle názvu nebo aliasu
             Ingredient ingredient = ingredientAliasService.findIngredientByNameFlexible(ing.getIngredientName())
                     .orElseThrow(() -> new EntityNotFoundException("Ingredient or alias not found: " + ing.getIngredientName()));
@@ -73,7 +73,7 @@ public class PizzaServiceImpl implements PizzaService {
                 quantity = ing.getQuantity();
             } else {
                 Optional<RecipeIngredient> base = recipeIngredientRepository
-                        .findByPizzaIdAndIngredientIdAndDishSizeId(pizza.getId(), ingredient.getId(), defaultDishSizeId);
+                        .findByMenuItemIdAndIngredientIdAndDishSizeId(menuItem.getId(), ingredient.getId(), defaultDishSizeId);
 
                 if (base.isPresent()) {
                     quantity = base.get().getQuantity() * dishFactor;
@@ -85,7 +85,7 @@ public class PizzaServiceImpl implements PizzaService {
             }
 
             RecipeIngredient recipeIngredient = new RecipeIngredient();
-            recipeIngredient.setPizza(pizza);
+            recipeIngredient.setMenuItem(menuItem);
             recipeIngredient.setIngredient(ingredient);
             recipeIngredient.setQuantity(quantity);
             recipeIngredient.setDishSize(dishSize);
@@ -97,28 +97,27 @@ public class PizzaServiceImpl implements PizzaService {
     }
 
     @Override
-    public PizzaResponseDto getPizzaById(UUID id) {
-        Pizza pizza = pizzaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Pizza not found with ID: " + id));
-        return pizzaMapper.toDto(pizza);
+    public MenuItemResponseDto getMenuItemById(UUID id) {
+        MenuItem menuItem = menuItemRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("MenuItem not found with ID: " + id));
+        return menuItemMapper.toDto(menuItem);
     }
 
-
-    public Pizza createPizza(PizzaCreateDto dto) {
-        Pizza pizza = new Pizza();
-        pizza.setName(dto.getName());
-        pizza.setDescription(dto.getDescription());
-        return pizzaRepository.save(pizza);
+    public MenuItem createMenuItem(MenuItemCreateDto dto) {
+        MenuItem menuItem = new MenuItem();
+        menuItem.setName(dto.getName());
+        menuItem.setDescription(dto.getDescription());
+        return menuItemRepository.save(menuItem);
     }
 
-    public RecipeIngredientShortDto addIngredientToPizza(RecipeIngredientCreateDto dto) {
-        Pizza pizza = pizzaRepository.findById(dto.getPizzaId())
-                .orElseThrow(() -> new EntityNotFoundException("Pizza not found"));
+    public RecipeIngredientShortDto addIngredientToMenuItem(RecipeIngredientCreateDto dto) {
+        MenuItem menuItem = menuItemRepository.findById(dto.getMenuItemId())
+                .orElseThrow(() -> new EntityNotFoundException("MenuItem not found"));
         Ingredient ingredient = ingredientRepository.findById(dto.getIngredientId())
                 .orElseThrow(() -> new EntityNotFoundException("Ingredient not found"));
 
         RecipeIngredient recipeIngredient = new RecipeIngredient();
-        recipeIngredient.setPizza(pizza);
+        recipeIngredient.setMenuItem(menuItem);
         recipeIngredient.setIngredient(ingredient);
         recipeIngredient.setQuantity(dto.getQuantity());
 
@@ -126,7 +125,7 @@ public class PizzaServiceImpl implements PizzaService {
     }
 
     @Override
-    public List<PizzaResponseDto> getAllPizzas() {
-        return pizzaMapper.toDtoList(pizzaRepository.findAll());
+    public List<MenuItemResponseDto> getAllMenuItems() {
+        return menuItemMapper.toDtoList(menuItemRepository.findAll());
     }
 }

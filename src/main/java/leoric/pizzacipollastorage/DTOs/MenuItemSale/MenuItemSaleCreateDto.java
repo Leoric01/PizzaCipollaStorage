@@ -1,12 +1,12 @@
-package leoric.pizzacipollastorage.DTOs.PizzaSale;
+package leoric.pizzacipollastorage.DTOs.MenuItemSale;
 
 import lombok.Data;
 
 import java.util.UUID;
 
 @Data
-public class PizzaSaleCreateDto {
-    private UUID pizzaId;
+public class MenuItemSaleCreateDto {
+    private UUID menuItemId;
     private UUID dishSizeId;
     private int quantitySold;
     private String cookName;

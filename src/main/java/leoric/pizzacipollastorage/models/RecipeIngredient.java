@@ -21,8 +21,8 @@ public class RecipeIngredient {
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "pizza_id")
-    private Pizza pizza;
+    @JoinColumn(name = "menu_item_id")
+    private MenuItem menuItem;
 
     @ManyToOne
     @JoinColumn(name = "ingredient_id")

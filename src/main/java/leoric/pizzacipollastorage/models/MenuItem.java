@@ -1,12 +1,16 @@
 package leoric.pizzacipollastorage.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -14,19 +18,15 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PizzaSaleExtra {
+public class MenuItem {
     @Id
     @UuidGenerator(style = UuidGenerator.Style.AUTO)
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "pizza_sale_id")
-    private PizzaSale pizzaSale;
+    private String name;
+    private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "extra_id")
-    private Extra extra;
-
-    private int quantity;
+    @OneToMany(mappedBy = "menuItem")
+    private List<RecipeIngredient> ingredients;
 }

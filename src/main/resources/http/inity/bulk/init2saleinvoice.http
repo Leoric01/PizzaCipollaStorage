@@ -1,5 +1,5 @@
 ### Create Pizza Sale
-POST http://localhost:8080/api/pizza-sales
+POST http://localhost:8080/api/menuitems-sales
 Content-Type: application/json
 
 {

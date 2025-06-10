@@ -1,11 +1,11 @@
 package leoric.pizzacipollastorage.mapstruct;
 
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientShortDto;
-import leoric.pizzacipollastorage.DTOs.Pizza.PizzaResponseDto;
-import leoric.pizzacipollastorage.DTOs.Pizza.RecipeIngredientShortDto;
-import leoric.pizzacipollastorage.DTOs.Pizza.RecipeIngredientVeryShortDto;
+import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemResponseDto;
+import leoric.pizzacipollastorage.DTOs.MenuItem.RecipeIngredientShortDto;
+import leoric.pizzacipollastorage.DTOs.MenuItem.RecipeIngredientVeryShortDto;
 import leoric.pizzacipollastorage.models.Ingredient;
-import leoric.pizzacipollastorage.models.Pizza;
+import leoric.pizzacipollastorage.models.MenuItem;
 import leoric.pizzacipollastorage.models.RecipeIngredient;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -13,11 +13,11 @@ import org.mapstruct.Mapping;
 import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {IngredientMapper.class})
-public interface PizzaMapper {
+public interface MenuItemMapper {
 
-    PizzaResponseDto toDto(Pizza pizza);
+    MenuItemResponseDto toDto(MenuItem menuItem);
 
-    List<PizzaResponseDto> toDtoList(List<Pizza> pizzas);
+    List<MenuItemResponseDto> toDtoList(List<MenuItem> menuItems);
 
     @Mapping(source = "quantity", target = "amount")
     @Mapping(source = "ingredient", target = "ingredient")

@@ -1,4 +1,4 @@
-package leoric.pizzacipollastorage.DTOs.PizzaSale;
+package leoric.pizzacipollastorage.DTOs.MenuItemSale;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,9 +12,9 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PizzaSaleResponseDto {
+public class MenuItemSaleResponseDto {
     private UUID id;
-    private String pizzaName;
+    private String menuItem;
     private String dishSize;
     private int quantitySold;
     private String cookName;

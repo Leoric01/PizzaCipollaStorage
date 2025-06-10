@@ -1,9 +1,9 @@
-package leoric.pizzacipollastorage.DTOs.Pizza;
+package leoric.pizzacipollastorage.DTOs.MenuItem;
 
 import lombok.Data;
 
 @Data
-public class BulkRecipeIngredientDto {
+public class RecipeIngredientBulkDto {
     private String ingredientName; // nebo alias
     private Float quantity; // povinné pokud dishSizeId == 1, jinak volitelné
 }

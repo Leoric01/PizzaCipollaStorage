@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Repository
 public interface RecipeIngredientRepository extends JpaRepository<RecipeIngredient, UUID> {
-    List<RecipeIngredient> findByPizzaId(UUID pizzaId);
+    List<RecipeIngredient> findByMenuItemId(UUID menuItemId);
 
-    Optional<RecipeIngredient> findByPizzaIdAndIngredientIdAndDishSizeId(UUID id, UUID id1, UUID l);
+    Optional<RecipeIngredient> findByMenuItemIdAndIngredientIdAndDishSizeId(UUID id, UUID id1, UUID l);
 }

@@ -2,9 +2,9 @@ package leoric.pizzacipollastorage.init;
 
 import jakarta.annotation.PostConstruct;
 import leoric.pizzacipollastorage.models.Ingredient;
-import leoric.pizzacipollastorage.models.Pizza;
+import leoric.pizzacipollastorage.models.MenuItem;
 import leoric.pizzacipollastorage.models.RecipeIngredient;
-import leoric.pizzacipollastorage.repositories.PizzaRepository;
+import leoric.pizzacipollastorage.repositories.MenuItemRepository;
 import leoric.pizzacipollastorage.repositories.RecipeIngredientRepository;
 import leoric.pizzacipollastorage.services.interfaces.IngredientAliasService;
 import leoric.pizzacipollastorage.utils.CustomUtilityString;
@@ -17,15 +17,15 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-@DependsOn({"pizzaInitializer", "ingredientInitializer"})
-public class PizzaRecipeInitializer {
+@DependsOn({"menuItemInitializer", "ingredientInitializer"})
+public class MenuItemRecipeInitializer {
 
-    private final PizzaRepository pizzaRepository;
+    private final MenuItemRepository menuItemRepository;
     private final IngredientAliasService ingredientAliasService;
     private final RecipeIngredientRepository recipeIngredientRepository;
 
     @PostConstruct
-    public void insertPizzaRecipes() {
+    public void insertMenuItemRecipes() {
         createRecipe("Margherita", Map.of(
                 "Mouka", 0.25f,
                 "sugo", 0.08f,
@@ -312,12 +312,12 @@ public class PizzaRecipeInitializer {
     }
 
     private void createRecipe(String pizzaName, Map<String, Float> ingredients) {
-        Optional<Pizza> pizzaOpt = pizzaRepository.findAll().stream()
+        Optional<MenuItem> pizzaOpt = menuItemRepository.findAll().stream()
                 .filter(p -> CustomUtilityString.normalize(p.getName()).equals(CustomUtilityString.normalize(pizzaName)))
                 .findFirst();
 
         if (pizzaOpt.isEmpty()) return;
-        Pizza pizza = pizzaOpt.get();
+        MenuItem menuItem = pizzaOpt.get();
 
         for (Map.Entry<String, Float> entry : ingredients.entrySet()) {
             String ingName = entry.getKey();
@@ -327,12 +327,12 @@ public class PizzaRecipeInitializer {
                     .orElseThrow(() -> new IllegalStateException("Ingredient not found (even with aliases): " + ingName));
 
             boolean exists = recipeIngredientRepository
-                    .findByPizzaId(pizza.getId()).stream()
+                    .findByMenuItemId(menuItem.getId()).stream()
                     .anyMatch(r -> r.getIngredient().getId().equals(ingredient.getId()));
 
             if (!exists) {
                 RecipeIngredient ri = RecipeIngredient.builder()
-                        .pizza(pizza)
+                        .menuItem(menuItem)
                         .ingredient(ingredient)
                         .quantity(quantity)
                         .build();

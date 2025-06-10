@@ -1,0 +1,23 @@
+### Create MenuItem
+POST http://localhost:8080/api/menuItems
+Content-Type: application/json
+
+{
+  "name": "Margherita",
+  "description": "Klasická menuItem s rajčatovou omáčkou a mozzarellou"
+}
+
+###
+// @sleep 30
+
+###
+POST http://localhost:8080/api/menuItems
+Content-Type: application/json
+
+{
+  "name": "Prosciutto",
+  "description": "MenuItem se šunkou, rajčatovou omáčkou a mozzarellou"
+}
+
+###
+// @sleep 30

@@ -1,4 +1,4 @@
-package leoric.pizzacipollastorage.DTOs.Pizza;
+package leoric.pizzacipollastorage.DTOs.MenuItem;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +12,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PizzaResponseDto {
+public class MenuItemResponseDto {
     private UUID id;
     private String name;
     private List<RecipeIngredientVeryShortDto> ingredients;

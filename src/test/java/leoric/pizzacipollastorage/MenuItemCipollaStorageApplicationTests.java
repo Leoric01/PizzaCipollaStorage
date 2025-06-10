@@ -9,5 +9,4 @@ class PizzaCipollaStorageApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }

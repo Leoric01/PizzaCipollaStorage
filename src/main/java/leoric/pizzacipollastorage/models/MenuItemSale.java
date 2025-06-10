@@ -15,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PizzaSale {
+public class MenuItemSale {
     @Id
     @UuidGenerator(style = UuidGenerator.Style.AUTO)
     @Column(columnDefinition = "BINARY(16)")
@@ -23,7 +23,7 @@ public class PizzaSale {
 
     @ManyToOne
     @JoinColumn(name = "pizza_id")
-    private Pizza pizza;
+    private MenuItem menuItem;
 
     @ManyToOne
     @JoinColumn(name = "dish_size_id")

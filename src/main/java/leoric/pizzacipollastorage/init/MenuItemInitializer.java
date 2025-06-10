@@ -1,20 +1,20 @@
 package leoric.pizzacipollastorage.init;
 
 import jakarta.annotation.PostConstruct;
-import leoric.pizzacipollastorage.models.Pizza;
-import leoric.pizzacipollastorage.repositories.PizzaRepository;
+import leoric.pizzacipollastorage.models.MenuItem;
+import leoric.pizzacipollastorage.repositories.MenuItemRepository;
 import leoric.pizzacipollastorage.utils.CustomUtilityString;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class PizzaInitializer {
+public class MenuItemInitializer {
 
-    private final PizzaRepository pizzaRepository;
+    private final MenuItemRepository menuItemRepository;
 
     @PostConstruct
-    public void insertFullPizzaMenu() {
+    public void insertFullMenuItem() {
         createIfNotExists("Margherita", "Tomato, mozzarella, basil.");
         createIfNotExists("Quattro Formaggi", "Cream, mozzarella, mascarpone, gorgonzola, parmesan.");
         createIfNotExists("Margherita Bufala", "Tomato, buffalo mozzarella, basil.");
@@ -53,17 +53,17 @@ public class PizzaInitializer {
 
     private void createIfNotExists(String name, String description) {
         String normalized = CustomUtilityString.normalize(name);
-        boolean exists = pizzaRepository.findAll().stream()
-                .map(Pizza::getName)
+        boolean exists = menuItemRepository.findAll().stream()
+                .map(MenuItem::getName)
                 .map(CustomUtilityString::normalize)
                 .anyMatch(n -> n.equals(normalized));
 
         if (!exists) {
-            Pizza pizza = Pizza.builder()
+            MenuItem menuItem = MenuItem.builder()
                     .name(name)
                     .description(description)
                     .build();
-            pizzaRepository.save(pizza);
+            menuItemRepository.save(menuItem);
         }
     }
 }
