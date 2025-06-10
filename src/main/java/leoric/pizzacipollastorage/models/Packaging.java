@@ -14,8 +14,8 @@ public class Packaging {
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
-    private String name;         // "MenuItem krabice 32cm" nebo taska atp
-    private String unit;         // "ks"
+    private String name;
+    private String unit;
     private float lossFactor;
 
     private boolean trackStock;  // Odečítat ze skladu?

@@ -1,6 +1,7 @@
 package leoric.pizzacipollastorage.controllers;
 
 import leoric.pizzacipollastorage.DTOs.MenuItem.*;
+import leoric.pizzacipollastorage.models.MenuItem;
 import leoric.pizzacipollastorage.services.interfaces.MenuItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +13,11 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/menu-items")
 @RequiredArgsConstructor
-public class MenuItem {
+public class MenuItemController {
     private final MenuItemService menuItemService;
 
     @PostMapping
-    public ResponseEntity<leoric.pizzacipollastorage.models.MenuItem> createMenuItem(@RequestBody MenuItemCreateDto dto) {
+    public ResponseEntity<MenuItem> createMenuItem(@RequestBody MenuItemCreateDto dto) {
         return ResponseEntity.ok(menuItemService.createMenuItem(dto));
     }
 
