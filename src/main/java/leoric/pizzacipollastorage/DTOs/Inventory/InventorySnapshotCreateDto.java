@@ -5,10 +5,11 @@ import leoric.pizzacipollastorage.models.enums.IngredientForm;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 public class InventorySnapshotCreateDto {
-    private Long ingredientId;
+    private UUID ingredientId;
     private Float measuredQuantity;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH")

@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +42,7 @@ public class VatRateServiceImpl implements VatRateService {
     }
 
     @Override
-    public VatRateDeleteResponseDto deleteVatRateById(Long id) {
+    public VatRateDeleteResponseDto deleteVatRateById(UUID id) {
         VatRate vatRate = vatRateRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Vat rate with ID " + id + " not found"));
 

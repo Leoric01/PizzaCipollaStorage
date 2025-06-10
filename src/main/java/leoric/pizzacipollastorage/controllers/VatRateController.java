@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/vat-rates")
@@ -30,7 +31,7 @@ public class VatRateController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<VatRateDeleteResponseDto> deleteVatRate(@PathVariable Long id) {
+    public ResponseEntity<VatRateDeleteResponseDto> deleteVatRate(@PathVariable UUID id) {
         VatRateDeleteResponseDto deleted = vatRateService.deleteVatRateById(id);
         return ResponseEntity.ok(deleted);
     }

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -26,12 +27,12 @@ public class BranchServiceImpl implements BranchService {
     }
 
     @Override
-    public void deleteBranch(Long id) {
+    public void deleteBranch(UUID id) {
         branchRepository.deleteById(id);
     }
 
     @Override
-    public BranchResponseDto updateBranch(Long id, BranchCreateDto dto) {
+    public BranchResponseDto updateBranch(UUID id, BranchCreateDto dto) {
         Branch branch = branchRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Branch not found: id = " + id));
         branch.setName(dto.getName());

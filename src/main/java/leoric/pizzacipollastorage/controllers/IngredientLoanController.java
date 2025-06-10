@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/loans")
@@ -23,7 +24,7 @@ public class IngredientLoanController {
     }
 
     @PatchMapping("/{id}/return")
-    public ResponseEntity<IngredientLoanResponseDto> returnLoan(@PathVariable Long id) {
+    public ResponseEntity<IngredientLoanResponseDto> returnLoan(@PathVariable UUID id) {
         return ResponseEntity.ok(ingredientLoanService.markLoanAsReturned(id));
     }
 

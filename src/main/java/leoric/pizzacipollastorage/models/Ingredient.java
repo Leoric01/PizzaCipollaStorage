@@ -1,9 +1,14 @@
 package leoric.pizzacipollastorage.models;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -12,8 +17,9 @@ import java.util.List;
 @Builder
 public class Ingredient {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @UuidGenerator(style = UuidGenerator.Style.AUTO)
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID id;
 
     private String name;
     private String unit;

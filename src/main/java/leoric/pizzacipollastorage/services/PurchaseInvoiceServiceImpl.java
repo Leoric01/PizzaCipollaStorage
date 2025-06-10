@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -83,7 +84,7 @@ public class PurchaseInvoiceServiceImpl implements PurchaseInvoiceService {
     }
 
     @Override
-    public PurchaseInvoiceResponseDto getById(Long id) {
+    public PurchaseInvoiceResponseDto getById(UUID id) {
         PurchaseInvoice invoice = purchaseInvoiceRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Purchase invoice not found"));
 

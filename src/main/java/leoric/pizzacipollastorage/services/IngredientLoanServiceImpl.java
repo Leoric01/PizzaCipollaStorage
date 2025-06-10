@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -61,7 +62,7 @@ public class IngredientLoanServiceImpl implements IngredientLoanService {
         loan.setItems(items);
 
         for (IngredientLoanItem item : items) {
-            Long ingredientId = item.getIngredient().getId();
+            UUID ingredientId = item.getIngredient().getId();
             float qty = item.getQuantity();
 
             if (dto.getLoanType() == LoanType.OUT) {
@@ -76,7 +77,7 @@ public class IngredientLoanServiceImpl implements IngredientLoanService {
     }
 
     @Override
-    public IngredientLoanResponseDto markLoanAsReturned(Long loanId) {
+    public IngredientLoanResponseDto markLoanAsReturned(UUID loanId) {
         IngredientLoan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new EntityNotFoundException("Loan not found"));
 
@@ -85,7 +86,7 @@ public class IngredientLoanServiceImpl implements IngredientLoanService {
         }
 
         for (IngredientLoanItem item : loan.getItems()) {
-            Long ingredientId = item.getIngredient().getId();
+            UUID ingredientId = item.getIngredient().getId();
             float qty = item.getQuantity();
 
             if (loan.getLoanType() == LoanType.OUT) {

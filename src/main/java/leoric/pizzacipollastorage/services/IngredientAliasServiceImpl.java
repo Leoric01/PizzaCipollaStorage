@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -62,14 +63,14 @@ public class IngredientAliasServiceImpl implements IngredientAliasService {
     }
 
     @Override
-    public List<IngredientAliasDto> getAliasesByIngredientId(Long ingredientId) {
+    public List<IngredientAliasDto> getAliasesByIngredientId(UUID ingredientId) {
         return aliasRepository.findAllByIngredientId(ingredientId).stream()
                 .map(aliasMapper::toDto)
                 .toList();
     }
 
     @Override
-    public void deleteAlias(Long aliasId) {
+    public void deleteAlias(UUID aliasId) {
         aliasRepository.deleteById(aliasId);
     }
 }

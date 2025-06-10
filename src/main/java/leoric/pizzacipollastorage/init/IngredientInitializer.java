@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 @DependsOn("vatRateInitializer")
@@ -20,12 +22,13 @@ public class IngredientInitializer {
 
     @PostConstruct
     public void insertDefaultIngredients() {
-        VatRate vatRate = vatRateRepository.findById(1L)
-                .orElseThrow(() -> new IllegalStateException("Missing VAT rate with ID 1"));
+        UUID vatRateId = UUID.fromString("00000000-0000-0000-0000-000000000001");
+        VatRate vatRate = vatRateRepository.findById(vatRateId)
+                .orElseThrow(() -> new IllegalStateException("Missing VAT rate with ID 000...001"));
 
         createIfNotExists("Mozzarella", "g", 0.04f, 0.04f, vatRate);
         createIfNotExists("Mouka", "g", 0.04f, 0.04f, vatRate);
-        createIfNotExists("Rajčatová omáčka", "g", 0.04f, 0.04f, vatRate);
+        createIfNotExists("Sugo", "g", 0.04f, 0.04f, vatRate);
         createIfNotExists("Ančovičky", "g", 0.04f, 0.04f, vatRate);
         createIfNotExists("Horcice", "g", 0.04f, 0.04f, vatRate);
         createIfNotExists("Parmezán", "g", 0.09f, 0.07f, vatRate);

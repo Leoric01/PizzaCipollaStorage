@@ -6,13 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class PizzaResponseDto {
-    private Long id;
+    private UUID id;
     private String name;
     private List<RecipeIngredientVeryShortDto> ingredients;
 }

@@ -3,16 +3,46 @@ POST http://localhost:8080/api/ingredient-aliases/batch
 Content-Type: application/json
 
 [
-  { "aliasName": "rajčatova omacka", "ingredientId": 3 },
-  { "aliasName": "rajcatová", "ingredientId": 3 },
-  { "aliasName": "rajcatova", "ingredientId": 3 },
-  { "aliasName": "sugo", "ingredientId": 3 },
-  { "aliasName": "sugo di pomodoro", "ingredientId": 3 },
-  { "aliasName": "paradajkova omacka", "ingredientId": 3 },
-  { "aliasName": "paradajkova", "ingredientId": 3 },
-  { "aliasName": "tomato sauce", "ingredientId": 3 },
-  { "aliasName": "omacka z rajcat", "ingredientId": 3 },
-  { "aliasName": "z rajcat", "ingredientId": 3 }
+  {
+    "aliasName": "rajčatova omacka",
+    "ingredientId": "5b5cd5e5-b53a-4977-8ad8-ae0c7d5008c4"
+  },
+  {
+    "aliasName": "rajcatová",
+    "ingredientId": "5b5cd5e5-b53a-4977-8ad8-ae0c7d5008c4"
+  },
+  {
+    "aliasName": "rajcatova",
+    "ingredientId": "5b5cd5e5-b53a-4977-8ad8-ae0c7d5008c4"
+  },
+  {
+    "aliasName": "sugo",
+    "ingredientId": "5b5cd5e5-b53a-4977-8ad8-ae0c7d5008c4"
+  },
+  {
+    "aliasName": "sugo di pomodoro",
+    "ingredientId": "5b5cd5e5-b53a-4977-8ad8-ae0c7d5008c4"
+  },
+  {
+    "aliasName": "paradajkova omacka",
+    "ingredientId": "5b5cd5e5-b53a-4977-8ad8-ae0c7d5008c4"
+  },
+  {
+    "aliasName": "paradajkova",
+    "ingredientId": "5b5cd5e5-b53a-4977-8ad8-ae0c7d5008c4"
+  },
+  {
+    "aliasName": "tomato sauce",
+    "ingredientId": "5b5cd5e5-b53a-4977-8ad8-ae0c7d5008c4"
+  },
+  {
+    "aliasName": "omacka z rajcat",
+    "ingredientId": "5b5cd5e5-b53a-4977-8ad8-ae0c7d5008c4"
+  },
+  {
+    "aliasName": "z rajcat",
+    "ingredientId": "5b5cd5e5-b53a-4977-8ad8-ae0c7d5008c4"
+  }
 ]
 
 ### Add Ingredients to Pizzas (Recipes)

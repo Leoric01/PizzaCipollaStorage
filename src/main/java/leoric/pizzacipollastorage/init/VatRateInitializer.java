@@ -7,6 +7,8 @@ import leoric.pizzacipollastorage.utils.CustomUtilityString;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component("vatRateInitializer")
 @RequiredArgsConstructor
 public class VatRateInitializer {
@@ -15,12 +17,12 @@ public class VatRateInitializer {
 
     @PostConstruct
     public void insertDefaultVatRates() {
-        createIfNotExists("dph - snížená", 0.12f);
-        createIfNotExists("dph - základní", 0.21f);
-        createIfNotExists("dph - nulová", 0.0f);
+        createIfNotExists(UUID.fromString("00000000-0000-0000-0000-000000000001"), "dph - základní", 0.21f);
+        createIfNotExists(UUID.fromString("00000000-0000-0000-0000-000000000002"), "dph - snížená", 0.12f);
+        createIfNotExists(UUID.fromString("00000000-0000-0000-0000-000000000003"), "dph - nulová", 0.0f);
     }
 
-    private void createIfNotExists(String name, float rate) {
+    private void createIfNotExists(UUID id, String name, float rate) {
         String normalizedInput = CustomUtilityString.normalize(name);
 
         boolean exists = vatRateRepository.findAll().stream()
@@ -30,6 +32,7 @@ public class VatRateInitializer {
 
         if (!exists) {
             VatRate vatRate = VatRate.builder()
+                    .id(id)
                     .name(name)
                     .rate(rate)
                     .build();

@@ -7,11 +7,12 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface InventorySnapshotRepository extends JpaRepository<InventorySnapshot, Long> {
+public interface InventorySnapshotRepository extends JpaRepository<InventorySnapshot, UUID> {
     boolean existsByIngredientAndTimestampBetween(Ingredient ingredient, LocalDateTime from, LocalDateTime to);
     Optional<InventorySnapshot> findTopByIngredientOrderByTimestampDesc(Ingredient ingredient);
 
-    Optional<InventorySnapshot> findTopByIngredientIdOrderByTimestampDesc(Long id);
+    Optional<InventorySnapshot> findTopByIngredientIdOrderByTimestampDesc(UUID id);
 }

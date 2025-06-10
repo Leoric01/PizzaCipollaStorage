@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/branches")
@@ -23,13 +24,13 @@ public class BranchController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
         branchService.deleteBranch(id);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<BranchResponseDto> update(@PathVariable Long id, @RequestBody BranchCreateDto dto) {
+    public ResponseEntity<BranchResponseDto> update(@PathVariable UUID id, @RequestBody BranchCreateDto dto) {
         return ResponseEntity.ok(branchService.updateBranch(id, dto));
     }
 

@@ -4,11 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class IngredientAliasDto {
-    private Long id;
+    private UUID id;
     private String aliasName;
-    private Long ingredientId;
+    private UUID ingredientId;
 }

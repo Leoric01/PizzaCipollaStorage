@@ -7,6 +7,7 @@ import leoric.pizzacipollastorage.models.VatRate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public interface VatRateService {
@@ -14,5 +15,5 @@ public interface VatRateService {
 
     List<VatRateShortDto> getAll();
 
-    VatRateDeleteResponseDto deleteVatRateById(Long id);
+    VatRateDeleteResponseDto deleteVatRateById(UUID id);
 }

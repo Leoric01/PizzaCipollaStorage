@@ -2,8 +2,10 @@ package leoric.pizzacipollastorage.DTOs.Supplier;
 
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 public class SupplierShortDto {
-    private Long id;
+    private UUID id;
     private String name;
 }

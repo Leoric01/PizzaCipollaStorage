@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/ingredient-aliases")
@@ -22,12 +23,12 @@ public class IngredientAliasController {
     }
 
     @GetMapping("/ingredient/{ingredientId}")
-    public ResponseEntity<List<IngredientAliasDto>> getAliases(@PathVariable Long ingredientId) {
+    public ResponseEntity<List<IngredientAliasDto>> getAliases(@PathVariable UUID ingredientId) {
         return ResponseEntity.ok(ingredientAliasService.getAliasesByIngredientId(ingredientId));
     }
 
     @DeleteMapping("/{aliasId}")
-    public ResponseEntity<Void> deleteAlias(@PathVariable Long aliasId) {
+    public ResponseEntity<Void> deleteAlias(@PathVariable UUID aliasId) {
         ingredientAliasService.deleteAlias(aliasId);
         return ResponseEntity.noContent().build();
     }

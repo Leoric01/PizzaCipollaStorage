@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -41,39 +42,45 @@ public class PizzaServiceImpl implements PizzaService {
         Pizza pizza = pizzaRepository.findByName(dto.getPizzaName())
                 .orElseThrow(() -> new EntityNotFoundException("Pizza not found: " + dto.getPizzaName()));
 
-        // Určení velikosti porce
-        int dishSizeId = dto.getDishSizeId() != null ? dto.getDishSizeId() : 1;
+        // Získání dishSize (z requestu nebo výchozí)
+        DishSize dishSize;
+        if (dto.getDishSizeId() != null) {
+            dishSize = dishSizeRepository.findById(dto.getDishSizeId())
+                    .orElseThrow(() -> new EntityNotFoundException("Dish size not found: ID = " + dto.getDishSizeId()));
+        } else {
+            dishSize = dishSizeRepository.findByDefaultSizeTrue()
+                    .orElseThrow(() -> new IllegalStateException("No default dish size defined."));
+        }
 
-        // Načtení DishSize entity
-        DishSize dishSize = dishSizeRepository.findById((long) dishSizeId)
-                .orElseThrow(() -> new EntityNotFoundException("Dish size not found: ID = " + dishSizeId));
-
-        float dishFactor = dishSizeId == 1 ? 1.0f : dishSize.getFactor();
+        float dishFactor = dishSize.isDefaultSize() ? 1.0f : dishSize.getFactor();
+        UUID defaultDishSizeId = dishSizeRepository.findByDefaultSizeTrue()
+                .orElseThrow(() -> new IllegalStateException("No default dish size defined."))
+                .getId();
 
         List<RecipeIngredientShortDto> created = new ArrayList<>();
 
         for (BulkRecipeIngredientDto ing : dto.getIngredients()) {
-            // Najit ingredienci podle názvu nebo aliasu
+            // Najít ingredienci podle názvu nebo aliasu
             Ingredient ingredient = ingredientAliasService.findIngredientByNameFlexible(ing.getIngredientName())
                     .orElseThrow(() -> new EntityNotFoundException("Ingredient or alias not found: " + ing.getIngredientName()));
 
             float quantity;
 
-            if (dishSizeId == 1) {
+            if (dishSize.isDefaultSize()) {
                 if (ing.getQuantity() == null) {
-                    throw new MissingQuantityException("Quantity is required for ingredient '" + ing.getIngredientName() + "' when dishSizeId is 1 (base size).");
+                    throw new MissingQuantityException("Quantity is required for ingredient '" + ing.getIngredientName() + "' when using default dish size.");
                 }
                 quantity = ing.getQuantity();
             } else {
                 Optional<RecipeIngredient> base = recipeIngredientRepository
-                        .findByPizzaIdAndIngredientIdAndDishSizeId(pizza.getId(), ingredient.getId(), 1L);
+                        .findByPizzaIdAndIngredientIdAndDishSizeId(pizza.getId(), ingredient.getId(), defaultDishSizeId);
 
                 if (base.isPresent()) {
                     quantity = base.get().getQuantity() * dishFactor;
                 } else if (ing.getQuantity() != null) {
                     quantity = ing.getQuantity();
                 } else {
-                    throw new MissingQuantityException("Missing quantity for ingredient '" + ing.getIngredientName() + "' and no base recipe found (dishSizeId=1).");
+                    throw new MissingQuantityException("Missing quantity for ingredient '" + ing.getIngredientName() + "' and no base recipe found.");
                 }
             }
 
@@ -85,11 +92,12 @@ public class PizzaServiceImpl implements PizzaService {
 
             created.add(recipeIngredientMapper.toShortDto(recipeIngredientRepository.save(recipeIngredient)));
         }
+
         return created;
     }
 
     @Override
-    public PizzaResponseDto getPizzaById(Long id) {
+    public PizzaResponseDto getPizzaById(UUID id) {
         Pizza pizza = pizzaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Pizza not found with ID: " + id));
         return pizzaMapper.toDto(pizza);

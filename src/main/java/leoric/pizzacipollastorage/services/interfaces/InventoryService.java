@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public interface InventoryService {
@@ -13,7 +14,7 @@ public interface InventoryService {
 
     List<InventorySnapshotResponseDto> getCurrentInventoryStatus();
 
-    void addToInventory(Long ingredientId, float addedQuantity);
+    void addToInventory(UUID ingredientId, float addedQuantity);
 
-    Map<Long, InventorySnapshotResponseDto> getCurrentInventoryStatusMap();
+    Map<UUID, InventorySnapshotResponseDto> getCurrentInventoryStatusMap();
 }

@@ -6,10 +6,11 @@ import leoric.pizzacipollastorage.models.enums.SnapshotType;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 public class InventorySnapshotResponseDto {
-    private Long id;
+    private UUID id;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH")
     private LocalDateTime timestamp;

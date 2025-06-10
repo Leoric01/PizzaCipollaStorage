@@ -5,12 +5,13 @@ import leoric.pizzacipollastorage.DTOs.PurchaseInvoice.PurchaseInvoiceResponseDt
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public interface PurchaseInvoiceService {
     PurchaseInvoiceResponseDto createInvoice(PurchaseInvoiceCreateDto dto);
 
-    PurchaseInvoiceResponseDto getById(Long id);
+    PurchaseInvoiceResponseDto getById(UUID id);
 
     List<PurchaseInvoiceResponseDto> getLatestInvoices(int limit);
 }

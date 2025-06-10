@@ -6,7 +6,7 @@ import leoric.pizzacipollastorage.models.StockEntry;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = {IngredientMapper.class, SupplierMapper.class})
+@Mapper(componentModel = "spring", uses = {IngredientMapper.class, SupplierMapper.class, UUIDMapper.class})
 public interface StockEntryMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "ingredient", ignore = true)

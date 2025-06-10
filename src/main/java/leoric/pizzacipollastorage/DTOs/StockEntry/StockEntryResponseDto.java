@@ -6,10 +6,11 @@ import leoric.pizzacipollastorage.DTOs.Supplier.SupplierShortDto;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 public class StockEntryResponseDto {
-    private Long id;
+    private UUID id;
     private IngredientShortDto ingredient;
     private SupplierShortDto supplier;
     private float quantityReceived;

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/purchase-invoices")
@@ -24,7 +25,7 @@ public class PurchaseInvoiceController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PurchaseInvoiceResponseDto> getPurchaseInvoiceById(@PathVariable Long id) {
+    public ResponseEntity<PurchaseInvoiceResponseDto> getPurchaseInvoiceById(@PathVariable UUID id) {
         return ResponseEntity.ok(purchaseInvoiceService.getById(id));
     }
     @GetMapping

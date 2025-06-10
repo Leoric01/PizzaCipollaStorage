@@ -2,13 +2,13 @@ package leoric.pizzacipollastorage.controllers;
 
 import leoric.pizzacipollastorage.DTOs.Pizza.*;
 import leoric.pizzacipollastorage.models.Pizza;
-import leoric.pizzacipollastorage.models.RecipeIngredient;
 import leoric.pizzacipollastorage.services.interfaces.PizzaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/pizzas")
@@ -36,7 +36,7 @@ public class PizzaController {
         return ResponseEntity.ok(pizzaService.getAllPizzas());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<PizzaResponseDto> getPizzaById(@PathVariable Long id) {
+    public ResponseEntity<PizzaResponseDto> getPizzaById(@PathVariable UUID id) {
         return ResponseEntity.ok(pizzaService.getPizzaById(id));
     }
 }

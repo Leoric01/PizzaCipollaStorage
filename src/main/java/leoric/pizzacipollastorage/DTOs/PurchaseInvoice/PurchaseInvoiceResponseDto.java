@@ -6,10 +6,11 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 public class PurchaseInvoiceResponseDto {
-    private Long id;
+    private UUID id;
     private String invoiceNumber;
     private SupplierShortDto supplier; // pouze jméno a id
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")

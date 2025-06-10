@@ -2,10 +2,10 @@ package leoric.pizzacipollastorage.services.interfaces;
 
 import leoric.pizzacipollastorage.DTOs.Pizza.*;
 import leoric.pizzacipollastorage.models.Pizza;
-import leoric.pizzacipollastorage.models.RecipeIngredient;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public interface PizzaService {
@@ -18,5 +18,5 @@ public interface PizzaService {
 
     List<RecipeIngredientShortDto> addIngredientsToPizzaBulk(BulkRecipeCreateDto dto);
 
-    PizzaResponseDto getPizzaById(Long id);
+    PizzaResponseDto getPizzaById(UUID id);
 }

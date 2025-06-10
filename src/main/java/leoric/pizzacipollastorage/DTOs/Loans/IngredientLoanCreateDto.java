@@ -7,14 +7,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class IngredientLoanCreateDto {
-    private Long fromBranchId;
-    private Long toBranchId;
+    private UUID fromBranchId;
+    private UUID toBranchId;
     private LoanType loanType;
     private List<IngredientLoanItemDto> items;
 }

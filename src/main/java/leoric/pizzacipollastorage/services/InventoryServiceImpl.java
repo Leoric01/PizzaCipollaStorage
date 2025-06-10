@@ -16,10 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -114,7 +111,7 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    public void addToInventory(Long ingredientId, float addedQuantity) {
+    public void addToInventory(UUID ingredientId, float addedQuantity) {
         InventorySnapshotResponseDto current = getCurrentInventoryStatusMap().get(ingredientId);
 
         float prevExpected = current.getExpectedQuantity() != null
@@ -136,7 +133,7 @@ public class InventoryServiceImpl implements InventoryService {
         snapshotRepository.save(snapshot);
     }
 
-    public Map<Long, InventorySnapshotResponseDto> getCurrentInventoryStatusMap() {
+    public Map<UUID, InventorySnapshotResponseDto> getCurrentInventoryStatusMap() {
         return getCurrentInventoryStatus().stream()
                 .collect(Collectors.toMap(
                         dto -> dto.getIngredient().getId(),

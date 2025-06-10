@@ -9,13 +9,14 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class IngredientLoanResponseDto {
-    private Long id;
+    private UUID id;
     private String fromBranchName;
     private String toBranchName;
     private LoanType loanType;
