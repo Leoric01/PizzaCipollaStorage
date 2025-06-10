@@ -15,7 +15,7 @@ public class DishSizeInitializer {
 
     @PostConstruct
     public void insertDefaultDishSizes() {
-        createIfNotExists("mala/base", 1.0f);
+        createIfNotExists("mala", 1.0f, true);
         createIfNotExists("Velká", 1.7f);
     }
 
@@ -31,6 +31,24 @@ public class DishSizeInitializer {
             DishSize dishSize = DishSize.builder()
                     .name(name)
                     .factor(factor)
+                    .build();
+            dishSizeRepository.save(dishSize);
+        }
+    }
+
+    private void createIfNotExists(String name, float factor, boolean isDefault) {
+        String normalizedInput = CustomUtilityString.normalize(name);
+
+        boolean exists = dishSizeRepository.findAll().stream()
+                .map(DishSize::getName)
+                .map(CustomUtilityString::normalize)
+                .anyMatch(existing -> existing.equals(normalizedInput));
+
+        if (!exists) {
+            DishSize dishSize = DishSize.builder()
+                    .name(name)
+                    .factor(factor)
+                    .defaultSize(isDefault)
                     .build();
             dishSizeRepository.save(dishSize);
         }
