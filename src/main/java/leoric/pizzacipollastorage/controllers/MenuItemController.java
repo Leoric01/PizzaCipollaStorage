@@ -31,9 +31,20 @@ public class MenuItemController {
         return ResponseEntity.ok(menuItemService.addIngredientsToMenuItemBulk(dto));
     }
 
+    @PostMapping("/with-ingredients")
+    public ResponseEntity<MenuItemResponseDto> createMenuItemWithIngredients(@RequestBody MenuItemWithIngredientsCreateDto dto) {
+        return ResponseEntity.ok(menuItemService.createMenuItemWithOptionalIngredients(dto));
+    }
+
     @GetMapping
     public ResponseEntity<List<MenuItemResponseDto>> getAllMenuItems() {
         return ResponseEntity.ok(menuItemService.getAllMenuItems());
+    }
+
+    @GetMapping("/name/{name}")
+    public ResponseEntity<MenuItemResponseDto> getMenuItemByNormalizedName(@PathVariable String name) {
+        MenuItemResponseDto response = menuItemService.getMenuItemByName(name);
+        return ResponseEntity.ok(response);
     }
     @GetMapping("/{id}")
     public ResponseEntity<MenuItemResponseDto> getMenuItemById(@PathVariable UUID id) {

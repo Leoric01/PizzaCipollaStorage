@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,5 +29,5 @@ public class MenuItem {
     private String description;
 
     @OneToMany(mappedBy = "menuItem")
-    private List<RecipeIngredient> ingredients;
+    private List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 }

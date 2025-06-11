@@ -19,4 +19,8 @@ public interface MenuItemService {
     List<RecipeIngredientShortDto> addIngredientsToMenuItemBulk(RecipeCreateBulkDto dto);
 
     MenuItemResponseDto getMenuItemById(UUID id);
+
+    MenuItemResponseDto createMenuItemWithOptionalIngredients(MenuItemWithIngredientsCreateDto dto);
+
+    MenuItemResponseDto getMenuItemByName(String menuItemName);
 }

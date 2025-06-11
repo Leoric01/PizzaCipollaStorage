@@ -47,7 +47,7 @@ Content-Type: application/json
 
 ### Add Ingredients to Pizzas (Recipes)
 // @sleep 30
-POST http://localhost:8080/api/menuItems/recipes
+POST http://localhost:8080/api/menu-items/recipes
 Content-Type: application/json
 
 {
@@ -60,7 +60,7 @@ Content-Type: application/json
 // @sleep 30
 
 ###
-POST http://localhost:8080/api/menuItems/recipes
+POST http://localhost:8080/api/menu-items/recipes
 Content-Type: application/json
 
 {
@@ -73,7 +73,7 @@ Content-Type: application/json
 // @sleep 30
 
 ###
-POST http://localhost:8080/api/menuItems/recipes
+POST http://localhost:8080/api/menu-items/recipes
 Content-Type: application/json
 
 {
@@ -85,7 +85,7 @@ Content-Type: application/json
 ###
 // @sleep 30
 ###
-POST http://localhost:8080/api/menuItems/recipes
+POST http://localhost:8080/api/menu-items/recipes
 Content-Type: application/json
 
 {
@@ -97,7 +97,7 @@ Content-Type: application/json
 ###
 // @sleep 30
 ###
-POST http://localhost:8080/api/menuItems/recipes
+POST http://localhost:8080/api/menu-items/recipes
 Content-Type: application/json
 
 {
@@ -109,7 +109,7 @@ Content-Type: application/json
 ###
 // @sleep 30
 ###
-POST http://localhost:8080/api/menuItems/recipes
+POST http://localhost:8080/api/menu-items/recipes
 Content-Type: application/json
 
 {
@@ -121,7 +121,7 @@ Content-Type: application/json
 ###
 // @sleep 30
 ###
-POST http://localhost:8080/api/menuItems/recipes
+POST http://localhost:8080/api/menu-items/recipes
 Content-Type: application/json
 
 {
@@ -133,7 +133,7 @@ Content-Type: application/json
 ###
 // @sleep 30
 ###
-POST http://localhost:8080/api/menuItems/recipes
+POST http://localhost:8080/api/menu-items/recipes
 Content-Type: application/json
 
 {
