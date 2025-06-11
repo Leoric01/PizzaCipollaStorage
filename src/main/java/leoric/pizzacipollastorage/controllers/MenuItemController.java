@@ -36,6 +36,20 @@ public class MenuItemController {
         return ResponseEntity.ok(menuItemService.createMenuItemWithOptionalIngredients(dto));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteMenuItemById(@PathVariable UUID id) {
+        menuItemService.deleteMenuItemById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<MenuItemResponseDto> updateMenuItem(
+            @PathVariable UUID id,
+            @RequestBody MenuItemWithIngredientsCreateDto dto) {
+        MenuItemResponseDto updated = menuItemService.updateMenuItem(id, dto);
+        return ResponseEntity.ok(updated);
+    }
+
     @GetMapping
     public ResponseEntity<List<MenuItemResponseDto>> getAllMenuItems() {
         return ResponseEntity.ok(menuItemService.getAllMenuItems());

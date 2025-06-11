@@ -12,5 +12,6 @@ import java.util.UUID;
 public interface RecipeIngredientRepository extends JpaRepository<RecipeIngredient, UUID> {
     List<RecipeIngredient> findByMenuItemId(UUID menuItemId);
 
+    void deleteAllByMenuItemId(UUID menuItemId);
     Optional<RecipeIngredient> findByMenuItemIdAndIngredientIdAndDishSizeId(UUID id, UUID id1, UUID l);
 }

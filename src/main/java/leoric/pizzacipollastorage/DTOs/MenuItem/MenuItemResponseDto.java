@@ -15,5 +15,5 @@ import java.util.UUID;
 public class MenuItemResponseDto {
     private UUID id;
     private String name;
-    private List<RecipeIngredientVeryShortDto> recipeIngredients;
+    private List<RecipeIngredientVeryShortDto> ingredients;
 }

@@ -23,4 +23,8 @@ public interface MenuItemService {
     MenuItemResponseDto createMenuItemWithOptionalIngredients(MenuItemWithIngredientsCreateDto dto);
 
     MenuItemResponseDto getMenuItemByName(String menuItemName);
+
+    void deleteMenuItemById(UUID id);
+
+    MenuItemResponseDto updateMenuItem(UUID id, MenuItemWithIngredientsCreateDto dto);
 }

@@ -15,7 +15,7 @@ import java.util.List;
 @Mapper(componentModel = "spring", uses = {IngredientMapper.class})
 public interface MenuItemMapper {
 
-    @Mapping(source = "recipeIngredients", target = "recipeIngredients")
+    @Mapping(source = "recipeIngredients", target = "ingredients")
     MenuItemResponseDto toDto(MenuItem menuItem);
 
     List<MenuItemResponseDto> toDtoList(List<MenuItem> menuItems);

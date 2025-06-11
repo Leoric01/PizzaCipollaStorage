@@ -39,6 +39,66 @@ public class MenuItemServiceImpl implements MenuItemService {
     private final MenuItemMapper menuItemMapper;
 
     @Override
+    public void deleteMenuItemById(UUID id) {
+        if (!menuItemRepository.existsById(id)) {
+            throw new EntityNotFoundException("MenuItem not found: " + id);
+        }
+        menuItemRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public MenuItemResponseDto updateMenuItem(UUID id, MenuItemWithIngredientsCreateDto dto) {
+        MenuItem menuItem = menuItemRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("MenuItem not found: " + id));
+
+        menuItem.setName(dto.getName());
+        menuItem.setDescription(dto.getDescription());
+        menuItemRepository.save(menuItem);
+
+        // clear existing recipeIngredients
+        recipeIngredientRepository.deleteAllByMenuItemId(menuItem.getId());
+
+        if (dto.getIngredients() != null && !dto.getIngredients().isEmpty()) {
+            DishSize dishSize = (dto.getDishSizeId() != null)
+                    ? dishSizeRepository.findById(dto.getDishSizeId())
+                    .orElseThrow(() -> new EntityNotFoundException("Dish size not found"))
+                    : dishSizeRepository.findByDefaultSizeTrue()
+                    .orElseThrow(() -> new IllegalStateException("No default dish size defined"));
+
+            float dishFactor = dishSize.isDefaultSize() ? 1.0f : dishSize.getFactor();
+            UUID defaultDishSizeId = dishSizeRepository.findByDefaultSizeTrue()
+                    .orElseThrow(() -> new IllegalStateException("No default dish size defined"))
+                    .getId();
+
+            List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+
+            for (MenuItemWithIngredientsCreateDto.RecipeIngredientSimpleDto ingDto : dto.getIngredients()) {
+                Ingredient ingredient = ingredientAliasService.findIngredientByNameFlexible(ingDto.getIngredientName())
+                        .orElseThrow(() -> new EntityNotFoundException("Ingredient not found: " + ingDto.getIngredientName()));
+
+                float quantity = (dishSize.isDefaultSize())
+                        ? Optional.ofNullable(ingDto.getQuantity())
+                        .orElseThrow(() -> new MissingQuantityException("Missing quantity for: " + ingDto.getIngredientName()))
+                        : getQuantity(menuItem, dishFactor, defaultDishSizeId, ingredient, ingDto.getQuantity(), ingDto.getIngredientName());
+
+                RecipeIngredient ri = new RecipeIngredient();
+                ri.setMenuItem(menuItem);
+                ri.setIngredient(ingredient);
+                ri.setQuantity(quantity);
+                ri.setDishSize(dishSize);
+
+                recipeIngredients.add(recipeIngredientRepository.save(ri));
+            }
+
+            menuItem.setRecipeIngredients(recipeIngredients);
+        }
+
+        return menuItemMapper.toDto(menuItem);
+    }
+
+
+    @Override
     public List<RecipeIngredientShortDto> addIngredientsToMenuItemBulk(RecipeCreateBulkDto dto) {
         MenuItem menuItem = menuItemRepository.findByName(dto.getMenuItem())
                 .orElseThrow(() -> new EntityNotFoundException("MenuItem not found: " + dto.getMenuItem()));
