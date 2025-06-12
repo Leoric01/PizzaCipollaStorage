@@ -24,4 +24,10 @@ public class InventoryController {
     public ResponseEntity<List<InventorySnapshotResponseDto>> getCurrentInventoryStatus() {
         return ResponseEntity.ok(inventoryService.getCurrentInventoryStatus());
     }
+
+    @PostMapping("/snapshot/bulk")
+    public ResponseEntity<List<InventorySnapshotResponseDto>> createSnapshotBulk(
+            @RequestBody List<InventorySnapshotCreateDto> dtos) {
+        return ResponseEntity.ok(inventoryService.createSnapshotBulk(dtos));
+    }
 }

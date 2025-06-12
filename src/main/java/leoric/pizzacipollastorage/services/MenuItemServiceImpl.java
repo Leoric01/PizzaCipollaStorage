@@ -118,6 +118,14 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
+    public void deleteRecipeIngredientById(UUID id) {
+        if (!recipeIngredientRepository.existsById(id)) {
+            throw new EntityNotFoundException("RecipeIngredient not found: " + id);
+        }
+        recipeIngredientRepository.deleteById(id);
+    }
+
+    @Override
     public List<RecipeIngredientShortDto> addIngredientsToMenuItemBulk(RecipeCreateBulkDto dto) {
         MenuItem menuItem = menuItemRepository.findByName(dto.getMenuItem())
                 .orElseThrow(() -> new EntityNotFoundException("MenuItem not found: " + dto.getMenuItem()));

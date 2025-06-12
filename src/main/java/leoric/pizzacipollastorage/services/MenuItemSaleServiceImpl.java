@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,10 +29,10 @@ public class MenuItemSaleServiceImpl implements MenuItemSaleService {
     @Transactional
     public MenuItemSaleResponseDto createSale(MenuItemSaleCreateDto dto) {
         MenuItem menuItem = menuItemRepository.findById(dto.getMenuItemId())
-                .orElseThrow(() -> new EntityNotFoundException("MenuItem not found"));
+                .orElseThrow(() -> new EntityNotFoundException("MenuItem " + dto.getMenuItemId() + " not found"));
 
         DishSize dishSize = dishSizeRepository.findById(dto.getDishSizeId())
-                .orElseThrow(() -> new EntityNotFoundException("Dish size not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Dish size " + dto.getDishSizeId() + " not found"));
 
         float sizeFactor = dishSize.getFactor();
 
@@ -82,5 +83,13 @@ public class MenuItemSaleServiceImpl implements MenuItemSaleService {
                 .cookName(sale.getCookName())
                 .saleDate(sale.getSaleDate())
                 .build();
+    }
+
+    @Override
+    @Transactional
+    public List<MenuItemSaleResponseDto> createSaleBulk(List<MenuItemSaleCreateDto> dtos) {
+        return dtos.stream()
+                .map(this::createSale)
+                .collect(Collectors.toList());
     }
 }

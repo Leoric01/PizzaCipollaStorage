@@ -18,7 +18,7 @@ public class MenuItemController {
     private final MenuItemService menuItemService;
 
     @PatchMapping("/recipes/{id}")
-    public ResponseEntity<RecipeIngredientShortDto> updateRecipeIngredient(
+    public ResponseEntity<RecipeIngredientShortDto> updateRecipeIngredientById(
             @PathVariable UUID id,
             @RequestBody RecipeIngredientVeryShortDto dto) {
         return ResponseEntity.ok(menuItemService.updateRecipeIngredient(id, dto));
@@ -27,6 +27,12 @@ public class MenuItemController {
     @GetMapping("/recipes/{id}")
     public ResponseEntity<RecipeIngredientShortDto> getRecipeIngredientById(@PathVariable UUID id) {
         return ResponseEntity.ok(menuItemService.getRecipeIngredientById(id));
+    }
+
+    @DeleteMapping("/recipes/{id}")
+    public ResponseEntity<Void> deleteRecipeIngredientById(@PathVariable UUID id) {
+        menuItemService.deleteRecipeIngredientById(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping

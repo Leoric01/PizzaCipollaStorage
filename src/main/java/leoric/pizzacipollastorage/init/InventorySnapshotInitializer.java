@@ -62,6 +62,8 @@ public class InventorySnapshotInitializer {
         create("Nutella");
         create("Mozzarella di bufala");
         create("Parmská šunka");
+        create("Mouka");
+        create("Drcený pepř");
     }
 
     private void create(String ingredientName) {

@@ -17,4 +17,6 @@ public interface InventoryService {
     void addToInventory(UUID ingredientId, float addedQuantity);
 
     Map<UUID, InventorySnapshotResponseDto> getCurrentInventoryStatusMap();
+
+    List<InventorySnapshotResponseDto> createSnapshotBulk(List<InventorySnapshotCreateDto> dtos);
 }

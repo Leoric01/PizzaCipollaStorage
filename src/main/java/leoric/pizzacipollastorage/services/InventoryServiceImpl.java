@@ -1,6 +1,7 @@
 package leoric.pizzacipollastorage.services;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import leoric.pizzacipollastorage.DTOs.Inventory.InventorySnapshotCreateDto;
 import leoric.pizzacipollastorage.DTOs.Inventory.InventorySnapshotResponseDto;
 import leoric.pizzacipollastorage.handler.exceptions.SnapshotTooRecentException;
@@ -13,6 +14,7 @@ import leoric.pizzacipollastorage.repositories.IngredientRepository;
 import leoric.pizzacipollastorage.repositories.InventorySnapshotRepository;
 import leoric.pizzacipollastorage.services.interfaces.InventoryService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -20,6 +22,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class InventoryServiceImpl implements InventoryService {
@@ -139,5 +142,27 @@ public class InventoryServiceImpl implements InventoryService {
                         dto -> dto.getIngredient().getId(),
                         Function.identity()
                 ));
+    }
+
+    @Override
+    @Transactional
+    public List<InventorySnapshotResponseDto> createSnapshotBulk(List<InventorySnapshotCreateDto> dtos) {
+        List<InventorySnapshotResponseDto> results = new ArrayList<>();
+
+        for (InventorySnapshotCreateDto dto : dtos) {
+            try {
+                results.add(createSnapshot(dto));
+            } catch (SnapshotTooRecentException e) {
+                log.warn("Snapshot too recent for ingredientId={} at {}: {}",
+                        dto.getIngredientId(), dto.getTimestamp(), e.getMessage());
+            } catch (EntityNotFoundException e) {
+                log.error("Ingredient not found for ID: {}", dto.getIngredientId(), e);
+            } catch (Exception e) {
+                log.error("Unexpected error while creating snapshot for ingredientId={} at {}: {}",
+                        dto.getIngredientId(), dto.getTimestamp(), e.getMessage(), e);
+            }
+        }
+
+        return results;
     }
 }

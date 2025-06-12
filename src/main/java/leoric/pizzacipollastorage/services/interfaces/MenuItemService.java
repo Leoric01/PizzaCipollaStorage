@@ -31,4 +31,6 @@ public interface MenuItemService {
     RecipeIngredientShortDto updateRecipeIngredient(UUID id, RecipeIngredientVeryShortDto dto);
 
     RecipeIngredientShortDto getRecipeIngredientById(UUID id);
+
+    void deleteRecipeIngredientById(UUID id);
 }
