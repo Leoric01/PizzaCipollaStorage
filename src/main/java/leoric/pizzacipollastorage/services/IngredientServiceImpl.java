@@ -34,13 +34,18 @@ public class IngredientServiceImpl implements IngredientService {
             throw new DuplicateIngredientNameException("Ingredient with name '" + dto.getName() + "' already exists");
         }
 
-        VatRate vatRate = vatRateRepository.findById(dto.getVatRateId())
+        VatRate vatRate = vatRateRepository.findById(dto.getCategory().getVatRateId())
                 .orElseThrow(() -> new EntityNotFoundException("Vat rate not found"));
 
-        Ingredient entity = ingredientMapper.toEntity(dto);
-        entity.setVatRate(vatRate);
-
-        Ingredient saved = ingredientRepository.save(entity);
+        Ingredient ingredient = Ingredient.builder()
+                .name(dto.getName())
+                .unit(dto.getUnit())
+                .lossCleaningFactor(dto.getLossCleaningFactor())
+                .lossUsageFactor(dto.getLossUsageFactor())
+                .category(dto.getCategory())
+                .vatRate(vatRate)
+                .build();
+        Ingredient saved = ingredientRepository.save(ingredient);
 
         return ingredientMapper.toDto(saved);
     }

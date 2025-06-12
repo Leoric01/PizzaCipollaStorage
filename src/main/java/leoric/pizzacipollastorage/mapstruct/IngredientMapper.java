@@ -13,6 +13,8 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface IngredientMapper {
+
+    @Mapping(target = "productCategory", source = "category")
     IngredientResponseDto toDto(Ingredient ingredient);
 
     Ingredient toEntity(IngredientCreateDto dto);

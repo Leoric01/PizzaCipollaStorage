@@ -1,6 +1,7 @@
 package leoric.pizzacipollastorage.models;
 
 import jakarta.persistence.*;
+import leoric.pizzacipollastorage.models.enums.ProductCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -41,4 +42,7 @@ public class Ingredient {
 
     @OneToMany(mappedBy = "ingredient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<IngredientAlias> aliases;
+
+    @Enumerated(EnumType.STRING)
+    private ProductCategory category;
 }

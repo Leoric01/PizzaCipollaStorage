@@ -1,8 +1,7 @@
 package leoric.pizzacipollastorage.DTOs.Ingredient;
 
+import leoric.pizzacipollastorage.models.enums.ProductCategory;
 import lombok.Data;
-
-import java.util.UUID;
 
 @Data
 public class IngredientCreateDto {
@@ -10,5 +9,5 @@ public class IngredientCreateDto {
     private String unit;
     private float lossCleaningFactor;
     private float lossUsageFactor;
-    private UUID vatRateId;
+    private ProductCategory category;
 }
