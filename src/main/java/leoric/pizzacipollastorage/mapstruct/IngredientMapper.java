@@ -3,6 +3,7 @@ package leoric.pizzacipollastorage.mapstruct;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientCreateDto;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientInventoryDto;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientResponseDto;
+import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientShortDto;
 import leoric.pizzacipollastorage.DTOs.Vat.VatRateShortDto;
 import leoric.pizzacipollastorage.models.Ingredient;
 import leoric.pizzacipollastorage.models.VatRate;
@@ -23,5 +24,10 @@ public interface IngredientMapper {
 
     @Mapping(target = "measuredQuantity", ignore = true)
     IngredientInventoryDto toInventoryDto(Ingredient ingredient);
+
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "name", source = "name")
+    @Mapping(target = "unit", source = "unit")
+    IngredientShortDto toShortDto(Ingredient ingredient);
 
 }

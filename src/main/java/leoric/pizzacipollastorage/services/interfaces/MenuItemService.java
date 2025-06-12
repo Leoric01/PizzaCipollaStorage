@@ -27,4 +27,8 @@ public interface MenuItemService {
     void deleteMenuItemById(UUID id);
 
     MenuItemResponseDto updateMenuItem(UUID id, MenuItemWithIngredientsCreateDto dto);
+
+    RecipeIngredientShortDto updateRecipeIngredient(UUID id, RecipeIngredientVeryShortDto dto);
+
+    RecipeIngredientShortDto getRecipeIngredientById(UUID id);
 }

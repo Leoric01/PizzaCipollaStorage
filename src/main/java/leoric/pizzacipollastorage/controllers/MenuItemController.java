@@ -14,7 +14,20 @@ import java.util.UUID;
 @RequestMapping("/api/menu-items")
 @RequiredArgsConstructor
 public class MenuItemController {
+
     private final MenuItemService menuItemService;
+
+    @PatchMapping("/recipes/{id}")
+    public ResponseEntity<RecipeIngredientShortDto> updateRecipeIngredient(
+            @PathVariable UUID id,
+            @RequestBody RecipeIngredientVeryShortDto dto) {
+        return ResponseEntity.ok(menuItemService.updateRecipeIngredient(id, dto));
+    }
+
+    @GetMapping("/recipes/{id}")
+    public ResponseEntity<RecipeIngredientShortDto> getRecipeIngredientById(@PathVariable UUID id) {
+        return ResponseEntity.ok(menuItemService.getRecipeIngredientById(id));
+    }
 
     @PostMapping
     public ResponseEntity<MenuItem> createMenuItem(@RequestBody MenuItemCreateDto dto) {
@@ -60,6 +73,7 @@ public class MenuItemController {
         MenuItemResponseDto response = menuItemService.getMenuItemByName(name);
         return ResponseEntity.ok(response);
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<MenuItemResponseDto> getMenuItemById(@PathVariable UUID id) {
         return ResponseEntity.ok(menuItemService.getMenuItemById(id));

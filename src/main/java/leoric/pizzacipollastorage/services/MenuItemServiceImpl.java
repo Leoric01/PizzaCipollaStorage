@@ -97,6 +97,25 @@ public class MenuItemServiceImpl implements MenuItemService {
         return menuItemMapper.toDto(menuItem);
     }
 
+    @Override
+    @Transactional
+    public RecipeIngredientShortDto updateRecipeIngredient(UUID recipeIngredientId, RecipeIngredientVeryShortDto dto) {
+        RecipeIngredient recipeIngredient = recipeIngredientRepository.findById(recipeIngredientId)
+                .orElseThrow(() -> new EntityNotFoundException("RecipeIngredient not found: " + recipeIngredientId));
+
+        recipeIngredient.setQuantity(dto.getAmount());
+
+        RecipeIngredient updated = recipeIngredientRepository.save(recipeIngredient);
+
+        return recipeIngredientMapper.toShortDto(updated);
+    }
+
+    @Override
+    public RecipeIngredientShortDto getRecipeIngredientById(UUID id) {
+        RecipeIngredient recipeIngredient = recipeIngredientRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("RecipeIngredient not found: " + id));
+        return recipeIngredientMapper.toShortDto(recipeIngredient);
+    }
 
     @Override
     public List<RecipeIngredientShortDto> addIngredientsToMenuItemBulk(RecipeCreateBulkDto dto) {

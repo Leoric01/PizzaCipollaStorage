@@ -1,10 +1,7 @@
 package leoric.pizzacipollastorage.mapstruct;
 
-import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientShortDto;
 import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemResponseDto;
-import leoric.pizzacipollastorage.DTOs.MenuItem.RecipeIngredientShortDto;
-import leoric.pizzacipollastorage.DTOs.MenuItem.RecipeIngredientVeryShortDto;
-import leoric.pizzacipollastorage.models.Ingredient;
+import leoric.pizzacipollastorage.DTOs.MenuItem.RecipeIngredientVeryShortDtoWithId;
 import leoric.pizzacipollastorage.models.MenuItem;
 import leoric.pizzacipollastorage.models.RecipeIngredient;
 import org.mapstruct.Mapper;
@@ -22,9 +19,5 @@ public interface MenuItemMapper {
 
     @Mapping(source = "quantity", target = "amount")
     @Mapping(source = "ingredient", target = "ingredient")
-    RecipeIngredientShortDto toShortDto(RecipeIngredient recipeIngredient);
-    @Mapping(source = "quantity", target = "amount")
-    @Mapping(source = "ingredient", target = "ingredient")
-    RecipeIngredientVeryShortDto toVeryShortDto(RecipeIngredient recipeIngredient);
-    IngredientShortDto toShortDto(Ingredient ingredient);
+    RecipeIngredientVeryShortDtoWithId toVeryShortDto(RecipeIngredient recipeIngredient);
 }
