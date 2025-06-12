@@ -7,8 +7,7 @@ import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientShortDto;
 import leoric.pizzacipollastorage.DTOs.Vat.VatRateShortDto;
 import leoric.pizzacipollastorage.models.Ingredient;
 import leoric.pizzacipollastorage.models.VatRate;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 
 import java.util.List;
 
@@ -29,5 +28,8 @@ public interface IngredientMapper {
     @Mapping(target = "name", source = "name")
     @Mapping(target = "unit", source = "unit")
     IngredientShortDto toShortDto(Ingredient ingredient);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void update(@MappingTarget Ingredient entity, IngredientCreateDto dto);
 
 }

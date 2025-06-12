@@ -1,9 +1,9 @@
 package leoric.pizzacipollastorage.mapstruct;
 
+import leoric.pizzacipollastorage.DTOs.Loans.IngredientLoanPatchDto;
 import leoric.pizzacipollastorage.DTOs.Loans.IngredientLoanResponseDto;
 import leoric.pizzacipollastorage.models.IngredientLoan;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 
 import java.util.List;
 
@@ -15,4 +15,7 @@ public interface IngredientLoanMapper {
     IngredientLoanResponseDto toDto(IngredientLoan loan);
 
     List<IngredientLoanResponseDto> toDtoList(List<IngredientLoan> loans);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void update(@MappingTarget IngredientLoan entity, IngredientLoanPatchDto dto);
 }

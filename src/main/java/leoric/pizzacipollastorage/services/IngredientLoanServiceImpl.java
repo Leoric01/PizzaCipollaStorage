@@ -2,6 +2,7 @@ package leoric.pizzacipollastorage.services;
 
 import jakarta.persistence.EntityNotFoundException;
 import leoric.pizzacipollastorage.DTOs.Loans.IngredientLoanCreateDto;
+import leoric.pizzacipollastorage.DTOs.Loans.IngredientLoanPatchDto;
 import leoric.pizzacipollastorage.DTOs.Loans.IngredientLoanResponseDto;
 import leoric.pizzacipollastorage.mapstruct.IngredientLoanMapper;
 import leoric.pizzacipollastorage.models.Branch;
@@ -16,12 +17,14 @@ import leoric.pizzacipollastorage.services.interfaces.IngredientAliasService;
 import leoric.pizzacipollastorage.services.interfaces.IngredientLoanService;
 import leoric.pizzacipollastorage.services.interfaces.InventoryService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class IngredientLoanServiceImpl implements IngredientLoanService {
@@ -32,8 +35,7 @@ public class IngredientLoanServiceImpl implements IngredientLoanService {
     private final InventoryService inventoryService;
     private final IngredientAliasService ingredientAliasService;
 
-
-    private final IngredientLoanMapper mapper;
+    private final IngredientLoanMapper ingredientLoanMapper;
 
     @Override
     public IngredientLoanResponseDto createLoan(IngredientLoanCreateDto dto) {
@@ -72,8 +74,7 @@ public class IngredientLoanServiceImpl implements IngredientLoanService {
             }
         }
 
-
-        return mapper.toDto(loanRepository.save(loan));
+        return ingredientLoanMapper.toDto(loanRepository.save(loan));
     }
 
     @Override
@@ -97,11 +98,25 @@ public class IngredientLoanServiceImpl implements IngredientLoanService {
         }
 
         loan.setStatus(LoanStatus.RETURNED);
-        return mapper.toDto(loanRepository.save(loan));
+        return ingredientLoanMapper.toDto(loanRepository.save(loan));
+    }
+
+    @Override
+    public IngredientLoanResponseDto patchLoan(UUID id, IngredientLoanPatchDto dto) {
+        IngredientLoan loan = loanRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Loan not found"));
+        LoanStatus oldStatus = loan.getStatus();
+        LoanStatus newStatus = dto.getStatus();
+        ingredientLoanMapper.update(loan, dto);
+
+        if (newStatus != null && newStatus != oldStatus) {
+            log.info("Loan [{}] status changed: {} → {}", loan.getId(), oldStatus, newStatus);
+        }
+        return ingredientLoanMapper.toDto(loanRepository.save(loan));
     }
 
     @Override
     public List<IngredientLoanResponseDto> getAllLoans() {
-        return loanRepository.findAll().stream().map(mapper::toDto).toList();
+        return loanRepository.findAll().stream().map(ingredientLoanMapper::toDto).toList();
     }
 }

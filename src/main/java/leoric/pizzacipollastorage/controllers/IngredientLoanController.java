@@ -1,6 +1,7 @@
 package leoric.pizzacipollastorage.controllers;
 
 import leoric.pizzacipollastorage.DTOs.Loans.IngredientLoanCreateDto;
+import leoric.pizzacipollastorage.DTOs.Loans.IngredientLoanPatchDto;
 import leoric.pizzacipollastorage.DTOs.Loans.IngredientLoanResponseDto;
 import leoric.pizzacipollastorage.services.interfaces.IngredientLoanService;
 import lombok.RequiredArgsConstructor;
@@ -31,5 +32,12 @@ public class IngredientLoanController {
     @GetMapping
     public ResponseEntity<List<IngredientLoanResponseDto>> getAll() {
         return ResponseEntity.ok(ingredientLoanService.getAllLoans());
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<IngredientLoanResponseDto> patchLoan(
+            @PathVariable UUID id,
+            @RequestBody IngredientLoanPatchDto dto) {
+        return ResponseEntity.ok(ingredientLoanService.patchLoan(id, dto));
     }
 }

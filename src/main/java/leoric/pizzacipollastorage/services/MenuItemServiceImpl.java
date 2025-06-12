@@ -152,7 +152,7 @@ public class MenuItemServiceImpl implements MenuItemService {
             Ingredient ingredient = ingredientAliasService.findIngredientByNameFlexible(ing.getIngredientName())
                     .orElseThrow(() -> new EntityNotFoundException("Ingredient or alias not found: " + ing.getIngredientName()));
 
-            float quantity = 0;
+            float quantity;
 
             if (dishSize.isDefaultSize()) {
                 if (ing.getQuantity() == null) {
@@ -245,11 +245,12 @@ public class MenuItemServiceImpl implements MenuItemService {
         }
     }
 
-    public MenuItem createMenuItem(MenuItemCreateDto dto) {
-        MenuItem menuItem = new MenuItem();
-        menuItem.setName(dto.getName());
-        menuItem.setDescription(dto.getDescription());
-        return menuItemRepository.save(menuItem);
+    @Override
+    @Transactional
+    public MenuItemResponseDto createMenuItem(MenuItemCreateDto dto) {
+        MenuItem menuItem = menuItemMapper.toEntity(dto);
+        MenuItem saved = menuItemRepository.save(menuItem);
+        return menuItemMapper.toDto(saved);
     }
 
     public RecipeIngredientShortDto addIngredientToMenuItem(RecipeIngredientCreateDto dto) {

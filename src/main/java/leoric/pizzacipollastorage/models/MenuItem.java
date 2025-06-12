@@ -1,9 +1,7 @@
 package leoric.pizzacipollastorage.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+import leoric.pizzacipollastorage.models.enums.MenuItemCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,6 +25,9 @@ public class MenuItem {
 
     private String name;
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    private MenuItemCategory category;
 
     @OneToMany(mappedBy = "menuItem")
     private List<RecipeIngredient> recipeIngredients = new ArrayList<>();
