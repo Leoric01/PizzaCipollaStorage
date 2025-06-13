@@ -19,4 +19,8 @@ public class IngredientResponseDto {
     private float lossCleaningFactor;
     private float lossUsageFactor;
     private ProductCategoryResponseDto productCategory;
+
+    private Float preferredFullStockLevel;
+    private Float warningStockLevel;
+    private Float minimumStockLevel;
 }

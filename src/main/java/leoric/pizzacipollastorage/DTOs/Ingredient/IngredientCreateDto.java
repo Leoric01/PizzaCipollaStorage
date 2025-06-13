@@ -9,4 +9,8 @@ public class IngredientCreateDto {
     private float lossCleaningFactor;
     private float lossUsageFactor;
     private String category;
+
+    private Float preferredFullStockLevel;
+    private Float warningStockLevel;
+    private Float minimumStockLevel;
 }

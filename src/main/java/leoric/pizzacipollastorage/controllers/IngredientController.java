@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/ingredients")
@@ -17,6 +18,13 @@ import java.util.List;
 public class IngredientController {
     private final IngredientService ingredientService;
 
+    @PutMapping("/{id}")
+    public ResponseEntity<IngredientResponseDto> updateIngredient(
+            @PathVariable UUID id,
+            @RequestBody IngredientCreateDto dto) {
+        IngredientResponseDto updated = ingredientService.updateIngredient(id, dto);
+        return ResponseEntity.ok(updated);
+    }
     @PostMapping
     public ResponseEntity<IngredientResponseDto> createIngredient(@RequestBody IngredientCreateDto dto) {
         return ResponseEntity.ok(ingredientService.createIngredient(dto));

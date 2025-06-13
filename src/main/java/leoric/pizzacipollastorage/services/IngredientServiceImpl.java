@@ -1,5 +1,6 @@
 package leoric.pizzacipollastorage.services;
 
+import jakarta.persistence.EntityNotFoundException;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientAlias.IngredientAliasOverviewDto;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientCreateDto;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientResponseDto;
@@ -20,15 +21,40 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class IngredientServiceImpl implements IngredientService {
+
     private final IngredientRepository ingredientRepository;
-    private final IngredientMapper ingredientMapper;
-    private final IngredientAliasService ingredientAliasService;
     private final ProductCategoryRepository productCategoryRepository;
     private final InventorySnapshotRepository inventorySnapshotRepository;
+
+    private final IngredientMapper ingredientMapper;
+
+    private final IngredientAliasService ingredientAliasService;
+
+    @Override
+    public IngredientResponseDto updateIngredient(UUID id, IngredientCreateDto dto) {
+        Ingredient existing = ingredientRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Ingredient not found: " + id));
+
+        if (!existing.getName().equalsIgnoreCase(dto.getName()) &&
+            ingredientRepository.existsByName(dto.getName())) {
+            throw new DuplicateIngredientNameException("Ingredient with name '" + dto.getName() + "' already exists");
+        }
+
+        ProductCategory category = productCategoryRepository
+                .findByNameIgnoreCase(dto.getCategory())
+                .orElseThrow(() -> new IllegalArgumentException("Category not found: " + dto.getCategory()));
+
+        ingredientMapper.update(existing, dto);
+        existing.setCategory(category);
+
+        Ingredient saved = ingredientRepository.save(existing);
+        return ingredientMapper.toDto(saved);
+    }
 
     @Override
     public IngredientResponseDto createIngredient(IngredientCreateDto dto) {

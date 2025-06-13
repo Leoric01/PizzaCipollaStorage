@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public interface IngredientService {
@@ -20,4 +21,6 @@ public interface IngredientService {
     Optional<IngredientAliasOverviewDto> getAliasOverviewByName(String inputName);
 
     PurchaseOrder generateAutoPurchaseOrder();
+
+    IngredientResponseDto updateIngredient(UUID id, IngredientCreateDto dto);
 }
