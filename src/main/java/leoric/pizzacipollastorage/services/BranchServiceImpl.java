@@ -7,6 +7,7 @@ import leoric.pizzacipollastorage.mapstruct.BranchMapper;
 import leoric.pizzacipollastorage.models.Branch;
 import leoric.pizzacipollastorage.repositories.BranchRepository;
 import leoric.pizzacipollastorage.services.interfaces.BranchService;
+import leoric.pizzacipollastorage.utils.CustomUtilityString;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -44,5 +45,22 @@ public class BranchServiceImpl implements BranchService {
     @Override
     public List<BranchResponseDto> getAllBranches() {
         return branchMapper.toDtoList(branchRepository.findAll());
+    }
+
+    @Override
+    public BranchResponseDto getBranchById(UUID id) {
+        Branch branch = branchRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Branch not found with id: " + id));
+        return branchMapper.toDto(branch);
+    }
+
+    @Override
+    public BranchResponseDto getBranchByName(String name) {
+        String normalizedSearch = CustomUtilityString.normalize(name);
+        return branchRepository.findAll().stream()
+                .filter(branch -> CustomUtilityString.normalize(branch.getName()).equals(normalizedSearch))
+                .findFirst()
+                .map(branchMapper::toDto)
+                .orElseThrow(() -> new EntityNotFoundException("Branch not found with name: " + name));
     }
 }

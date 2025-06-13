@@ -38,4 +38,14 @@ public class BranchController {
     public ResponseEntity<List<BranchResponseDto>> getAll() {
         return ResponseEntity.ok(branchService.getAllBranches());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<BranchResponseDto> getById(@PathVariable UUID id) {
+        return ResponseEntity.ok(branchService.getBranchById(id));
+    }
+
+    @GetMapping("/by-name/{name}")
+    public ResponseEntity<BranchResponseDto> getByName(@PathVariable String name) {
+        return ResponseEntity.ok(branchService.getBranchByName(name));
+    }
 }

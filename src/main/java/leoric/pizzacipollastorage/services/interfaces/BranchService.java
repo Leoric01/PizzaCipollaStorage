@@ -15,4 +15,8 @@ public interface BranchService {
 
     BranchResponseDto updateBranch(UUID id, BranchCreateDto dto);
     List<BranchResponseDto> getAllBranches();
+
+    BranchResponseDto getBranchById(UUID id);
+
+    BranchResponseDto getBranchByName(String name);
 }
