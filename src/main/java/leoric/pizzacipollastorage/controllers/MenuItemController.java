@@ -33,11 +33,11 @@ public class MenuItemController {
         menuItemService.deleteRecipeIngredientById(id);
         return ResponseEntity.noContent().build();
     }
-
-    @PostMapping
-    public ResponseEntity<MenuItemResponseDto> createMenuItem(@RequestBody MenuItemCreateDto dto) {
-        return ResponseEntity.ok(menuItemService.createMenuItem(dto));
-    }
+//
+//    @PostMapping("/without-ingredients")
+//    public ResponseEntity<MenuItemResponseDto> createMenuItemWithoutIngredients(@RequestBody MenuItemCreateDto dto) {
+//        return ResponseEntity.ok(menuItemService.createMenuItem(dto));
+//    }
 
     @PostMapping("/recipes")
     public ResponseEntity<RecipeIngredientShortDto> addIngredientToMenuItem(@RequestBody RecipeIngredientCreateDto dto) {
@@ -49,8 +49,8 @@ public class MenuItemController {
         return ResponseEntity.ok(menuItemService.addIngredientsToMenuItemBulk(dto));
     }
 
-    @PostMapping("/with-ingredients")
-    public ResponseEntity<MenuItemResponseDto> createMenuItemWithIngredients(@RequestBody MenuItemWithIngredientsCreateDto dto) {
+    @PostMapping
+    public ResponseEntity<MenuItemResponseDto> createMenuItemWith(@RequestBody MenuItemWithIngredientsCreateDto dto) {
         return ResponseEntity.ok(menuItemService.createMenuItemWithOptionalIngredients(dto));
     }
 
