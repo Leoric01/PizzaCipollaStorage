@@ -27,286 +27,287 @@ public class MenuItemRecipeInitializer {
     @PostConstruct
     public void insertMenuItemRecipes() {
         createRecipe("Margherita", Map.of(
-                "Mouka", 0.25f,
-                "sugo", 0.08f,
-                "Mozzarella", 0.11f,
-                "Bazalka", 0.005f
+                "Mouka", 250f,
+                "sugo", 80f,
+                "Mozzarella", 91f,
+                "Bazalka", 5f
         ));
 
         createRecipe("Quattro Formaggi", Map.of(
-                "Mouka", 0.25f,
-                "Smetana", 0.05f,
-                "Mozzarella", 0.08f,
-                "Mascarpone", 0.05f,
-                "Gorgonzola", 0.05f,
-                "Parmezán", 0.02f
+                "Mouka", 250f,
+                "Smetana", 50f,
+                "Mozzarella", 80f,
+                "Mascarpone", 50f,
+                "Gorgonzola", 50f,
+                "Parmezán", 20f
         ));
 
         createRecipe("Margherita Bufala", Map.of(
-                "Mouka", 0.25f,
-                "sugo", 0.08f,
-                "Mozzarella di bufala", 0.11f,
-                "Bazalka", 0.005f
+                "Mouka", 250f,
+                "sugo", 80f,
+                "Mozzarella di bufala", 110f,
+                "Bazalka", 5f
         ));
 
         createRecipe("Ai Formaggi", Map.of(
-                "Mouka", 0.25f,
-                "sugo", 0.08f,
-                "Mozzarella", 0.08f,
-                "Uzený eidam", 0.05f,
-                "Gorgonzola", 0.05f
+                "Mouka", 250f,
+                "sugo", 80f,
+                "Mozzarella", 80f,
+                "Uzený eidam", 50f,
+                "Gorgonzola", 50f
         ));
 
         createRecipe("Funghi", Map.of(
-                "Mouka", 0.25f,
-                "sugo", 0.08f,
-                "Mozzarella", 0.11f,
-                "Žampiony", 0.09f
+                "Mouka", 250f,
+                "sugo", 80f,
+                "Mozzarella", 110f,
+                "Žampiony", 90f
         ));
 
-
         createRecipe("Santoška", Map.of(
-                "Mouka", 0.25f,
-                "sugo", 0.08f,
-                "Uzený eidam", 0.05f,
-                "Camembert", 0.05f,
-                "Rajčata", 0.06f,
-                "Olivy zelené", 0.03f
+                "Mouka", 250f,
+                "sugo", 80f,
+                "Uzený eidam", 50f,
+                "Camembert", 50f,
+                "Rajčata", 60f,
+                "Olivy zelené", 30f
         ));
 
         createRecipe("Spinaci", Map.of(
-                "Mouka", 0.25f,
-                "sugo", 0.08f,
-                "Mozzarella", 0.11f,
-                "Špenát", 0.06f,
-                "Vejce", 0.05f
+                "Mouka", 250f,
+                "sugo", 80f,
+                "Mozzarella", 110f,
+                "Špenát", 60f,
+                "Vejce", 50f
         ));
+
         createRecipe("Bandiera", Map.of(
-                "Mouka", 0.25f,
-                "Smetana", 0.05f,
-                "Mozzarella", 0.11f,
-                "Rajčata", 0.06f,
-                "Rukola", 0.015f,
-                "Česnek", 0.005f
+                "Mouka", 250f,
+                "Smetana", 50f,
+                "Mozzarella", 110f,
+                "Rajčata", 60f,
+                "Rukola", 15f,
+                "Česnek", 5f
         ));
 
         createRecipe("Vesuvio", Map.of(
-                "Mouka", 0.25f,
-                "sugo", 0.08f,
-                "Mozzarella", 0.11f,
-                "Šunka", 0.10f
+                "Mouka", 250f,
+                "sugo", 80f,
+                "Mozzarella", 110f,
+                "Šunka", 100f
         ));
 
         createRecipe("Capricciosa", Map.of(
-                "Mouka", 0.25f,
-                "sugo", 0.08f,
-                "Mozzarella", 0.11f,
-                "Šunka", 0.08f,
-                "Žampiony", 0.09f
+                "Mouka", 250f,
+                "sugo", 80f,
+                "Mozzarella", 110f,
+                "Šunka", 80f,
+                "Žampiony", 90f
         ));
 
         createRecipe("Hawaii", Map.of(
-                "Mouka", 0.25f,
-                "sugo", 0.08f,
-                "Mozzarella", 0.11f,
-                "Šunka", 0.08f,
-                "Ananas", 0.07f
+                "Mouka", 250f,
+                "sugo", 80f,
+                "Mozzarella", 110f,
+                "Šunka", 80f,
+                "Ananas", 70f
         ));
 
         createRecipe("Al Capone", Map.of(
-                "Mouka", 0.25f,
-                "sugo", 0.08f,
-                "Mozzarella", 0.11f,
-                "Šunka", 0.06f,
-                "Salám", 0.05f,
-                "Paprika", 0.05f
+                "Mouka", 250f,
+                "sugo", 80f,
+                "Mozzarella", 110f,
+                "Šunka", 60f,
+                "Salám", 50f,
+                "Paprika", 50f
         ));
 
         createRecipe("Diavola", Map.of(
-                "Mouka", 0.25f,
-                "sugo", 0.08f,
-                "Mozzarella", 0.11f,
-                "Šunka", 0.06f,
-                "Žampiony", 0.08f,
-                "Jalapeňos", 0.03f
+                "Mouka", 250f,
+                "sugo", 80f,
+                "Mozzarella", 110f,
+                "Šunka", 60f,
+                "Žampiony", 80f,
+                "Jalapeňos", 30f
         ));
 
         createRecipe("Alla Crema", Map.of(
-                "Mouka", 0.25f,
-                "Smetana", 0.05f,
-                "Mozzarella", 0.11f,
-                "Šunka", 0.08f,
-                "Parmezán", 0.02f
+                "Mouka", 250f,
+                "Smetana", 50f,
+                "Mozzarella", 110f,
+                "Šunka", 80f,
+                "Parmezán", 20f
         ));
 
         createRecipe("Salame", Map.of(
-                "Mouka", 0.25f,
-                "sugo", 0.08f,
-                "Mozzarella", 0.11f,
-                "Salám", 0.06f
+                "Mouka", 250f,
+                "sugo", 80f,
+                "Mozzarella", 110f,
+                "Salám", 60f
         ));
 
         createRecipe("Piccante", Map.of(
-                "Mouka", 0.25f,
-                "sugo", 0.08f,
-                "Mozzarella", 0.11f,
-                "Salám", 0.05f,
-                "Paprika", 0.05f,
-                "Vejce", 0.05f,
-                "Jalapeňos", 0.03f
+                "Mouka", 250f,
+                "sugo", 80f,
+                "Mozzarella", 110f,
+                "Salám", 50f,
+                "Paprika", 50f,
+                "Vejce", 50f,
+                "Jalapeňos", 30f
         ));
+
         createRecipe("Mascarpone", Map.of(
-                "Mouka", 0.25f,
-                "sugo", 0.08f,
-                "Mozzarella", 0.11f,
-                "Mascarpone", 0.05f,
-                "Salám", 0.05f,
-                "Jalapeňos", 0.03f
+                "Mouka", 250f,
+                "sugo", 80f,
+                "Mozzarella", 110f,
+                "Mascarpone", 50f,
+                "Salám", 50f,
+                "Jalapeňos", 30f
         ));
 
         createRecipe("Pancetta", Map.of(
-                "Mouka", 0.25f,
-                "sugo", 0.08f,
-                "Mozzarella", 0.11f,
-                "Pancetta", 0.06f
+                "Mouka", 250f,
+                "sugo", 80f,
+                "Mozzarella", 110f,
+                "Pancetta", 60f
         ));
 
         createRecipe("Spinaci Pancetta", Map.of(
-                "Mouka", 0.25f,
-                "sugo", 0.08f,
-                "Mozzarella", 0.11f,
-                "Pancetta", 0.06f,
-                "Špenát", 0.05f,
-                "Vejce", 0.05f
+                "Mouka", 250f,
+                "sugo", 80f,
+                "Mozzarella", 110f,
+                "Pancetta", 60f,
+                "Špenát", 50f,
+                "Vejce", 50f
         ));
 
         createRecipe("Gorgonzola", Map.of(
-                "Mouka", 0.25f,
-                "sugo", 0.08f,
-                "Mozzarella", 0.11f,
-                "Pancetta", 0.06f,
-                "Gorgonzola", 0.04f
+                "Mouka", 250f,
+                "sugo", 80f,
+                "Mozzarella", 110f,
+                "Pancetta", 60f,
+                "Gorgonzola", 40f
         ));
 
         createRecipe("Mexicana", Map.of(
-                "Mouka", 0.25f,
-                "sugo", 0.08f,
-                "Mozzarella", 0.11f,
-                "Pancetta", 0.06f,
-                "Fazolky", 0.05f,
-                "Červená cibule", 0.03f,
-                "Jalapeňos", 0.03f
+                "Mouka", 250f,
+                "sugo", 80f,
+                "Mozzarella", 110f,
+                "Pancetta", 60f,
+                "Fazolky", 50f,
+                "Červená cibule", 30f,
+                "Jalapeňos", 30f
         ));
 
         createRecipe("Don Corleone", Map.of(
-                "Mouka", 0.25f,
-                "sugo", 0.08f,
-                "Mozzarella", 0.11f,
-                "Šunka", 0.05f,
-                "Salám", 0.04f,
-                "Pancetta", 0.05f,
-                "Žampiony", 0.07f
+                "Mouka", 250f,
+                "sugo", 80f,
+                "Mozzarella", 110f,
+                "Šunka", 50f,
+                "Salám", 40f,
+                "Pancetta", 50f,
+                "Žampiony", 70f
         ));
 
         createRecipe("Bestiale", Map.of(
-                "Mouka", 0.25f,
-                "Hořčice", 0.02f,
-                "Mozzarella", 0.1f,
-                "Uzený eidam", 0.05f,
-                "Pancetta", 0.05f,
-                "Salám", 0.04f,
-                "Camembert", 0.04f,
-                "Červená cibule", 0.03f,
-                "Drcený pepř", 0.001f
+                "Mouka", 250f,
+                "Hořčice", 20f,
+                "Mozzarella", 100f,
+                "Uzený eidam", 50f,
+                "Pancetta", 50f,
+                "Salám", 40f,
+                "Camembert", 40f,
+                "Červená cibule", 30f,
+                "Drcený pepř", 1f
         ));
 
         createRecipe("Papa Cipolla", Map.of(
-                "Mouka", 0.25f,
-                "Smetana", 0.05f,
-                "Mozzarella", 0.1f,
-                "Pancetta", 0.06f,
-                "Červená cibule", 0.03f,
-                "Pórek", 0.03f,
-                "Parmská šunka", 0.05f,
-                "Vejce", 0.05f
+                "Mouka", 250f,
+                "Smetana", 50f,
+                "Mozzarella", 100f,
+                "Pancetta", 60f,
+                "Červená cibule", 30f,
+                "Pórek", 30f,
+                "Parmská šunka", 50f,
+                "Vejce", 50f
         ));
 
         createRecipe("Prosciutto Crudo", Map.of(
-                "Mouka", 0.25f,
-                "sugo", 0.08f,
-                "Mozzarella", 0.1f,
-                "Parmská šunka", 0.05f,
-                "Rukola", 0.015f
+                "Mouka", 250f,
+                "sugo", 80f,
+                "Mozzarella", 100f,
+                "Parmská šunka", 50f,
+                "Rukola", 15f
         ));
 
         createRecipe("Marco Polo", Map.of(
-                "Mouka", 0.25f,
-                "sugo", 0.08f,
-                "Mozzarella", 0.11f,
-                "Grilovaná kuřecí prsa", 0.08f,
-                "Rajčata", 0.05f,
-                "Parmezán", 0.02f
+                "Mouka", 250f,
+                "sugo", 80f,
+                "Mozzarella", 110f,
+                "Grilovaná kuřecí prsa", 80f,
+                "Rajčata", 50f,
+                "Parmezán", 20f
         ));
 
         createRecipe("Broccoli Pollo", Map.of(
-                "Mouka", 0.25f,
-                "Smetana", 0.05f,
-                "Mozzarella", 0.1f,
-                "Brokolice", 0.07f,
-                "Grilovaná kuřecí prsa", 0.08f,
-                "Parmezán", 0.02f
+                "Mouka", 250f,
+                "Smetana", 50f,
+                "Mozzarella", 100f,
+                "Brokolice", 70f,
+                "Grilovaná kuřecí prsa", 80f,
+                "Parmezán", 20f
         ));
 
         createRecipe("Pollo", Map.of(
-                "Mouka", 0.25f,
-                "sugo", 0.08f,
-                "Mozzarella", 0.11f,
-                "Grilovaná kuřecí prsa", 0.08f
+                "Mouka", 250f,
+                "sugo", 80f,
+                "Mozzarella", 110f,
+                "Grilovaná kuřecí prsa", 80f
         ));
 
         createRecipe("Spinaci Pollo", Map.of(
-                "Mouka", 0.25f,
-                "Smetana", 0.05f,
-                "Mozzarella", 0.1f,
-                "Špenát", 0.05f,
-                "Grilovaná kuřecí prsa", 0.08f,
-                "Drcený pepř", 0.001f
+                "Mouka", 250f,
+                "Smetana", 50f,
+                "Mozzarella", 100f,
+                "Špenát", 50f,
+                "Grilovaná kuřecí prsa", 80f,
+                "Drcený pepř", 1f
         ));
 
         createRecipe("Siciliana Tonno", Map.of(
-                "Mouka", 0.25f,
-                "sugo", 0.08f,
-                "Mozzarella", 0.11f,
-                "Tuňák", 0.07f,
-                "Červená cibule", 0.03f
+                "Mouka", 250f,
+                "sugo", 80f,
+                "Mozzarella", 110f,
+                "Tuňák", 70f,
+                "Červená cibule", 30f
         ));
 
         createRecipe("Napoletana", Map.of(
-                "Mouka", 0.25f,
-                "sugo", 0.08f,
-                "Mozzarella", 0.1f,
-                "Ančovičky", 0.03f,
-                "Rajčata", 0.04f,
-                "Olivy černé", 0.02f
+                "Mouka", 250f,
+                "sugo", 80f,
+                "Mozzarella", 100f,
+                "Ančovičky", 30f,
+                "Rajčata", 40f,
+                "Olivy černé", 20f
         ));
 
         createRecipe("Carpaccio", Map.of(
-                "Mouka", 0.25f,
-                "sugo", 0.08f,
-                "Mozzarella", 0.1f,
-                "Carpaccio z pravé svíčkové", 0.06f,
-                "Rukola", 0.015f,
-                "Parmezán", 0.02f,
-                "Pesto", 0.01f
+                "Mouka", 250f,
+                "sugo", 80f,
+                "Mozzarella", 100f,
+                "Carpaccio z pravé svíčkové", 60f,
+                "Rukola", 15f,
+                "Parmezán", 20f,
+                "Pesto", 10f
         ));
 
         createRecipe("Dolce Banana", Map.of(
-                "Mouka", 0.25f,
-                "Smetana", 0.05f,
-                "Mascarpone", 0.05f,
-                "Nutella", 0.05f,
-                "Banán", 0.07f,
-                "Vanilkový cukr", 0.005f
+                "Mouka", 250f,
+                "Smetana", 50f,
+                "Mascarpone", 50f,
+                "Nutella", 50f,
+                "Banán", 70f,
+                "Vanilkový cukr", 5f
         ));
 
     }

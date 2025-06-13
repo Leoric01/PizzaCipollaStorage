@@ -1,7 +1,6 @@
 package leoric.pizzacipollastorage.DTOs.Ingredient;
 
-import leoric.pizzacipollastorage.DTOs.Vat.VatRateShortDto;
-import leoric.pizzacipollastorage.models.enums.ProductCategory;
+import leoric.pizzacipollastorage.DTOs.ProductCategory.ProductCategoryResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +18,5 @@ public class IngredientResponseDto {
     private String unit;
     private float lossCleaningFactor;
     private float lossUsageFactor;
-    private VatRateShortDto vatRate;
-    private ProductCategory productCategory;
+    private ProductCategoryResponseDto productCategory;
 }

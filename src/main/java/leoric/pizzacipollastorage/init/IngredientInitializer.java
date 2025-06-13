@@ -1,9 +1,12 @@
 package leoric.pizzacipollastorage.init;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.persistence.EntityNotFoundException;
 import leoric.pizzacipollastorage.models.Ingredient;
+import leoric.pizzacipollastorage.models.ProductCategory;
 import leoric.pizzacipollastorage.models.VatRate;
 import leoric.pizzacipollastorage.repositories.IngredientRepository;
+import leoric.pizzacipollastorage.repositories.ProductCategoryRepository;
 import leoric.pizzacipollastorage.repositories.VatRateRepository;
 import leoric.pizzacipollastorage.utils.CustomUtilityString;
 import lombok.RequiredArgsConstructor;
@@ -14,65 +17,68 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-@DependsOn("vatRateInitializer")
+@DependsOn({"vatRateInitializer", "productCategoryInitializer"})
 public class IngredientInitializer {
 
     private final IngredientRepository ingredientRepository;
     private final VatRateRepository vatRateRepository;
+    private final ProductCategoryRepository productCategoryRepository;
 
     @PostConstruct
     public void insertDefaultIngredients() {
         UUID vatRateId = UUID.fromString("00000000-0000-0000-0000-000000000001");
         VatRate vatRate = vatRateRepository.findById(vatRateId)
                 .orElseThrow(() -> new IllegalStateException("Missing VAT rate with ID 000...001"));
+        ProductCategory defaultCategory = productCategoryRepository.findByNameIgnoreCase("FOOD")
+                .orElseThrow(() -> new EntityNotFoundException("Product category FOOD not found"));
 
-        createIfNotExists("Mozzarella", "g", 0.04f, 0.04f, vatRate);
-        createIfNotExists("Mouka", "g", 0.04f, 0.04f, vatRate);
-        createIfNotExists("Sugo", "g", 0.04f, 0.04f, vatRate);
-        createIfNotExists("Ančovičky", "g", 0.04f, 0.04f, vatRate);
-        createIfNotExists("Horcice", "g", 0.04f, 0.04f, vatRate);
-        createIfNotExists("Parmezán", "g", 0.09f, 0.07f, vatRate);
-        createIfNotExists("Jalapeňos", "g", 0.02f, 0.07f, vatRate);
-        createIfNotExists("Kukuřice", "g", 0.01f, 0.04f, vatRate);
-        createIfNotExists("Rukola", "g", 0.00f, 0.04f, vatRate);
-        createIfNotExists("Pesto alla genovese", "g", 0.03f, 0.06f, vatRate);
-        createIfNotExists("Červená cibule", "g", 0.03f, 0.03f, vatRate);
-        createIfNotExists("Česnek", "g", 0.01f, 0.06f, vatRate);
-        createIfNotExists("Pórek", "g", 0.02f, 0.05f, vatRate);
-        createIfNotExists("Brokolice", "g", 0.09f, 0.05f, vatRate);
-        createIfNotExists("Smetana", "g", 0.08f, 0.09f, vatRate);
-        createIfNotExists("Vejce", "ks", 0.06f, 0.06f, vatRate);
-        createIfNotExists("Fazolky", "ks", 0.06f, 0.06f, vatRate);
-        createIfNotExists("Olivy černé", "g", 0.02f, 0.07f, vatRate);
-        createIfNotExists("Olivy zelené", "g", 0.06f, 0.07f, vatRate);
-        createIfNotExists("Olivy mix", "g", 0.01f, 0.05f, vatRate);
-        createIfNotExists("Žampiony", "g", 0.0f, 0.07f, vatRate);
-        createIfNotExists("Rajčata", "g", 0.01f, 0.05f, vatRate);
-        createIfNotExists("Paprika", "g", 0.05f, 0.07f, vatRate);
-        createIfNotExists("Salám", "g", 0.09f, 0.01f, vatRate);
-        createIfNotExists("Pancetta", "g", 0.04f, 0.04f, vatRate);
-        createIfNotExists("Šunka", "g", 0.02f, 0.0f, vatRate);
-        createIfNotExists("Grilovaná kuřecí prsa", "g", 0.05f, 0.02f, vatRate);
-        createIfNotExists("Ananas", "g", 0.08f, 0.09f, vatRate);
-        createIfNotExists("Camembert", "g", 0.09f, 0.04f, vatRate);
-        createIfNotExists("Uzený eidam", "g", 0.0f, 0.05f, vatRate);
-        createIfNotExists("Mascarpone", "g", 0.04f, 0.08f, vatRate);
-        createIfNotExists("Gorgonzola", "g", 0.04f, 0.02f, vatRate);
-        createIfNotExists("Špenát", "g", 0.08f, 0.01f, vatRate);
-        createIfNotExists("Tuňák", "g", 0.04f, 0.1f, vatRate);
-        createIfNotExists("Plody moře", "g", 0.09f, 0.05f, vatRate);
-        createIfNotExists("Bazalka", "g", 0.08f, 0.04f, vatRate);
-        createIfNotExists("Chili", "g", 0.1f, 0.02f, vatRate);
-        createIfNotExists("Nutella", "g", 0.02f, 0.09f, vatRate);
-        createIfNotExists("Mozzarella di bufala", "ks", 0.08f, 0.02f, vatRate);
-        createIfNotExists("Parmská šunka", "g", 0.04f, 0.09f, vatRate);
-        createIfNotExists("Drcený pepř", "g", 0.04f, 0.09f, vatRate);
-        createIfNotExists("Banán", "ks", 0.04f, 0.09f, vatRate);
-        createIfNotExists("Vanilkový cukr", "ks", 0.0f, 0.0f, vatRate);
+        createIfNotExists("Mozzarella", "g", 0.04f, 0.04f, defaultCategory);
+        createIfNotExists("Mouka", "g", 0.04f, 0.04f, defaultCategory);
+        createIfNotExists("Sugo", "g", 0.04f, 0.04f, defaultCategory);
+        createIfNotExists("Ančovičky", "g", 0.04f, 0.04f, defaultCategory);
+        createIfNotExists("Horcice", "g", 0.04f, 0.04f, defaultCategory);
+        createIfNotExists("Parmezán", "g", 0.09f, 0.07f, defaultCategory);
+        createIfNotExists("Jalapeňos", "g", 0.02f, 0.07f, defaultCategory);
+        createIfNotExists("Kukuřice", "g", 0.01f, 0.04f, defaultCategory);
+        createIfNotExists("Rukola", "g", 0.00f, 0.04f, defaultCategory);
+        createIfNotExists("Pesto alla genovese", "g", 0.03f, 0.06f, defaultCategory);
+        createIfNotExists("Červená cibule", "g", 0.03f, 0.03f, defaultCategory);
+        createIfNotExists("Česnek", "g", 0.01f, 0.06f, defaultCategory);
+        createIfNotExists("Pórek", "g", 0.02f, 0.05f, defaultCategory);
+        createIfNotExists("Brokolice", "g", 0.09f, 0.05f, defaultCategory);
+        createIfNotExists("Smetana", "g", 0.08f, 0.09f, defaultCategory);
+        createIfNotExists("Vejce", "ks", 0.06f, 0.06f, defaultCategory);
+        createIfNotExists("Fazolky", "ks", 0.06f, 0.06f, defaultCategory);
+        createIfNotExists("Olivy černé", "g", 0.02f, 0.07f, defaultCategory);
+        createIfNotExists("Olivy zelené", "g", 0.06f, 0.07f, defaultCategory);
+        createIfNotExists("Olivy mix", "g", 0.01f, 0.05f, defaultCategory);
+        createIfNotExists("Žampiony", "g", 0.0f, 0.07f, defaultCategory);
+        createIfNotExists("Rajčata", "g", 0.01f, 0.05f, defaultCategory);
+        createIfNotExists("Paprika", "g", 0.05f, 0.07f, defaultCategory);
+        createIfNotExists("Salám", "g", 0.09f, 0.01f, defaultCategory);
+        createIfNotExists("Pancetta", "g", 0.04f, 0.04f, defaultCategory);
+        createIfNotExists("Šunka", "g", 0.02f, 0.0f, defaultCategory);
+        createIfNotExists("Grilovaná kuřecí prsa", "g", 0.05f, 0.02f, defaultCategory);
+        createIfNotExists("Ananas", "g", 0.08f, 0.09f, defaultCategory);
+        createIfNotExists("Camembert", "g", 0.09f, 0.04f, defaultCategory);
+        createIfNotExists("Uzený eidam", "g", 0.0f, 0.05f, defaultCategory);
+        createIfNotExists("Mascarpone", "g", 0.04f, 0.08f, defaultCategory);
+        createIfNotExists("Gorgonzola", "g", 0.04f, 0.02f, defaultCategory);
+        createIfNotExists("Špenát", "g", 0.08f, 0.01f, defaultCategory);
+        createIfNotExists("Tuňák", "g", 0.04f, 0.1f, defaultCategory);
+        createIfNotExists("Plody moře", "g", 0.09f, 0.05f, defaultCategory);
+        createIfNotExists("Bazalka", "g", 0.08f, 0.04f, defaultCategory);
+        createIfNotExists("Chili", "g", 0.1f, 0.02f, defaultCategory);
+        createIfNotExists("Nutella", "g", 0.02f, 0.09f, defaultCategory);
+        createIfNotExists("Mozzarella di bufala", "ks", 0.08f, 0.02f, defaultCategory);
+        createIfNotExists("Parmská šunka", "g", 0.04f, 0.09f, defaultCategory);
+        createIfNotExists("Drcený pepř", "g", 0.04f, 0.09f, defaultCategory);
+        createIfNotExists("Banán", "ks", 0.04f, 0.09f, defaultCategory);
+        createIfNotExists("Vanilkový cukr", "ks", 0.0f, 0.0f, defaultCategory);
 
     }
 
-    private void createIfNotExists(String name, String unit, float lossCleaning, float lossUsage, VatRate vatRate) {
+    private void createIfNotExists(String name, String unit, float lossCleaning, float lossUsage, ProductCategory category) {
         boolean exists = ingredientRepository.findAll().stream()
                 .map(i -> CustomUtilityString.normalize(i.getName()))
                 .anyMatch(n -> n.equals(CustomUtilityString.normalize(name)));
@@ -83,7 +89,7 @@ public class IngredientInitializer {
                     .unit(unit)
                     .lossCleaningFactor(lossCleaning)
                     .lossUsageFactor(lossUsage)
-                    .vatRate(vatRate)
+                    .category(category)
                     .build();
             ingredientRepository.save(ingredient);
         }

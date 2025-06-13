@@ -1,7 +1,6 @@
 package leoric.pizzacipollastorage.models;
 
 import jakarta.persistence.*;
-import leoric.pizzacipollastorage.models.enums.ProductCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,10 +26,6 @@ public class Ingredient {
     private float lossCleaningFactor;
     private float lossUsageFactor;
 
-    @ManyToOne
-    @JoinColumn(name = "vat_rate_id")
-    private VatRate vatRate;
-
     @OneToMany(mappedBy = "ingredient")
     private List<IngredientPrice> prices;
 
@@ -43,6 +38,7 @@ public class Ingredient {
     @OneToMany(mappedBy = "ingredient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<IngredientAlias> aliases;
 
-    @Enumerated(EnumType.STRING)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "product_category_id")
     private ProductCategory category;
 }

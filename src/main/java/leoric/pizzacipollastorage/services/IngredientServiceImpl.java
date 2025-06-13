@@ -1,6 +1,5 @@
 package leoric.pizzacipollastorage.services;
 
-import jakarta.persistence.EntityNotFoundException;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientAlias.IngredientAliasOverviewDto;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientCreateDto;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientResponseDto;
@@ -8,9 +7,9 @@ import leoric.pizzacipollastorage.handler.exceptions.DuplicateIngredientNameExce
 import leoric.pizzacipollastorage.mapstruct.IngredientMapper;
 import leoric.pizzacipollastorage.models.Ingredient;
 import leoric.pizzacipollastorage.models.IngredientAlias;
-import leoric.pizzacipollastorage.models.VatRate;
+import leoric.pizzacipollastorage.models.ProductCategory;
 import leoric.pizzacipollastorage.repositories.IngredientRepository;
-import leoric.pizzacipollastorage.repositories.VatRateRepository;
+import leoric.pizzacipollastorage.repositories.ProductCategoryRepository;
 import leoric.pizzacipollastorage.services.interfaces.IngredientAliasService;
 import leoric.pizzacipollastorage.services.interfaces.IngredientService;
 import lombok.RequiredArgsConstructor;
@@ -23,30 +22,24 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class IngredientServiceImpl implements IngredientService {
     private final IngredientRepository ingredientRepository;
-    private final VatRateRepository vatRateRepository;
     private final IngredientMapper ingredientMapper;
     private final IngredientAliasService ingredientAliasService;
+    private final ProductCategoryRepository productCategoryRepository;
 
     @Override
     public IngredientResponseDto createIngredient(IngredientCreateDto dto) {
-        boolean exists = ingredientRepository.existsByName(dto.getName());
-        if (exists) {
+        if (ingredientRepository.existsByName(dto.getName())) {
             throw new DuplicateIngredientNameException("Ingredient with name '" + dto.getName() + "' already exists");
         }
 
-        VatRate vatRate = vatRateRepository.findById(dto.getCategory().getVatRateId())
-                .orElseThrow(() -> new EntityNotFoundException("Vat rate not found"));
+        ProductCategory category = productCategoryRepository
+                .findByNameIgnoreCase(dto.getCategory())
+                .orElseThrow(() -> new IllegalArgumentException("Category not found: " + dto.getCategory()));
 
-        Ingredient ingredient = Ingredient.builder()
-                .name(dto.getName())
-                .unit(dto.getUnit())
-                .lossCleaningFactor(dto.getLossCleaningFactor())
-                .lossUsageFactor(dto.getLossUsageFactor())
-                .category(dto.getCategory())
-                .vatRate(vatRate)
-                .build();
+        Ingredient ingredient = ingredientMapper.toEntity(dto);
+        ingredient.setCategory(category);
+
         Ingredient saved = ingredientRepository.save(ingredient);
-
         return ingredientMapper.toDto(saved);
     }
 

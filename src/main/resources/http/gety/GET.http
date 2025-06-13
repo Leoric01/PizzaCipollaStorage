@@ -11,10 +11,10 @@ GET http://localhost:8080/api/inventory/current-status
 GET http://localhost:8080/api/menu-items
 
 ### Get MenuItem by id
-GET http://localhost:8080/api/menu-items/{id}
+GET http://localhost:8080/api/menu-items/fab0e5d6-d6dc-422c-9469-70ff21a75656
 
 ### Get MenuItem by name
-GET http://localhost:8080/api/menu-items/name/Diavola2
+GET http://localhost:8080/api/menu-items/name/Diavola
 
 ### Get All Dish Sizes
 GET http://localhost:8080/api/dish-sizes

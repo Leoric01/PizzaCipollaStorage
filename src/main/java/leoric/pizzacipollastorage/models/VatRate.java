@@ -18,6 +18,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class VatRate {
+
     @Id
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
@@ -26,5 +27,5 @@ public class VatRate {
     private float rate;
 
     @OneToMany(mappedBy = "vatRate")
-    private List<Ingredient> ingredients;
+    private List<ProductCategory> categories;
 }
