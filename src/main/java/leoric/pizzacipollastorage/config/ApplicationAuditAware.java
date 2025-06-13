@@ -1,6 +1,7 @@
 package leoric.pizzacipollastorage.config;
 
 import leoric.pizzacipollastorage.auth.models.User;
+import lombok.NonNull;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -11,6 +12,7 @@ import java.util.Optional;
 public class ApplicationAuditAware implements AuditorAware<Integer> {
 
     @Override
+    @NonNull
     public Optional<Integer> getCurrentAuditor() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
