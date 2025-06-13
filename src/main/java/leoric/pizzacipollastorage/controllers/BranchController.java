@@ -1,7 +1,7 @@
 package leoric.pizzacipollastorage.controllers;
 
-import leoric.pizzacipollastorage.DTOs.Loans.BranchCreateDto;
-import leoric.pizzacipollastorage.DTOs.Loans.BranchResponseDto;
+import leoric.pizzacipollastorage.loans.dtos.BranchCreateDto;
+import leoric.pizzacipollastorage.loans.dtos.BranchResponseDto;
 import leoric.pizzacipollastorage.services.interfaces.BranchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

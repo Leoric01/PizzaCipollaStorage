@@ -18,7 +18,7 @@ public interface MenuItemMapper {
 
     List<MenuItemResponseDto> toDtoList(List<MenuItem> menuItems);
 
-    @Mapping(source = "quantity", target = "amount")
+    @Mapping(source = "quantity", target = "quantity")
     @Mapping(source = "ingredient", target = "ingredient")
     RecipeIngredientVeryShortDtoWithId toVeryShortDto(RecipeIngredient recipeIngredient);
 

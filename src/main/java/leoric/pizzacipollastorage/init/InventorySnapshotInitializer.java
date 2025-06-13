@@ -1,12 +1,13 @@
 package leoric.pizzacipollastorage.init;
+
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityNotFoundException;
+import leoric.pizzacipollastorage.inventory.models.InventorySnapshot;
+import leoric.pizzacipollastorage.inventory.repositories.InventorySnapshotRepository;
 import leoric.pizzacipollastorage.models.Ingredient;
-import leoric.pizzacipollastorage.models.InventorySnapshot;
-import leoric.pizzacipollastorage.models.enums.IngredientForm;
+import leoric.pizzacipollastorage.models.enums.IngredientState;
 import leoric.pizzacipollastorage.models.enums.SnapshotType;
 import leoric.pizzacipollastorage.repositories.IngredientRepository;
-import leoric.pizzacipollastorage.repositories.InventorySnapshotRepository;
 import leoric.pizzacipollastorage.utils.CustomUtilityString;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.DependsOn;
@@ -72,9 +73,9 @@ public class InventorySnapshotInitializer {
                 .findFirst()
                 .orElseThrow(() -> new EntityNotFoundException("Ingredient not found: " + ingredientName));
 
-        IngredientForm form = switch (ingredient.getUnit()) {
-            case "ks" -> IngredientForm.RAW;
-            default -> IngredientForm.PREPARED;
+        IngredientState form = switch (ingredient.getUnit()) {
+            case "ks" -> IngredientState.RAW;
+            default -> IngredientState.PREPARED;
         };
 
         InventorySnapshot snapshot = InventorySnapshot.builder()

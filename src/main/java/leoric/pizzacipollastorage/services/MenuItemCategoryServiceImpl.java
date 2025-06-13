@@ -43,7 +43,6 @@ public class MenuItemCategoryServiceImpl implements MenuItemCategoryService {
 
         String newName = dto.getName().trim();
 
-        // Check duplicity ignoring the current entity itself
         menuItemCategoryRepository.findByNameIgnoreCase(newName)
                 .filter(existingCategory -> !existingCategory.getId().equals(id))
                 .ifPresent(existingCategory -> {

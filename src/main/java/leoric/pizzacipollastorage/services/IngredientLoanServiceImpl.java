@@ -1,9 +1,10 @@
 package leoric.pizzacipollastorage.services;
 
 import jakarta.persistence.EntityNotFoundException;
-import leoric.pizzacipollastorage.DTOs.Loans.IngredientLoanCreateDto;
-import leoric.pizzacipollastorage.DTOs.Loans.IngredientLoanPatchDto;
-import leoric.pizzacipollastorage.DTOs.Loans.IngredientLoanResponseDto;
+import leoric.pizzacipollastorage.inventory.services.InventoryService;
+import leoric.pizzacipollastorage.loans.dtos.IngredientLoanCreateDto;
+import leoric.pizzacipollastorage.loans.dtos.IngredientLoanPatchDto;
+import leoric.pizzacipollastorage.loans.dtos.IngredientLoanResponseDto;
 import leoric.pizzacipollastorage.mapstruct.IngredientLoanMapper;
 import leoric.pizzacipollastorage.models.Branch;
 import leoric.pizzacipollastorage.models.Ingredient;
@@ -15,7 +16,6 @@ import leoric.pizzacipollastorage.repositories.BranchRepository;
 import leoric.pizzacipollastorage.repositories.IngredientLoanRepository;
 import leoric.pizzacipollastorage.services.interfaces.IngredientAliasService;
 import leoric.pizzacipollastorage.services.interfaces.IngredientLoanService;
-import leoric.pizzacipollastorage.services.interfaces.InventoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -15,5 +15,5 @@ import java.util.UUID;
 public class RecipeIngredientShortDto {
     private UUID id;
     private IngredientShortDto ingredient;
-    private float amount;
+    private float quantity;
 }

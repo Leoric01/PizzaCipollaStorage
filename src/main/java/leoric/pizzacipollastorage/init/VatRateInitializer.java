@@ -1,9 +1,9 @@
 package leoric.pizzacipollastorage.init;
 
 import jakarta.annotation.PostConstruct;
-import leoric.pizzacipollastorage.models.VatRate;
-import leoric.pizzacipollastorage.repositories.VatRateRepository;
 import leoric.pizzacipollastorage.utils.CustomUtilityString;
+import leoric.pizzacipollastorage.vat.models.VatRate;
+import leoric.pizzacipollastorage.vat.repositories.VatRateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

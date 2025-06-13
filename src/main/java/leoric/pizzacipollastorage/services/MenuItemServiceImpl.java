@@ -98,7 +98,7 @@ public class MenuItemServiceImpl implements MenuItemService {
         RecipeIngredient recipeIngredient = recipeIngredientRepository.findById(recipeIngredientId)
                 .orElseThrow(() -> new EntityNotFoundException("RecipeIngredient not found: " + recipeIngredientId));
 
-        recipeIngredient.setQuantity(dto.getAmount());
+        recipeIngredient.setQuantity(dto.getQuantity());
 
         RecipeIngredient updated = recipeIngredientRepository.save(recipeIngredient);
 

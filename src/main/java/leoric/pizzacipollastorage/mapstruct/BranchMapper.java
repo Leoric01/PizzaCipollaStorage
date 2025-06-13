@@ -1,7 +1,7 @@
 package leoric.pizzacipollastorage.mapstruct;
 
-import leoric.pizzacipollastorage.DTOs.Loans.BranchCreateDto;
-import leoric.pizzacipollastorage.DTOs.Loans.BranchResponseDto;
+import leoric.pizzacipollastorage.loans.dtos.BranchCreateDto;
+import leoric.pizzacipollastorage.loans.dtos.BranchResponseDto;
 import leoric.pizzacipollastorage.models.Branch;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;

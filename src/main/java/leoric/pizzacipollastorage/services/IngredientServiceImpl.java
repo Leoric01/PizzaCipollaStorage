@@ -5,16 +5,21 @@ import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientAlias.IngredientAlia
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientCreateDto;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientResponseDto;
 import leoric.pizzacipollastorage.handler.exceptions.DuplicateIngredientNameException;
+import leoric.pizzacipollastorage.inventory.models.InventorySnapshot;
+import leoric.pizzacipollastorage.inventory.repositories.InventorySnapshotRepository;
 import leoric.pizzacipollastorage.mapstruct.IngredientMapper;
-import leoric.pizzacipollastorage.models.*;
+import leoric.pizzacipollastorage.models.Ingredient;
+import leoric.pizzacipollastorage.models.IngredientAlias;
 import leoric.pizzacipollastorage.models.enums.InventoryStatus;
 import leoric.pizzacipollastorage.models.enums.OrderItemStatus;
 import leoric.pizzacipollastorage.models.enums.OrderStatus;
+import leoric.pizzacipollastorage.purchase.models.PurchaseOrder;
+import leoric.pizzacipollastorage.purchase.models.PurchaseOrderItem;
 import leoric.pizzacipollastorage.repositories.IngredientRepository;
-import leoric.pizzacipollastorage.repositories.InventorySnapshotRepository;
-import leoric.pizzacipollastorage.repositories.ProductCategoryRepository;
 import leoric.pizzacipollastorage.services.interfaces.IngredientAliasService;
 import leoric.pizzacipollastorage.services.interfaces.IngredientService;
+import leoric.pizzacipollastorage.vat.models.ProductCategory;
+import leoric.pizzacipollastorage.vat.repositories.ProductCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -4,8 +4,8 @@ import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientAlias.IngredientAlia
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientCreateDto;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientResponseDto;
 import leoric.pizzacipollastorage.models.Ingredient;
-import leoric.pizzacipollastorage.models.PurchaseOrder;
 import leoric.pizzacipollastorage.models.enums.InventoryStatus;
+import leoric.pizzacipollastorage.purchase.models.PurchaseOrder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

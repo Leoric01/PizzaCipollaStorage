@@ -1,7 +1,7 @@
 package leoric.pizzacipollastorage.services.interfaces;
 
-import leoric.pizzacipollastorage.DTOs.Loans.BranchCreateDto;
-import leoric.pizzacipollastorage.DTOs.Loans.BranchResponseDto;
+import leoric.pizzacipollastorage.loans.dtos.BranchCreateDto;
+import leoric.pizzacipollastorage.loans.dtos.BranchResponseDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

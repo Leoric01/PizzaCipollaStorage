@@ -2,7 +2,7 @@ package leoric.pizzacipollastorage.DTOs.StockEntry;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientShortDto;
-import leoric.pizzacipollastorage.DTOs.Supplier.SupplierShortDto;
+import leoric.pizzacipollastorage.purchase.dtos.Supplier.SupplierShortDto;
 import lombok.Data;
 
 import java.time.LocalDate;

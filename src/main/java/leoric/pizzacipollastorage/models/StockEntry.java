@@ -2,6 +2,8 @@ package leoric.pizzacipollastorage.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import leoric.pizzacipollastorage.purchase.models.PurchaseInvoiceItem;
+import leoric.pizzacipollastorage.purchase.models.Supplier;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

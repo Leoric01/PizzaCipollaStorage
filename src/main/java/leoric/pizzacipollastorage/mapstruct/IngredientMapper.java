@@ -5,10 +5,10 @@ import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientInventoryDto;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientResponseDto;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientShortDto;
 import leoric.pizzacipollastorage.DTOs.ProductCategory.ProductCategoryResponseDto;
-import leoric.pizzacipollastorage.DTOs.Vat.VatRateShortDto;
 import leoric.pizzacipollastorage.models.Ingredient;
-import leoric.pizzacipollastorage.models.ProductCategory;
-import leoric.pizzacipollastorage.models.VatRate;
+import leoric.pizzacipollastorage.vat.dtos.VatRateShortDto;
+import leoric.pizzacipollastorage.vat.models.ProductCategory;
+import leoric.pizzacipollastorage.vat.models.VatRate;
 import org.mapstruct.*;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package leoric.pizzacipollastorage.mapstruct;
 
-import leoric.pizzacipollastorage.DTOs.Loans.IngredientLoanItemDto;
+import leoric.pizzacipollastorage.loans.dtos.IngredientLoanItemDto;
 import leoric.pizzacipollastorage.models.IngredientLoanItem;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

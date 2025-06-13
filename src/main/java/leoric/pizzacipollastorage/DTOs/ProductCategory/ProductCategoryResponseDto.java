@@ -1,6 +1,6 @@
 package leoric.pizzacipollastorage.DTOs.ProductCategory;
 
-import leoric.pizzacipollastorage.DTOs.Vat.VatRateShortDto;
+import leoric.pizzacipollastorage.vat.dtos.VatRateShortDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

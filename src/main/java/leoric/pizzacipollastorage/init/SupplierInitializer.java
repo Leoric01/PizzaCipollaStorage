@@ -1,8 +1,8 @@
 package leoric.pizzacipollastorage.init;
 
 import jakarta.annotation.PostConstruct;
-import leoric.pizzacipollastorage.models.Supplier;
-import leoric.pizzacipollastorage.repositories.SupplierRepository;
+import leoric.pizzacipollastorage.purchase.models.Supplier;
+import leoric.pizzacipollastorage.purchase.repositories.SupplierRepository;
 import leoric.pizzacipollastorage.utils.CustomUtilityString;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

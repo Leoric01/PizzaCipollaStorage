@@ -1,6 +1,8 @@
 package leoric.pizzacipollastorage.models;
 
 import jakarta.persistence.*;
+import leoric.pizzacipollastorage.inventory.models.InventorySnapshot;
+import leoric.pizzacipollastorage.vat.models.ProductCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

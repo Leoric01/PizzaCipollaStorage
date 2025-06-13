@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RecipeIngredientVeryShortDto {
     private IngredientShortDto ingredient;
-    private float amount;
+    private float quantity;
 }

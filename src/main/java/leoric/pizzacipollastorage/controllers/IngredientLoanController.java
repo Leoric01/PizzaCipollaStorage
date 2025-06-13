@@ -1,8 +1,8 @@
 package leoric.pizzacipollastorage.controllers;
 
-import leoric.pizzacipollastorage.DTOs.Loans.IngredientLoanCreateDto;
-import leoric.pizzacipollastorage.DTOs.Loans.IngredientLoanPatchDto;
-import leoric.pizzacipollastorage.DTOs.Loans.IngredientLoanResponseDto;
+import leoric.pizzacipollastorage.loans.dtos.IngredientLoanCreateDto;
+import leoric.pizzacipollastorage.loans.dtos.IngredientLoanPatchDto;
+import leoric.pizzacipollastorage.loans.dtos.IngredientLoanResponseDto;
 import leoric.pizzacipollastorage.services.interfaces.IngredientLoanService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

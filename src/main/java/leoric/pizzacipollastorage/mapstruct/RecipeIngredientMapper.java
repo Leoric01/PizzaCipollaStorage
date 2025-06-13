@@ -8,6 +8,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", uses = IngredientMapper.class)
 public interface RecipeIngredientMapper {
 
-    @Mapping(source = "quantity", target = "amount")
+    @Mapping(source = "quantity", target = "quantity")
     RecipeIngredientShortDto toShortDto(RecipeIngredient recipeIngredient);
 }
