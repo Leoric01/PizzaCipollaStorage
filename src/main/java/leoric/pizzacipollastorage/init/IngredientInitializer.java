@@ -4,16 +4,12 @@ import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityNotFoundException;
 import leoric.pizzacipollastorage.models.Ingredient;
 import leoric.pizzacipollastorage.models.ProductCategory;
-import leoric.pizzacipollastorage.models.VatRate;
 import leoric.pizzacipollastorage.repositories.IngredientRepository;
 import leoric.pizzacipollastorage.repositories.ProductCategoryRepository;
-import leoric.pizzacipollastorage.repositories.VatRateRepository;
 import leoric.pizzacipollastorage.utils.CustomUtilityString;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -21,14 +17,10 @@ import java.util.UUID;
 public class IngredientInitializer {
 
     private final IngredientRepository ingredientRepository;
-    private final VatRateRepository vatRateRepository;
     private final ProductCategoryRepository productCategoryRepository;
 
     @PostConstruct
     public void insertDefaultIngredients() {
-        UUID vatRateId = UUID.fromString("00000000-0000-0000-0000-000000000001");
-        VatRate vatRate = vatRateRepository.findById(vatRateId)
-                .orElseThrow(() -> new IllegalStateException("Missing VAT rate with ID 000...001"));
         ProductCategory defaultCategory = productCategoryRepository.findByNameIgnoreCase("FOOD")
                 .orElseThrow(() -> new EntityNotFoundException("Product category FOOD not found"));
 
