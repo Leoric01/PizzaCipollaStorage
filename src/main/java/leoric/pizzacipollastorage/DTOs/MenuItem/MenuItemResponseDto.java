@@ -1,6 +1,5 @@
 package leoric.pizzacipollastorage.DTOs.MenuItem;
 
-import leoric.pizzacipollastorage.models.enums.MenuItemCategory;
 import lombok.Data;
 
 import java.util.List;
@@ -11,6 +10,6 @@ public class MenuItemResponseDto {
     private UUID id;
     private String name;
     private String description;
-    private MenuItemCategory category;
+    private MenuItemCategoryResponseDto menuItemCategory;
     private List<RecipeIngredientVeryShortDtoWithId> ingredients;
 }

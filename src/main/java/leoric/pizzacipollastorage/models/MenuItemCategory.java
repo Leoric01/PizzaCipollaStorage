@@ -1,6 +1,9 @@
 package leoric.pizzacipollastorage.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,19 +19,14 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MenuItem {
+public class MenuItemCategory {
     @Id
     @UuidGenerator(style = UuidGenerator.Style.AUTO)
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
     private String name;
-    private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private MenuItemCategory category;
-
-    @OneToMany(mappedBy = "menuItem")
-    private List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+    @OneToMany(mappedBy = "category")
+    private List<MenuItem> menuItems = new ArrayList<>();
 }

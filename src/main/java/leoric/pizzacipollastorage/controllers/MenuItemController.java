@@ -50,7 +50,7 @@ public class MenuItemController {
     }
 
     @PostMapping
-    public ResponseEntity<MenuItemResponseDto> createMenuItemWith(@RequestBody MenuItemWithIngredientsCreateDto dto) {
+    public ResponseEntity<MenuItemResponseDto> createMenuItem(@RequestBody MenuItemFullCreateDto dto) {
         return ResponseEntity.ok(menuItemService.createMenuItemWithOptionalIngredients(dto));
     }
 
@@ -63,7 +63,7 @@ public class MenuItemController {
     @PutMapping("/{id}")
     public ResponseEntity<MenuItemResponseDto> updateMenuItem(
             @PathVariable UUID id,
-            @RequestBody MenuItemWithIngredientsCreateDto dto) {
+            @RequestBody MenuItemFullCreateDto dto) {
         MenuItemResponseDto updated = menuItemService.updateMenuItem(id, dto);
         return ResponseEntity.ok(updated);
     }

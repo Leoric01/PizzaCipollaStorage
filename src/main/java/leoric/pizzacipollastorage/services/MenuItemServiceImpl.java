@@ -6,14 +6,8 @@ import leoric.pizzacipollastorage.DTOs.MenuItem.*;
 import leoric.pizzacipollastorage.handler.exceptions.MissingQuantityException;
 import leoric.pizzacipollastorage.mapstruct.MenuItemMapper;
 import leoric.pizzacipollastorage.mapstruct.RecipeIngredientMapper;
-import leoric.pizzacipollastorage.models.DishSize;
-import leoric.pizzacipollastorage.models.Ingredient;
-import leoric.pizzacipollastorage.models.MenuItem;
-import leoric.pizzacipollastorage.models.RecipeIngredient;
-import leoric.pizzacipollastorage.repositories.DishSizeRepository;
-import leoric.pizzacipollastorage.repositories.IngredientRepository;
-import leoric.pizzacipollastorage.repositories.MenuItemRepository;
-import leoric.pizzacipollastorage.repositories.RecipeIngredientRepository;
+import leoric.pizzacipollastorage.models.*;
+import leoric.pizzacipollastorage.repositories.*;
 import leoric.pizzacipollastorage.services.interfaces.IngredientAliasService;
 import leoric.pizzacipollastorage.services.interfaces.MenuItemService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +27,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     private final RecipeIngredientRepository recipeIngredientRepository;
     private final DishSizeRepository dishSizeRepository;
     private final RecipeIngredientMapper recipeIngredientMapper;
+    private final MenuItemCategoryRepository menuItemCategoryRepository;
 
     private final IngredientAliasService ingredientAliasService;
 
@@ -48,7 +43,7 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     @Transactional
-    public MenuItemResponseDto updateMenuItem(UUID id, MenuItemWithIngredientsCreateDto dto) {
+    public MenuItemResponseDto updateMenuItem(UUID id, MenuItemFullCreateDto dto) {
         MenuItem menuItem = menuItemRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("MenuItem not found: " + id));
 
@@ -73,14 +68,14 @@ public class MenuItemServiceImpl implements MenuItemService {
 
             List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 
-            for (MenuItemWithIngredientsCreateDto.RecipeIngredientSimpleDto ingDto : dto.getIngredients()) {
-                Ingredient ingredient = ingredientAliasService.findIngredientByNameFlexible(ingDto.getIngredientName())
-                        .orElseThrow(() -> new EntityNotFoundException("Ingredient not found: " + ingDto.getIngredientName()));
+            for (MenuItemFullCreateDto.RecipeIngredientSimpleDto ingDto : dto.getIngredients()) {
+                Ingredient ingredient = ingredientRepository.findById(ingDto.getIngredientId())
+                        .orElseThrow(() -> new EntityNotFoundException("Ingredient not found: " + ingDto.getIngredientId()));
 
                 float quantity = (dishSize.isDefaultSize())
                         ? Optional.ofNullable(ingDto.getQuantity())
-                        .orElseThrow(() -> new MissingQuantityException("Missing quantity for: " + ingDto.getIngredientName()))
-                        : getQuantity(menuItem, dishFactor, defaultDishSizeId, ingredient, ingDto.getQuantity(), ingDto.getIngredientName());
+                        .orElseThrow(() -> new MissingQuantityException("Missing quantity for ingredient ID: " + ingDto.getIngredientId()))
+                        : getQuantity(menuItem, dishFactor, defaultDishSizeId, ingredient, ingDto.getQuantity(), ingDto.getIngredientId().toString());
 
                 RecipeIngredient ri = new RecipeIngredient();
                 ri.setMenuItem(menuItem);
@@ -184,7 +179,7 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     @Transactional
-    public MenuItemResponseDto createMenuItemWithOptionalIngredients(MenuItemWithIngredientsCreateDto dto) {
+    public MenuItemResponseDto createMenuItemWithOptionalIngredients(MenuItemFullCreateDto dto) {
         MenuItem menuItem = new MenuItem();
         menuItem.setName(dto.getName());
         menuItem.setDescription(dto.getDescription());
@@ -204,19 +199,20 @@ public class MenuItemServiceImpl implements MenuItemService {
         UUID defaultDishSizeId = dishSizeRepository.findByDefaultSizeTrue()
                 .orElseThrow(() -> new IllegalStateException("No default dish size defined"))
                 .getId();
+
         List<RecipeIngredient> recipeIngredients = new ArrayList<>();
-        for (MenuItemWithIngredientsCreateDto.RecipeIngredientSimpleDto ingDto : dto.getIngredients()) {
-            Ingredient ingredient = ingredientAliasService.findIngredientByNameFlexible(ingDto.getIngredientName())
-                    .orElseThrow(() -> new EntityNotFoundException("Ingredient or alias not found: " + ingDto.getIngredientName()));
+        for (MenuItemFullCreateDto.RecipeIngredientSimpleDto ingDto : dto.getIngredients()) {
+            Ingredient ingredient = ingredientRepository.findById(ingDto.getIngredientId())
+                    .orElseThrow(() -> new EntityNotFoundException("Ingredient not found: " + ingDto.getIngredientId()));
 
             float quantity;
             if (dishSize.isDefaultSize()) {
                 if (ingDto.getQuantity() == null) {
-                    throw new MissingQuantityException("Missing quantity for: " + ingDto.getIngredientName());
+                    throw new MissingQuantityException("Missing quantity for ingredient ID: " + ingDto.getIngredientId());
                 }
                 quantity = ingDto.getQuantity();
             } else {
-                quantity = getQuantity(menuItem, dishFactor, defaultDishSizeId, ingredient, ingDto.getQuantity(), ingDto.getIngredientName());
+                quantity = getQuantity(menuItem, dishFactor, defaultDishSizeId, ingredient, ingDto.getQuantity(), ingDto.getIngredientId().toString());
             }
 
             RecipeIngredient ri = new RecipeIngredient();
@@ -228,11 +224,24 @@ public class MenuItemServiceImpl implements MenuItemService {
             recipeIngredientRepository.save(ri);
             recipeIngredients.add(ri);
         }
+        if (dto.getMenuItemCategory() != null && dto.getMenuItemCategory().getName() != null) {
+            String categoryName = dto.getMenuItemCategory().getName().trim();
+
+            MenuItemCategory category = menuItemCategoryRepository.findByNameIgnoreCase(categoryName)
+                    .orElseGet(() -> {
+                        MenuItemCategory newCategory = new MenuItemCategory();
+                        newCategory.setName(categoryName);
+                        return menuItemCategoryRepository.save(newCategory);
+                    });
+
+            menuItem.setCategory(category);
+        }
         menuItem.setRecipeIngredients(recipeIngredients);
         return menuItemMapper.toDto(menuItem);
     }
 
-    private float getQuantity(MenuItem menuItem, float dishFactor, UUID defaultDishSizeId, Ingredient ingredient, Float providedQuantity, String ingredientName) {
+    private float getQuantity(MenuItem menuItem, float dishFactor, UUID defaultDishSizeId,
+                              Ingredient ingredient, Float providedQuantity, String ingredientIdForError) {
         Optional<RecipeIngredient> base = recipeIngredientRepository
                 .findByMenuItemIdAndIngredientIdAndDishSizeId(menuItem.getId(), ingredient.getId(), defaultDishSizeId);
 
@@ -241,7 +250,7 @@ public class MenuItemServiceImpl implements MenuItemService {
         } else if (providedQuantity != null) {
             return providedQuantity;
         } else {
-            throw new MissingQuantityException("Missing quantity for ingredient '" + ingredientName + "' and no base recipe found.");
+            throw new MissingQuantityException("Missing quantity for ingredient ID '" + ingredientIdForError + "' and no base recipe found.");
         }
     }
 

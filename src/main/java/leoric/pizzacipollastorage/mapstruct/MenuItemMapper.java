@@ -13,6 +13,7 @@ import java.util.List;
 public interface MenuItemMapper {
 
     @Mapping(source = "recipeIngredients", target = "ingredients")
+    @Mapping(source = "category", target = "menuItemCategory")
     MenuItemResponseDto toDto(MenuItem menuItem);
 
     List<MenuItemResponseDto> toDtoList(List<MenuItem> menuItems);

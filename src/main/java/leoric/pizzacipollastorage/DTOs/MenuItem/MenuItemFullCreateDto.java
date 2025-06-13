@@ -6,16 +6,17 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
-public class MenuItemWithIngredientsCreateDto {
+public class MenuItemFullCreateDto {
     private String name;
     private String description;
-    private UUID dishSizeId; // optional
+    private UUID dishSizeId;
+    private MenuItemCategoryCreateDto menuItemCategory;
 
-    private List<RecipeIngredientSimpleDto> ingredients; // optional
+    private List<RecipeIngredientSimpleDto> ingredients;
 
     @Data
     public static class RecipeIngredientSimpleDto {
-        private String ingredientName;
+        private UUID ingredientId;
         private Float quantity;
     }
 }

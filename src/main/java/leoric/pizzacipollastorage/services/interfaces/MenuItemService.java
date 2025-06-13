@@ -19,13 +19,13 @@ public interface MenuItemService {
 
     MenuItemResponseDto getMenuItemById(UUID id);
 
-    MenuItemResponseDto createMenuItemWithOptionalIngredients(MenuItemWithIngredientsCreateDto dto);
+    MenuItemResponseDto createMenuItemWithOptionalIngredients(MenuItemFullCreateDto dto);
 
     MenuItemResponseDto getMenuItemByName(String menuItemName);
 
     void deleteMenuItemById(UUID id);
 
-    MenuItemResponseDto updateMenuItem(UUID id, MenuItemWithIngredientsCreateDto dto);
+    MenuItemResponseDto updateMenuItem(UUID id, MenuItemFullCreateDto dto);
 
     RecipeIngredientShortDto updateRecipeIngredient(UUID id, RecipeIngredientVeryShortDto dto);
 
