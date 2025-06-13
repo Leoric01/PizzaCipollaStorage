@@ -1,4 +1,4 @@
-package leoric.pizzacipollastorage.DTOs.Supplier;
+package leoric.pizzacipollastorage.DTOs.PurchaseOrder;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SupplierShortDto {
-    private UUID id;
-    private String name;
+public class PurchaseOrderItemCreateDto {
+    private UUID ingredientId;
+    private float quantityOrdered;
+    private String note;
 }

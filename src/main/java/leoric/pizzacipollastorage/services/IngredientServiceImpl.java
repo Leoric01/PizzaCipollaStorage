@@ -5,16 +5,19 @@ import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientCreateDto;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientResponseDto;
 import leoric.pizzacipollastorage.handler.exceptions.DuplicateIngredientNameException;
 import leoric.pizzacipollastorage.mapstruct.IngredientMapper;
-import leoric.pizzacipollastorage.models.Ingredient;
-import leoric.pizzacipollastorage.models.IngredientAlias;
-import leoric.pizzacipollastorage.models.ProductCategory;
+import leoric.pizzacipollastorage.models.*;
+import leoric.pizzacipollastorage.models.enums.InventoryStatus;
+import leoric.pizzacipollastorage.models.enums.OrderItemStatus;
+import leoric.pizzacipollastorage.models.enums.OrderStatus;
 import leoric.pizzacipollastorage.repositories.IngredientRepository;
+import leoric.pizzacipollastorage.repositories.InventorySnapshotRepository;
 import leoric.pizzacipollastorage.repositories.ProductCategoryRepository;
 import leoric.pizzacipollastorage.services.interfaces.IngredientAliasService;
 import leoric.pizzacipollastorage.services.interfaces.IngredientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +28,7 @@ public class IngredientServiceImpl implements IngredientService {
     private final IngredientMapper ingredientMapper;
     private final IngredientAliasService ingredientAliasService;
     private final ProductCategoryRepository productCategoryRepository;
+    private final InventorySnapshotRepository inventorySnapshotRepository;
 
     @Override
     public IngredientResponseDto createIngredient(IngredientCreateDto dto) {
@@ -41,6 +45,73 @@ public class IngredientServiceImpl implements IngredientService {
 
         Ingredient saved = ingredientRepository.save(ingredient);
         return ingredientMapper.toDto(saved);
+    }
+
+    @Override
+    public InventoryStatus checkInventoryStatus(Ingredient ingredient) {
+        Optional<InventorySnapshot> latestSnapshotOpt =
+                inventorySnapshotRepository.findTopByIngredientOrderByTimestampDesc(ingredient);
+
+        if (latestSnapshotOpt.isEmpty()) return InventoryStatus.UNKNOWN;
+
+        InventorySnapshot snapshot = latestSnapshotOpt.get();
+        float measuredQuantity = snapshot.getMeasuredQuantity();
+
+        if (ingredient.getMinimumStockLevel() != null && measuredQuantity <= ingredient.getMinimumStockLevel()) {
+            return InventoryStatus.CRITICAL;
+        } else if (ingredient.getWarningStockLevel() != null && measuredQuantity <= ingredient.getWarningStockLevel()) {
+            return InventoryStatus.WARNING;
+        } else {
+            return InventoryStatus.OK;
+        }
+    }
+
+    @Override
+    public PurchaseOrder generateAutoPurchaseOrder() {
+        List<Ingredient> criticalIngredients = ingredientRepository.findAll()
+                .stream()
+                .filter(i -> checkInventoryStatus(i) == InventoryStatus.CRITICAL)
+                .toList();
+
+        PurchaseOrder order = PurchaseOrder.builder()
+                .status(OrderStatus.NEW)
+                .orderDate(LocalDate.now())
+                .note("Automaticky vygenerováno na základě skladových zásob")
+                .build();
+
+        List<PurchaseOrderItem> items = criticalIngredients.stream()
+                .map(i -> PurchaseOrderItem.builder()
+                        .ingredient(i)
+                        .quantityOrdered(calculateSuggestedQuantity(i))
+                        .status(OrderItemStatus.ORDERED)
+                        .purchaseOrder(order)
+                        .build())
+                .toList();
+
+        order.setItems(items);
+
+        return order;
+    }
+
+    private float calculateSuggestedQuantity(Ingredient ingredient) {
+        Optional<InventorySnapshot> latestSnapshotOpt =
+                inventorySnapshotRepository.findTopByIngredientOrderByTimestampDesc(ingredient);
+
+        float measured = latestSnapshotOpt.map(InventorySnapshot::getMeasuredQuantity).orElse(0f);
+
+        // 1. Pokud máme definovanou "plnou" zásobu – dopočítáme rozdíl
+        if (ingredient.getPreferredFullStockLevel() != null) {
+            float deficit = ingredient.getPreferredFullStockLevel() - measured;
+            return Math.max(deficit, 0f); // nechceme záporné objednávky
+        }
+
+        // 2. Jinak – nouzové řešení: objednej 2× minimum
+        if (ingredient.getMinimumStockLevel() != null) {
+            return ingredient.getMinimumStockLevel() * 2;
+        }
+
+        // 3. Poslední možnost: default fallback
+        return 1f;
     }
 
     @Override

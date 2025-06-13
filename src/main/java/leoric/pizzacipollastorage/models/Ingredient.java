@@ -26,6 +26,10 @@ public class Ingredient {
     private float lossCleaningFactor;
     private float lossUsageFactor;
 
+    private Float preferredFullStockLevel;
+    private Float warningStockLevel;
+    private Float minimumStockLevel;
+
     @OneToMany(mappedBy = "ingredient")
     private List<IngredientPrice> prices;
 
