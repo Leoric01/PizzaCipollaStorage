@@ -1,4 +1,4 @@
-package leoric.pizzacipollastorage.models;
+package leoric.pizzacipollastorage.loans.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,4 +1,4 @@
-package leoric.pizzacipollastorage.controllers;
+package leoric.pizzacipollastorage.loans.controllers;
 
 import leoric.pizzacipollastorage.loans.dtos.BranchCreateDto;
 import leoric.pizzacipollastorage.loans.dtos.BranchResponseDto;

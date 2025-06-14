@@ -1,11 +1,11 @@
-package leoric.pizzacipollastorage.services;
+package leoric.pizzacipollastorage.loans.services;
 
 import jakarta.persistence.EntityNotFoundException;
 import leoric.pizzacipollastorage.loans.dtos.BranchCreateDto;
 import leoric.pizzacipollastorage.loans.dtos.BranchResponseDto;
+import leoric.pizzacipollastorage.loans.models.Branch;
+import leoric.pizzacipollastorage.loans.repositories.BranchRepository;
 import leoric.pizzacipollastorage.mapstruct.BranchMapper;
-import leoric.pizzacipollastorage.models.Branch;
-import leoric.pizzacipollastorage.repositories.BranchRepository;
 import leoric.pizzacipollastorage.services.interfaces.BranchService;
 import leoric.pizzacipollastorage.utils.CustomUtilityString;
 import lombok.RequiredArgsConstructor;

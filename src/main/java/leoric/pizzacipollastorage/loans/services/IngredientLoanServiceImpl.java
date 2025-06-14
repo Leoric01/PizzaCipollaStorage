@@ -1,19 +1,19 @@
-package leoric.pizzacipollastorage.services;
+package leoric.pizzacipollastorage.loans.services;
 
 import jakarta.persistence.EntityNotFoundException;
 import leoric.pizzacipollastorage.inventory.services.InventoryService;
 import leoric.pizzacipollastorage.loans.dtos.IngredientLoanCreateDto;
 import leoric.pizzacipollastorage.loans.dtos.IngredientLoanPatchDto;
 import leoric.pizzacipollastorage.loans.dtos.IngredientLoanResponseDto;
+import leoric.pizzacipollastorage.loans.models.Branch;
+import leoric.pizzacipollastorage.loans.models.IngredientLoan;
+import leoric.pizzacipollastorage.loans.models.IngredientLoanItem;
+import leoric.pizzacipollastorage.loans.repositories.BranchRepository;
+import leoric.pizzacipollastorage.loans.repositories.IngredientLoanRepository;
 import leoric.pizzacipollastorage.mapstruct.IngredientLoanMapper;
-import leoric.pizzacipollastorage.models.Branch;
 import leoric.pizzacipollastorage.models.Ingredient;
-import leoric.pizzacipollastorage.models.IngredientLoan;
-import leoric.pizzacipollastorage.models.IngredientLoanItem;
 import leoric.pizzacipollastorage.models.enums.LoanStatus;
 import leoric.pizzacipollastorage.models.enums.LoanType;
-import leoric.pizzacipollastorage.repositories.BranchRepository;
-import leoric.pizzacipollastorage.repositories.IngredientLoanRepository;
 import leoric.pizzacipollastorage.services.interfaces.IngredientAliasService;
 import leoric.pizzacipollastorage.services.interfaces.IngredientLoanService;
 import lombok.RequiredArgsConstructor;

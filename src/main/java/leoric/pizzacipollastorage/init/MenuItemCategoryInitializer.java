@@ -7,7 +7,7 @@ import leoric.pizzacipollastorage.utils.CustomUtilityString;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("menuItemCategoryInitializer")
 @RequiredArgsConstructor
 public class MenuItemCategoryInitializer {
 

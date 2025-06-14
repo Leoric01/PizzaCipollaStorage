@@ -1,4 +1,4 @@
-package leoric.pizzacipollastorage.models;
+package leoric.pizzacipollastorage.loans.models;
 
 import jakarta.persistence.*;
 import leoric.pizzacipollastorage.models.enums.LoanStatus;

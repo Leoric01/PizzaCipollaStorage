@@ -2,7 +2,7 @@ package leoric.pizzacipollastorage.mapstruct;
 
 import leoric.pizzacipollastorage.loans.dtos.IngredientLoanPatchDto;
 import leoric.pizzacipollastorage.loans.dtos.IngredientLoanResponseDto;
-import leoric.pizzacipollastorage.models.IngredientLoan;
+import leoric.pizzacipollastorage.loans.models.IngredientLoan;
 import org.mapstruct.*;
 
 import java.util.List;
