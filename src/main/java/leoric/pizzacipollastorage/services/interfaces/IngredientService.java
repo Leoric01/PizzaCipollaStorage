@@ -17,10 +17,14 @@ public interface IngredientService {
     IngredientResponseDto createIngredient(IngredientCreateDto dto);
 
     InventoryStatus checkInventoryStatus(Ingredient ingredient);
+
     List<IngredientResponseDto> getAllIngredients();
+
     Optional<IngredientAliasOverviewDto> getAliasOverviewByName(String inputName);
 
     PurchaseOrder generateAutoPurchaseOrder();
 
     IngredientResponseDto updateIngredient(UUID id, IngredientCreateDto dto);
+
+    void deleteById(UUID id);
 }

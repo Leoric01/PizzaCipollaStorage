@@ -62,6 +62,14 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
+    public void deleteById(UUID id) {
+        if (!ingredientRepository.existsById(id)) {
+            throw new EntityNotFoundException("Ingredient with id " + id + " not found");
+        }
+        ingredientRepository.deleteById(id);
+    }
+
+    @Override
     public IngredientResponseDto createIngredient(IngredientCreateDto dto) {
         if (ingredientRepository.existsByName(dto.getName())) {
             throw new DuplicateIngredientNameException("Ingredient with name '" + dto.getName() + "' already exists");

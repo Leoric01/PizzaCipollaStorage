@@ -19,7 +19,7 @@ public class IngredientController {
     private final IngredientService ingredientService;
 
     @PutMapping("/{id}")
-    public ResponseEntity<IngredientResponseDto> updateIngredient(
+    public ResponseEntity<IngredientResponseDto> updateIngredientById(
             @PathVariable UUID id,
             @RequestBody IngredientCreateDto dto) {
         IngredientResponseDto updated = ingredientService.updateIngredient(id, dto);
@@ -40,5 +40,11 @@ public class IngredientController {
         return ingredientService.getAliasOverviewByName(name)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new EntityNotFoundException("Ingredient not found for name or alias: " + name));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteIngredientById(@PathVariable UUID id) {
+        ingredientService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
