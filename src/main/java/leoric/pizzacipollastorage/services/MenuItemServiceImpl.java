@@ -49,10 +49,9 @@ public class MenuItemServiceImpl implements MenuItemService {
 
         menuItem.setName(dto.getName());
         menuItem.setDescription(dto.getDescription());
-        menuItemRepository.save(menuItem);
 
-        // clear existing recipeIngredients
-        recipeIngredientRepository.deleteAllByMenuItemId(menuItem.getId());
+        // Clear recipeIngredients via managed collection (important for orphanRemoval)
+        menuItem.getRecipeIngredients().clear();
 
         if (dto.getIngredients() != null && !dto.getIngredients().isEmpty()) {
             DishSize dishSize = (dto.getDishSizeId() != null)
@@ -65,8 +64,6 @@ public class MenuItemServiceImpl implements MenuItemService {
             UUID defaultDishSizeId = dishSizeRepository.findByDefaultSizeTrue()
                     .orElseThrow(() -> new IllegalStateException("No default dish size defined"))
                     .getId();
-
-            List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 
             for (MenuItemFullCreateDto.RecipeIngredientSimpleDto ingDto : dto.getIngredients()) {
                 Ingredient ingredient = ingredientRepository.findById(ingDto.getIngredientId())
@@ -83,12 +80,10 @@ public class MenuItemServiceImpl implements MenuItemService {
                 ri.setQuantity(quantity);
                 ri.setDishSize(dishSize);
 
-                recipeIngredients.add(recipeIngredientRepository.save(ri));
+                menuItem.getRecipeIngredients().add(ri);
             }
-
-            menuItem.setRecipeIngredients(recipeIngredients);
         }
-
+        menuItem = menuItemRepository.save(menuItem);
         return menuItemMapper.toDto(menuItem);
     }
 

@@ -29,6 +29,6 @@ public class MenuItem {
     @JoinColumn(name = "category_id")
     private MenuItemCategory category;
 
-    @OneToMany(mappedBy = "menuItem", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "menuItem", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 }

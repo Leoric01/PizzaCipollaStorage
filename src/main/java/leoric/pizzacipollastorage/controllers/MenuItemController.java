@@ -16,6 +16,36 @@ public class MenuItemController {
 
     private final MenuItemService menuItemService;
 
+    @GetMapping
+    public ResponseEntity<List<MenuItemResponseDto>> getAllMenuItems() {
+        return ResponseEntity.ok(menuItemService.getAllMenuItems());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<MenuItemResponseDto> getMenuItemById(@PathVariable UUID id) {
+        return ResponseEntity.ok(menuItemService.getMenuItemById(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<MenuItemResponseDto> createMenuItem(@RequestBody MenuItemFullCreateDto dto) {
+        return ResponseEntity.ok(menuItemService.createMenuItemWithOptionalIngredients(dto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteMenuItemById(@PathVariable UUID id) {
+        menuItemService.deleteMenuItemById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<MenuItemResponseDto> updateMenuItem(
+            @PathVariable UUID id,
+            @RequestBody MenuItemFullCreateDto dto) {
+        MenuItemResponseDto updated = menuItemService.updateMenuItem(id, dto);
+        return ResponseEntity.ok(updated);
+    }
+
+
     @PatchMapping("/recipes/{id}")
     public ResponseEntity<RecipeIngredientShortDto> updateRecipeIngredientById(
             @PathVariable UUID id,
@@ -49,29 +79,6 @@ public class MenuItemController {
         return ResponseEntity.ok(menuItemService.addIngredientsToMenuItemBulk(dto));
     }
 
-    @PostMapping
-    public ResponseEntity<MenuItemResponseDto> createMenuItem(@RequestBody MenuItemFullCreateDto dto) {
-        return ResponseEntity.ok(menuItemService.createMenuItemWithOptionalIngredients(dto));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMenuItemById(@PathVariable UUID id) {
-        menuItemService.deleteMenuItemById(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<MenuItemResponseDto> updateMenuItem(
-            @PathVariable UUID id,
-            @RequestBody MenuItemFullCreateDto dto) {
-        MenuItemResponseDto updated = menuItemService.updateMenuItem(id, dto);
-        return ResponseEntity.ok(updated);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<MenuItemResponseDto>> getAllMenuItems() {
-        return ResponseEntity.ok(menuItemService.getAllMenuItems());
-    }
 
     @GetMapping("/name/{name}")
     public ResponseEntity<MenuItemResponseDto> getMenuItemByNormalizedName(@PathVariable String name) {
@@ -79,8 +86,4 @@ public class MenuItemController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<MenuItemResponseDto> getMenuItemById(@PathVariable UUID id) {
-        return ResponseEntity.ok(menuItemService.getMenuItemById(id));
-    }
 }
