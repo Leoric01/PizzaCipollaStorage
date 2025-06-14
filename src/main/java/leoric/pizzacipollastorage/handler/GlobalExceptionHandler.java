@@ -19,6 +19,20 @@ import static org.springframework.http.HttpStatus.*;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(IngredientInUseException.class)
+    public ResponseEntity<ExceptionResponse> handleIngredientInUseException(IngredientInUseException ex) {
+        log.warn("Ingredient in use: {}", ex.getMessage());
+        return ResponseEntity
+                .status(CONFLICT)
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorCode(BusinessErrorCodes.INGREDIENT_IN_USE_IN_MENUITEM.getCode())
+                                .businessErrorDescription(BusinessErrorCodes.INGREDIENT_IN_USE_IN_MENUITEM.getDescription())
+                                .error(ex.getMessage())
+                                .build()
+                );
+    }
+
     @ExceptionHandler(EmailAlreadyInUseException.class)
     public ResponseEntity<ExceptionResponse> handleEmailAlreadyInUseException(EmailAlreadyInUseException ex) {
         log.warn("Email already in use: {}", ex.getMessage());

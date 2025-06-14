@@ -14,7 +14,7 @@ import java.util.List;
 public interface VatRateMapper {
     VatRateShortDto toShortDto(VatRate vatRate);
 
-    @Mapping(target = "category", ignore = true)
+    @Mapping(target = "productCategory", ignore = true)
     Ingredient toEntity(IngredientCreateDto dto);
 
     IngredientResponseDto toDto(Ingredient ingredient);

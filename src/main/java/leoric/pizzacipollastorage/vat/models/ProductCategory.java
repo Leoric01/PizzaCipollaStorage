@@ -30,6 +30,6 @@ public class ProductCategory {
     @JoinColumn(name = "vat_rate_id", nullable = false)
     private VatRate vatRate;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "productCategory")
     private List<Ingredient> ingredients;
 }

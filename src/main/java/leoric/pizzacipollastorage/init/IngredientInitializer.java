@@ -81,7 +81,7 @@ public class IngredientInitializer {
                     .unit(unit)
                     .lossCleaningFactor(lossCleaning)
                     .lossUsageFactor(lossUsage)
-                    .category(category)
+                    .productCategory(category)
                     .build();
             ingredientRepository.save(ingredient);
         }

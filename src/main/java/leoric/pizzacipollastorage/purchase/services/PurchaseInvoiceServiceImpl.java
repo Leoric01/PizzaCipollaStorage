@@ -61,7 +61,7 @@ public class PurchaseInvoiceServiceImpl implements PurchaseInvoiceService {
             Ingredient ingredient = ingredientRepository.findByNameIgnoreCase(itemDto.getIngredientName())
                     .orElseThrow(() -> new EntityNotFoundException("Ingredience '" + itemDto.getIngredientName() + "' nebyla nalezena."));
 
-            VatRate vatRate = ingredient.getCategory().getVatRate();
+            VatRate vatRate = ingredient.getProductCategory().getVatRate();
 
             PurchaseInvoiceItem item = PurchaseInvoiceItem.builder()
                     .purchaseInvoice(invoice)

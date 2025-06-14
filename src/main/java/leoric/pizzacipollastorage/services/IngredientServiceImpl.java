@@ -5,28 +5,33 @@ import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientAlias.IngredientAlia
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientCreateDto;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientResponseDto;
 import leoric.pizzacipollastorage.handler.exceptions.DuplicateIngredientNameException;
+import leoric.pizzacipollastorage.handler.exceptions.IngredientInUseException;
 import leoric.pizzacipollastorage.inventory.models.InventorySnapshot;
 import leoric.pizzacipollastorage.inventory.repositories.InventorySnapshotRepository;
 import leoric.pizzacipollastorage.mapstruct.IngredientMapper;
 import leoric.pizzacipollastorage.models.Ingredient;
 import leoric.pizzacipollastorage.models.IngredientAlias;
+import leoric.pizzacipollastorage.models.MenuItem;
 import leoric.pizzacipollastorage.models.enums.InventoryStatus;
 import leoric.pizzacipollastorage.models.enums.OrderItemStatus;
 import leoric.pizzacipollastorage.models.enums.OrderStatus;
 import leoric.pizzacipollastorage.purchase.models.PurchaseOrder;
 import leoric.pizzacipollastorage.purchase.models.PurchaseOrderItem;
 import leoric.pizzacipollastorage.repositories.IngredientRepository;
+import leoric.pizzacipollastorage.repositories.MenuItemRepository;
 import leoric.pizzacipollastorage.services.interfaces.IngredientAliasService;
 import leoric.pizzacipollastorage.services.interfaces.IngredientService;
 import leoric.pizzacipollastorage.vat.models.ProductCategory;
 import leoric.pizzacipollastorage.vat.repositories.ProductCategoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +40,7 @@ public class IngredientServiceImpl implements IngredientService {
     private final IngredientRepository ingredientRepository;
     private final ProductCategoryRepository productCategoryRepository;
     private final InventorySnapshotRepository inventorySnapshotRepository;
+    private final MenuItemRepository menuItemRepository;
 
     private final IngredientMapper ingredientMapper;
 
@@ -51,11 +57,11 @@ public class IngredientServiceImpl implements IngredientService {
         }
 
         ProductCategory category = productCategoryRepository
-                .findByNameIgnoreCase(dto.getCategory())
-                .orElseThrow(() -> new IllegalArgumentException("Category not found: " + dto.getCategory()));
+                .findByNameIgnoreCase(dto.getProductCategory())
+                .orElseThrow(() -> new IllegalArgumentException("Category not found: " + dto.getProductCategory()));
 
         ingredientMapper.update(existing, dto);
-        existing.setCategory(category);
+        existing.setProductCategory(category);
 
         Ingredient saved = ingredientRepository.save(existing);
         return ingredientMapper.toDto(saved);
@@ -63,10 +69,19 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public void deleteById(UUID id) {
-        if (!ingredientRepository.existsById(id)) {
-            throw new EntityNotFoundException("Ingredient with id " + id + " not found");
+        Ingredient ingredient = ingredientRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Ingredient with id " + id + " not found"));
+
+        try {
+            ingredientRepository.deleteById(id);
+        } catch (DataIntegrityViolationException ex) {
+            List<MenuItem> menuItems = menuItemRepository.findAllByRecipeIngredientsIngredientId(id);
+            String names = menuItems.stream()
+                    .map(MenuItem::getName)
+                    .collect(Collectors.joining(", "));
+
+            throw new IngredientInUseException(ingredient.getId().toString(), ingredient.getName(), names);
         }
-        ingredientRepository.deleteById(id);
     }
 
     @Override
@@ -76,11 +91,11 @@ public class IngredientServiceImpl implements IngredientService {
         }
 
         ProductCategory category = productCategoryRepository
-                .findByNameIgnoreCase(dto.getCategory())
-                .orElseThrow(() -> new IllegalArgumentException("Category not found: " + dto.getCategory()));
+                .findByNameIgnoreCase(dto.getProductCategory())
+                .orElseThrow(() -> new IllegalArgumentException("Category not found: " + dto.getProductCategory()));
 
         Ingredient ingredient = ingredientMapper.toEntity(dto);
-        ingredient.setCategory(category);
+        ingredient.setProductCategory(category);
 
         Ingredient saved = ingredientRepository.save(ingredient);
         return ingredientMapper.toDto(saved);

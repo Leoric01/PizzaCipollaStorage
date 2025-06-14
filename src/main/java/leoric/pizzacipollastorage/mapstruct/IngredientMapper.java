@@ -16,10 +16,10 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface IngredientMapper {
 
-    @Mapping(target = "productCategory", source = "category")
+    @Mapping(target = "productCategory", source = "productCategory")
     IngredientResponseDto toDto(Ingredient ingredient);
 
-    @Mapping(target = "category", ignore = true)
+    @Mapping(target = "productCategory", ignore = true)
     Ingredient toEntity(IngredientCreateDto dto);
 
     VatRateShortDto toShortDto(VatRate vatRate);
@@ -38,7 +38,7 @@ public interface IngredientMapper {
     IngredientShortDto toShortDto(Ingredient ingredient);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "category", ignore = true)
+    @Mapping(target = "productCategory", ignore = true)
     void update(@MappingTarget Ingredient entity, IngredientCreateDto dto);
 
 }

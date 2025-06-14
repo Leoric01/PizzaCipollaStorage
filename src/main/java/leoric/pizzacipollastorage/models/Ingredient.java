@@ -18,6 +18,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class Ingredient {
+
     @Id
     @UuidGenerator(style = UuidGenerator.Style.AUTO)
     @Column(columnDefinition = "BINARY(16)")
@@ -46,5 +47,5 @@ public class Ingredient {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "product_category_id")
-    private ProductCategory category;
+    private ProductCategory productCategory;
 }
