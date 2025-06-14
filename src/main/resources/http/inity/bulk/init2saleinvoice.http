@@ -32,7 +32,7 @@ Content-Type: application/json
       "unitPriceWithoutTax": 0.26
     },
     {
-      "ingredientName": "Rajčatová omáčka",
+      "ingredientName": "Sugo",
       "quantity": 3000.0,
       "unitPriceWithoutTax": 0.18
     },
