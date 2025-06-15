@@ -38,9 +38,9 @@ public class IngredientInitializer {
         createIfNotExists("Česnek", "g", 0.01f, 0.06f, defaultCategory);
         createIfNotExists("Pórek", "g", 0.02f, 0.05f, defaultCategory);
         createIfNotExists("Brokolice", "g", 0.09f, 0.05f, defaultCategory);
-        createIfNotExists("Smetana", "g", 0.08f, 0.09f, defaultCategory);
+        createIfNotExists("Smetana", "l", 0.08f, 0.09f, defaultCategory);
         createIfNotExists("Vejce", "ks", 0.06f, 0.06f, defaultCategory);
-        createIfNotExists("Fazolky", "ks", 0.06f, 0.06f, defaultCategory);
+        createIfNotExists("Fazolky", "g", 0.06f, 0.06f, defaultCategory);
         createIfNotExists("Olivy černé", "g", 0.02f, 0.07f, defaultCategory);
         createIfNotExists("Olivy zelené", "g", 0.06f, 0.07f, defaultCategory);
         createIfNotExists("Olivy mix", "g", 0.01f, 0.05f, defaultCategory);

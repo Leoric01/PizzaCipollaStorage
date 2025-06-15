@@ -178,60 +178,61 @@ public class MenuItemServiceImpl implements MenuItemService {
         MenuItem menuItem = new MenuItem();
         menuItem.setName(dto.getName());
         menuItem.setDescription(dto.getDescription());
-        menuItem = menuItemRepository.save(menuItem);
 
-        if (dto.getIngredients() == null || dto.getIngredients().isEmpty()) {
-            return menuItemMapper.toDto(menuItem);
-        }
-
-        DishSize dishSize = (dto.getDishSizeId() != null)
-                ? dishSizeRepository.findById(dto.getDishSizeId())
-                .orElseThrow(() -> new EntityNotFoundException("Dish size not found"))
-                : dishSizeRepository.findByDefaultSizeTrue()
-                .orElseThrow(() -> new IllegalStateException("No default dish size defined"));
-
-        float dishFactor = dishSize.isDefaultSize() ? 1.0f : dishSize.getFactor();
-        UUID defaultDishSizeId = dishSizeRepository.findByDefaultSizeTrue()
-                .orElseThrow(() -> new IllegalStateException("No default dish size defined"))
-                .getId();
-
-        List<RecipeIngredient> recipeIngredients = new ArrayList<>();
-        for (MenuItemFullCreateDto.RecipeIngredientSimpleDto ingDto : dto.getIngredients()) {
-            Ingredient ingredient = ingredientRepository.findById(ingDto.getIngredientId())
-                    .orElseThrow(() -> new EntityNotFoundException("Ingredient not found: " + ingDto.getIngredientId()));
-
-            float quantity;
-            if (dishSize.isDefaultSize()) {
-                if (ingDto.getQuantity() == null) {
-                    throw new MissingQuantityException("Missing quantity for ingredient ID: " + ingDto.getIngredientId());
-                }
-                quantity = ingDto.getQuantity();
-            } else {
-                quantity = getQuantity(menuItem, dishFactor, defaultDishSizeId, ingredient, ingDto.getQuantity(), ingDto.getIngredientId().toString());
-            }
-
-            RecipeIngredient ri = new RecipeIngredient();
-            ri.setMenuItem(menuItem);
-            ri.setIngredient(ingredient);
-            ri.setQuantity(quantity);
-            ri.setDishSize(dishSize);
-
-            recipeIngredientRepository.save(ri);
-            recipeIngredients.add(ri);
-        }
         if (dto.getMenuItemCategory() != null && dto.getMenuItemCategory().getName() != null) {
             String categoryName = dto.getMenuItemCategory().getName().trim();
-
             MenuItemCategory category = menuItemCategoryRepository.findByNameIgnoreCase(categoryName)
                     .orElseGet(() -> {
                         MenuItemCategory newCategory = new MenuItemCategory();
                         newCategory.setName(categoryName);
                         return menuItemCategoryRepository.save(newCategory);
                     });
-
             menuItem.setCategory(category);
         }
+
+        List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+
+        if (dto.getIngredients() != null && !dto.getIngredients().isEmpty()) {
+            DishSize dishSize = (dto.getDishSizeId() != null)
+                    ? dishSizeRepository.findById(dto.getDishSizeId())
+                    .orElseThrow(() -> new EntityNotFoundException("Dish size not found"))
+                    : dishSizeRepository.findByDefaultSizeTrue()
+                    .orElseThrow(() -> new IllegalStateException("No default dish size defined"));
+
+            float dishFactor = dishSize.isDefaultSize() ? 1.0f : dishSize.getFactor();
+            UUID defaultDishSizeId = dishSizeRepository.findByDefaultSizeTrue()
+                    .orElseThrow(() -> new IllegalStateException("No default dish size defined"))
+                    .getId();
+
+            for (MenuItemFullCreateDto.RecipeIngredientSimpleDto ingDto : dto.getIngredients()) {
+                Ingredient ingredient = ingredientRepository.findById(ingDto.getIngredientId())
+                        .orElseThrow(() -> new EntityNotFoundException("Ingredient not found: " + ingDto.getIngredientId()));
+
+                float quantity;
+                if (dishSize.isDefaultSize()) {
+                    if (ingDto.getQuantity() == null) {
+                        throw new MissingQuantityException("Missing quantity for ingredient ID: " + ingDto.getIngredientId());
+                    }
+                    quantity = ingDto.getQuantity();
+                } else {
+                    quantity = getQuantity(menuItem, dishFactor, defaultDishSizeId, ingredient, ingDto.getQuantity(), ingDto.getIngredientId().toString());
+                }
+
+                RecipeIngredient ri = new RecipeIngredient();
+                ri.setMenuItem(menuItem);
+                ri.setIngredient(ingredient);
+                ri.setQuantity(quantity);
+                ri.setDishSize(dishSize);
+
+                recipeIngredients.add(ri);
+            }
+        }
+
         menuItem.setRecipeIngredients(recipeIngredients);
+        MenuItem finalMenuItem = menuItem;
+        recipeIngredients.forEach(ri -> ri.setMenuItem(finalMenuItem));
+
+        menuItem = menuItemRepository.save(menuItem);
         return menuItemMapper.toDto(menuItem);
     }
 
