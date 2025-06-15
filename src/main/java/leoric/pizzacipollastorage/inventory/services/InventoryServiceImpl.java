@@ -38,10 +38,10 @@ public class InventoryServiceImpl implements InventoryService {
         LocalDateTime from = dto.getTimestamp().minusHours(6);
         LocalDateTime to = dto.getTimestamp().plusHours(6);
 
-        boolean existsRecent = snapshotRepository.existsByIngredientAndTimestampBetween(ingredient, from, to);
-        if (existsRecent) {
-            throw new SnapshotTooRecentException("Snapshot for this ingredient already exists in the last 6 hours.");
-        }
+//        boolean existsRecent = snapshotRepository.existsByIngredientAndTimestampBetween(ingredient, from, to);
+//        if (existsRecent) {
+//            throw new SnapshotTooRecentException("Snapshot for this ingredient already exists in the last 6 hours.");
+//        }
 
         // Výpočet efektivního množství na základě formy
         Float measured = dto.getMeasuredQuantity();
