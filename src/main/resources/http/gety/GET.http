@@ -37,4 +37,5 @@ GET http://localhost:8080/api/branches
 ### Zobrazit vsechny pujcky zbozi in/out
 GET http://localhost:8080/api/loans
 
-###
+### Get All Product Categories
+GET http://localhost:8080/api/product-categories/all

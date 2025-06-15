@@ -22,7 +22,9 @@ import leoric.pizzacipollastorage.repositories.MenuItemRepository;
 import leoric.pizzacipollastorage.services.interfaces.IngredientAliasService;
 import leoric.pizzacipollastorage.services.interfaces.IngredientService;
 import leoric.pizzacipollastorage.vat.models.ProductCategory;
+import leoric.pizzacipollastorage.vat.models.VatRate;
 import leoric.pizzacipollastorage.vat.repositories.ProductCategoryRepository;
+import leoric.pizzacipollastorage.vat.repositories.VatRateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -41,6 +43,7 @@ public class IngredientServiceImpl implements IngredientService {
     private final ProductCategoryRepository productCategoryRepository;
     private final InventorySnapshotRepository inventorySnapshotRepository;
     private final MenuItemRepository menuItemRepository;
+    private final VatRateRepository vatRateRepository;
 
     private final IngredientMapper ingredientMapper;
 
@@ -90,13 +93,28 @@ public class IngredientServiceImpl implements IngredientService {
             throw new DuplicateIngredientNameException("Ingredient with name '" + dto.getName() + "' already exists");
         }
 
-        ProductCategory category = productCategoryRepository
-                .findByNameIgnoreCase(dto.getProductCategory())
-                .orElseThrow(() -> new IllegalArgumentException("Category not found: " + dto.getProductCategory()));
-
         Ingredient ingredient = ingredientMapper.toEntity(dto);
-        ingredient.setProductCategory(category);
 
+        String categoryName = (dto.getProductCategory() == null || dto.getProductCategory().isBlank())
+                ? "UNKNOWN"
+                : dto.getProductCategory();
+
+        // Load default VAT rate (dph - základní, ID = 000...001)
+        UUID defaultVatRateId = UUID.fromString("00000000-0000-0000-0000-000000000001");
+        VatRate defaultVatRate = vatRateRepository.findById(defaultVatRateId)
+                .orElseThrow(() -> new IllegalStateException("Default VAT rate (dph - základní) not found"));
+
+        // Find or create product category
+        ProductCategory category = productCategoryRepository
+                .findByNameIgnoreCase(categoryName)
+                .orElseGet(() -> productCategoryRepository.save(
+                        ProductCategory.builder()
+                                .name(categoryName)
+                                .vatRate(defaultVatRate)
+                                .build()
+                ));
+
+        ingredient.setProductCategory(category);
         Ingredient saved = ingredientRepository.save(ingredient);
         return ingredientMapper.toDto(saved);
     }

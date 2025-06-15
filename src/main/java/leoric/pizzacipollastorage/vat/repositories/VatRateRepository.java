@@ -10,5 +10,5 @@ import java.util.UUID;
 public interface VatRateRepository extends JpaRepository<VatRate, UUID> {
 
     boolean existsByName(String name);
-
+//    Optional<VatRate> findByDefaultTrue();
 }
