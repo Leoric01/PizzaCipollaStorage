@@ -2,7 +2,6 @@ package leoric.pizzacipollastorage.inventory.services;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import leoric.pizzacipollastorage.handler.exceptions.SnapshotTooRecentException;
 import leoric.pizzacipollastorage.inventory.InventorySnapshotMapper;
 import leoric.pizzacipollastorage.inventory.dtos.Inventory.InventorySnapshotCreateDto;
 import leoric.pizzacipollastorage.inventory.dtos.Inventory.InventorySnapshotResponseDto;
@@ -35,15 +34,6 @@ public class InventoryServiceImpl implements InventoryService {
         Ingredient ingredient = ingredientRepository.findById(dto.getIngredientId())
                 .orElseThrow(() -> new EntityNotFoundException("Ingredient not found"));
 
-        LocalDateTime from = dto.getTimestamp().minusHours(6);
-        LocalDateTime to = dto.getTimestamp().plusHours(6);
-
-//        boolean existsRecent = snapshotRepository.existsByIngredientAndTimestampBetween(ingredient, from, to);
-//        if (existsRecent) {
-//            throw new SnapshotTooRecentException("Snapshot for this ingredient already exists in the last 6 hours.");
-//        }
-
-        // Výpočet efektivního množství na základě formy
         Float measured = dto.getMeasuredQuantity();
         IngredientState form = dto.getForm() != null ? dto.getForm() : IngredientState.RAW;
 
@@ -55,7 +45,6 @@ public class InventoryServiceImpl implements InventoryService {
             measured = measured / (1 - lossFactor);
         }
 
-        // Očekávané množství pro výpočet discrepancy
         InventorySnapshot lastSnapshot = snapshotRepository
                 .findTopByIngredientOrderByTimestampDesc(ingredient)
                 .orElse(null);
@@ -68,9 +57,11 @@ public class InventoryServiceImpl implements InventoryService {
 
         Float discrepancy = oldExpected != null ? measured - oldExpected : null;
 
+        LocalDateTime now = LocalDateTime.now();
+
         InventorySnapshot snapshot = InventorySnapshot.builder()
                 .ingredient(ingredient)
-                .timestamp(dto.getTimestamp())
+                .timestamp(now)
                 .measuredQuantity(measured)
                 .expectedQuantity(measured)
                 .note(dto.getNote() != null
@@ -82,7 +73,6 @@ public class InventoryServiceImpl implements InventoryService {
         InventorySnapshot saved = snapshotRepository.save(snapshot);
         return snapshotMapper.toDto(saved);
     }
-
 
     @Override
     public List<InventorySnapshotResponseDto> getCurrentInventoryStatus() {
@@ -151,14 +141,11 @@ public class InventoryServiceImpl implements InventoryService {
         for (InventorySnapshotCreateDto dto : dtos) {
             try {
                 results.add(createSnapshot(dto));
-            } catch (SnapshotTooRecentException e) {
-                log.warn("Snapshot too recent for ingredientId={} at {}: {}",
-                        dto.getIngredientId(), dto.getTimestamp(), e.getMessage());
             } catch (EntityNotFoundException e) {
                 log.error("Ingredient not found for ID: {}", dto.getIngredientId(), e);
             } catch (Exception e) {
-                log.error("Unexpected error while creating snapshot for ingredientId={} at {}: {}",
-                        dto.getIngredientId(), dto.getTimestamp(), e.getMessage(), e);
+                log.error("Unexpected error while creating snapshot for ingredientId={} : {}",
+                        dto.getIngredientId(), e.getMessage(), e);
             }
         }
 
