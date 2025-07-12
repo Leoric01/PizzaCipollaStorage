@@ -31,7 +31,7 @@ public interface UserMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "accountLocked", constant = "false")
-    @Mapping(target = "enabled", constant = "true")
+    @Mapping(target = "enabled", constant = "false")
     @Mapping(target = "roles", ignore = true)
     @Mapping(target = "createdDate", ignore = true)
     @Mapping(target = "lastModifiedDate", ignore = true)

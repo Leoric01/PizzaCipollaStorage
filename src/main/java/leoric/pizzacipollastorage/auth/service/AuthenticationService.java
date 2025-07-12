@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 public interface AuthenticationService {
-    void register(RegistrationRequest request);
+    void register(RegistrationRequest request) throws MessagingException;
 
     AuthenticationResponse authenticate(AuthenticationRequest request);
 

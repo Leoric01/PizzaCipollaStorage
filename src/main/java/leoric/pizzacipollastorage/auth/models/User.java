@@ -2,6 +2,7 @@ package leoric.pizzacipollastorage.auth.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.UuidGenerator;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Getter
@@ -28,14 +30,16 @@ import java.util.stream.Collectors;
 @EntityListeners(AuditingEntityListener.class)
 public class User implements UserDetails, Principal {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @UuidGenerator(style = UuidGenerator.Style.AUTO)
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID id;
+
     @CreatedBy
     @Column(updatable = false)
-    private Integer createdBy;
+    private UUID createdBy;
 
     @LastModifiedBy
-    private Integer lastModifiedBy;
+    private UUID lastModifiedBy;
 
     @CreatedDate
     @Column(updatable = false)

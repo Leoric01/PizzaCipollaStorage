@@ -17,6 +17,7 @@ import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static org.springframework.http.HttpHeaders.*;
 
@@ -44,9 +45,10 @@ public class BeansConfig {
     }
 
     @Bean
-    public AuditorAware<Integer> auditorAware() {
+    public AuditorAware<UUID> auditorAware() {
         return new ApplicationAuditAware();
     }
+
     @Bean
     public CorsFilter corsFilter() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

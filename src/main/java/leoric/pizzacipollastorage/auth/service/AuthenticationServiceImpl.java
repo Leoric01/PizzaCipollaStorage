@@ -1,7 +1,7 @@
 package leoric.pizzacipollastorage.auth.service;
 
 import jakarta.mail.MessagingException;
-import leoric.pizzacipollastorage.auth.*;
+import leoric.pizzacipollastorage.auth.UserMapper;
 import leoric.pizzacipollastorage.auth.dtos.AuthenticationRequest;
 import leoric.pizzacipollastorage.auth.dtos.AuthenticationResponse;
 import leoric.pizzacipollastorage.auth.dtos.RegistrationRequest;
@@ -13,6 +13,7 @@ import leoric.pizzacipollastorage.auth.repositories.RoleRepository;
 import leoric.pizzacipollastorage.auth.repositories.TokenRepository;
 import leoric.pizzacipollastorage.auth.repositories.UserRepository;
 import leoric.pizzacipollastorage.auth.security.JwtService;
+import leoric.pizzacipollastorage.handler.exceptions.EmailAlreadyInUseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,10 +24,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -43,27 +43,32 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Value("${mailing.frontend.activation-url}")
     String activationUrl;
 
-    // TODO : Turned of email validation for development, also swap USER for STUDENT and add TEAChER
     @Override
-    public void register(RegistrationRequest request) {
-        Role userRole = roleRepository.findByName(request.getRole().toUpperCase())
-                .orElseThrow(() -> new IllegalArgumentException("Role " + request.getRole() + " not initialized"));
+    public void register(RegistrationRequest request) throws MessagingException {
+        if (userRepository.existsByEmail(request.email())) {
+            throw new EmailAlreadyInUseException("Email " + request.email() + " is already in use");
+        }
+        Role userRole = roleRepository.findByName(request.role().toUpperCase())
+                .orElseThrow(() -> new IllegalArgumentException("Role " + request.role() + " not initialized"));
         User user = userMapper.registrationRequestToUser(request);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setPassword(passwordEncoder.encode(request.password()));
         user.setRoles(List.of(userRole));
 
         userRepository.save(user);
-//        sendValidationEmail(user);
+        sendValidationEmail(user);
     }
 
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        var auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+        var auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.email(), request.password()));
         Map<String, Object> claims = new HashMap<>();
         User user = (User) auth.getPrincipal();
         claims.put("fullName", user.getFullname());
-        var jwtToken = jwtService.generateToken(claims, user);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        String jwtToken = jwtService.generateToken(claims, user);
+        Date expiresDate = jwtService.extractExpirationTime(jwtToken);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss dd.MM.yyyy", Locale.getDefault());
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return new AuthenticationResponse(jwtToken, dateFormat.format(expiresDate));
     }
 
     @Override
@@ -71,7 +76,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public void activateAccount(String token) throws MessagingException {
         Token savedToken = tokenRepository.findByToken(token)
                 // todo exception has to be defined
-                .orElseThrow(() -> new RuntimeException("Invalid token"));
+                .orElseThrow(() -> new RuntimeException("Invalid token (OTP)"));
         if (LocalDateTime.now().isAfter(savedToken.getExpiresAt())) {
             sendValidationEmail(savedToken.getUser());
             throw new RuntimeException("Activation token has expired. A new token has been send to the same email address");
@@ -113,6 +118,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return generatedToken;
     }
     private String generateActivationCode(int length) {
+        // TODO predelat chars na prod
+//        final String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         final String chars = "0123456789";
         StringBuilder activationCode = new StringBuilder();
         SecureRandom random = new SecureRandom();
