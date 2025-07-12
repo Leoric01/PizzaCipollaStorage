@@ -22,43 +22,34 @@ public class SecurityConfig {
 
     private final JwtFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(req -> req
-                        .anyRequest().permitAll()
+                .authorizeHttpRequests(req ->
+                        req.requestMatchers(
+                                        "/auth/**",
+                                        //THIS BELOW IS FOR SWAGGER
+                                        "/v2/api-docs",
+                                        "/v3/api-docs",
+                                        "/v3/api-docs/**",
+                                        "/swagger-resources",
+                                        "/swagger-resources/**",
+                                        "/configuration/ui",
+                                        "/configuration/security",
+                                        "/swagger-ui/**",
+                                        "/api/v1/swagger-ui/**",
+                                        "/webjars/**",
+                                        "/swagger-ui.html"
+                                ).permitAll()
+                                .anyRequest()
+                                .authenticated()
                 )
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        return http
-//                .cors(withDefaults())
-//                .csrf(AbstractHttpConfigurer::disable)
-//                .authorizeHttpRequests(req ->
-//                        req.requestMatchers(
-//                                        "/auth/**",
-//                                        //THIS BELOW IS FOR SWAGGER
-//                                        "/v2/api-docs",
-//                                        "/v3/api-docs",
-//                                        "/v3/api-docs/**",
-//                                        "/swagger-resources",
-//                                        "/swagger-resources/**",
-//                                        "/configuration/ui",
-//                                        "/configuration/security",
-//                                        "/swagger-ui/**",
-//                                        "/api/v1/swagger-ui/**",
-//                                        "/webjars/**",
-//                                        "/swagger-ui.html"
-//                                ).permitAll()
-//                                .anyRequest()
-//                                .authenticated()
-//                )
-//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .authenticationProvider(authenticationProvider)
-//                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-//                .build();
-//    }
 }

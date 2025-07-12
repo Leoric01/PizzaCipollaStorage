@@ -63,6 +63,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.email(), request.password()));
         Map<String, Object> claims = new HashMap<>();
         User user = (User) auth.getPrincipal();
+        claims.put("id", user.getId());
         claims.put("fullName", user.getFullname());
         String jwtToken = jwtService.generateToken(claims, user);
         Date expiresDate = jwtService.extractExpirationTime(jwtToken);

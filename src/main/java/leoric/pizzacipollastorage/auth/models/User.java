@@ -3,9 +3,7 @@ package leoric.pizzacipollastorage.auth.models;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,7 +11,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.security.Principal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -29,20 +26,14 @@ import java.util.stream.Collectors;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class User implements UserDetails, Principal {
+
     @Id
     @UuidGenerator(style = UuidGenerator.Style.AUTO)
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
-    @CreatedBy
-    @Column(updatable = false)
-    private UUID createdBy;
-
-    @LastModifiedBy
-    private UUID lastModifiedBy;
-
     @CreatedDate
-    @Column(updatable = false)
+    @Column(updatable = false, nullable = false)
     private LocalDateTime createdDate;
 
     @LastModifiedDate
@@ -50,8 +41,6 @@ public class User implements UserDetails, Principal {
     private String firstName;
 
     private String lastName;
-
-    private LocalDate dateOfBirth;
 
     @Column(unique = true)
     private String email;

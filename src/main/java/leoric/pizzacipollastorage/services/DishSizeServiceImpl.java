@@ -3,6 +3,7 @@ package leoric.pizzacipollastorage.services;
 import jakarta.persistence.EntityNotFoundException;
 import leoric.pizzacipollastorage.DTOs.DishSize.DishSizeCreateDto;
 import leoric.pizzacipollastorage.DTOs.DishSize.DishSizeResponseDto;
+import leoric.pizzacipollastorage.auth.models.User;
 import leoric.pizzacipollastorage.mapstruct.DishSizeMapper;
 import leoric.pizzacipollastorage.models.DishSize;
 import leoric.pizzacipollastorage.repositories.DishSizeRepository;
@@ -21,7 +22,7 @@ public class DishSizeServiceImpl implements DishSizeService {
     private final DishSizeMapper dishSizeMapper;
 
     @Override
-    public DishSizeResponseDto create(DishSizeCreateDto dto) {
+    public DishSizeResponseDto create(DishSizeCreateDto dto, User user) {
         DishSize saved = dishSizeRepository.save(dishSizeMapper.toEntity(dto));
         return dishSizeMapper.toDto(saved);
     }
@@ -49,5 +50,4 @@ public class DishSizeServiceImpl implements DishSizeService {
         }
         dishSizeRepository.deleteById(id);
     }
-
 }

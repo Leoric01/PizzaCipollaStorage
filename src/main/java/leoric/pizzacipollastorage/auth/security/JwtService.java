@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-
 @Service
 public class JwtService {
 
@@ -72,7 +71,6 @@ public class JwtService {
                 .claim("authorities", authorities)
                 .signWith(getSignInKey())
                 .compact();
-
     }
 
     private boolean isTokenExpired(String token) {

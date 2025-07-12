@@ -1,4 +1,5 @@
 package leoric.pizzacipollastorage.auth.security;
+
 import leoric.pizzacipollastorage.auth.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,4 +19,5 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
         return userRepository.findByEmail(userEmail).orElseThrow(() -> new UsernameNotFoundException("User " + userEmail + " not found"));
     }
+
 }
