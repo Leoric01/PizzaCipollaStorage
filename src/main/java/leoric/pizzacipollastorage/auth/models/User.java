@@ -1,6 +1,7 @@
 package leoric.pizzacipollastorage.auth.models;
 
 import jakarta.persistence.*;
+import leoric.pizzacipollastorage.loans.models.Branch;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.data.annotation.CreatedDate;
@@ -53,6 +54,14 @@ public class User implements UserDetails, Principal {
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_branch",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "branch_id")
+    )
+    private List<Branch> branches;
 
     @Override
     public String getName() {

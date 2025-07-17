@@ -46,5 +46,4 @@ public class AuthenticationController {
     public ResponseEntity<List<UserResponse>> listAll() {
         return ResponseEntity.ok(authenticationService.listAll());
     }
-
 }

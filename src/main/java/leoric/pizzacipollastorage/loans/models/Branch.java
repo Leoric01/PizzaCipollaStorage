@@ -1,9 +1,7 @@
 package leoric.pizzacipollastorage.loans.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+import leoric.pizzacipollastorage.auth.models.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,4 +31,7 @@ public class Branch {
 
     @OneToMany(mappedBy = "toBranch")
     private List<IngredientLoan> loansReceived;
+
+    @ManyToMany(mappedBy = "branches")
+    private List<User> users;
 }
