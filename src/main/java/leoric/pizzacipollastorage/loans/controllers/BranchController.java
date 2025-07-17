@@ -1,11 +1,14 @@
 package leoric.pizzacipollastorage.loans.controllers;
 
+import leoric.pizzacipollastorage.auth.models.User;
 import leoric.pizzacipollastorage.loans.dtos.BranchCreateDto;
 import leoric.pizzacipollastorage.loans.dtos.BranchResponseDto;
 import leoric.pizzacipollastorage.services.interfaces.BranchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +22,9 @@ public class BranchController {
     private final BranchService branchService;
 
     @PostMapping
-    public ResponseEntity<BranchResponseDto> create(@RequestBody BranchCreateDto dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(branchService.createBranch(dto));
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
+    public ResponseEntity<BranchResponseDto> branchCreate(@RequestBody BranchCreateDto dto, @AuthenticationPrincipal User currentUser) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(branchService.createBranch(dto, currentUser));
     }
 
     @DeleteMapping("/{id}")

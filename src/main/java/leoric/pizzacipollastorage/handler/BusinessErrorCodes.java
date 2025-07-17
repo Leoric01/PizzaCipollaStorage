@@ -19,6 +19,7 @@ public enum BusinessErrorCodes {
     MISSING_INGREDIENT_QUANTITY(309, BAD_REQUEST, "Missing quantity for ingredient in base dish size"),
     SNAPSHOT_ALREADY_EXISTS(308, CONFLICT, "Snapshot for this ingredient already exists in the last 6 hours"),
     INGREDIENT_IN_USE_IN_MENUITEM(310, CONFLICT, "Ingredient is used in one or more menu items"),
+    BRANCH_CREATION_FORBIDDEN(311, FORBIDDEN, "Only users with MANAGER role can create a branch"),
     EMAIL_ALREADY_IN_USE(305, CONFLICT, "Email is already in use");
 
     private final int code;

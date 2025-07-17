@@ -65,8 +65,8 @@ public class MenuItemController {
     }
 //
 //    @PostMapping("/without-ingredients")
-//    public ResponseEntity<MenuItemResponseDto> createMenuItemWithoutIngredients(@RequestBody MenuItemCreateDto dto) {
-//        return ResponseEntity.ok(menuItemService.createMenuItem(dto));
+//    public ResponseEntity<MenuItemResponseDto> createMenuItemWithoutIngredients(@RequestBody MenuItemCreateDto dtos) {
+//        return ResponseEntity.ok(menuItemService.createMenuItem(dtos));
 //    }
 
     @PostMapping("/recipes")

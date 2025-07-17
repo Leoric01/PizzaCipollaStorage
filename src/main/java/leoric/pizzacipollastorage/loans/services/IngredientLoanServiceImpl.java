@@ -110,7 +110,7 @@ public class IngredientLoanServiceImpl implements IngredientLoanService {
         ingredientLoanMapper.update(loan, dto);
 
         if (newStatus != null && newStatus != oldStatus) {
-            log.info("Loan [{}] status changed: {} → {}", loan.getId(), oldStatus, newStatus);
+            log.info("Loan [{}] branchAccessRequestStatus changed: {} → {}", loan.getId(), oldStatus, newStatus);
         }
         return ingredientLoanMapper.toDto(loanRepository.save(loan));
     }

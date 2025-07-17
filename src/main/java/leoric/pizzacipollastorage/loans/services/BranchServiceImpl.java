@@ -1,6 +1,8 @@
 package leoric.pizzacipollastorage.loans.services;
 
 import jakarta.persistence.EntityNotFoundException;
+import leoric.pizzacipollastorage.auth.models.User;
+import leoric.pizzacipollastorage.auth.repositories.UserRepository;
 import leoric.pizzacipollastorage.loans.dtos.BranchCreateDto;
 import leoric.pizzacipollastorage.loans.dtos.BranchResponseDto;
 import leoric.pizzacipollastorage.loans.models.Branch;
@@ -11,6 +13,7 @@ import leoric.pizzacipollastorage.utils.CustomUtilityString;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,13 +21,23 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class BranchServiceImpl implements BranchService {
 
+    private final UserRepository userRepository;
     private final BranchRepository branchRepository;
     private final BranchMapper branchMapper;
 
     @Override
-    public BranchResponseDto createBranch(BranchCreateDto dto) {
+    public BranchResponseDto createBranch(BranchCreateDto dto, User currentUser) {
         Branch branch = branchMapper.toEntity(dto);
-        return branchMapper.toDto(branchRepository.save(branch));
+        if (branch.getUsers() == null) {
+            branch.setUsers(new ArrayList<>());
+        }
+        branch.setCreatedByManager(currentUser);
+        branch.getUsers().add(currentUser);
+        currentUser.getBranches().add(branch);
+
+        branchRepository.save(branch);
+        userRepository.save(currentUser);
+        return branchMapper.toDto(branch);
     }
 
     @Override

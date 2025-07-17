@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,12 +27,16 @@ public class Branch {
     private String address;
     private String contactInfo;
 
+    @ManyToMany(mappedBy = "branches")
+    private List<User> users = new ArrayList<>();
+
+    @ManyToOne(optional = false)
+    private User createdByManager;
+
     @OneToMany(mappedBy = "fromBranch")
-    private List<IngredientLoan> loansGiven;
+    private List<IngredientLoan> loansGiven = new ArrayList<>();
 
     @OneToMany(mappedBy = "toBranch")
-    private List<IngredientLoan> loansReceived;
+    private List<IngredientLoan> loansReceived = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "branches")
-    private List<User> users;
 }

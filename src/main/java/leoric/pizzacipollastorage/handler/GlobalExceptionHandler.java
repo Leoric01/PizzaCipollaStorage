@@ -47,6 +47,16 @@ public class GlobalExceptionHandler {
                 );
     }
 
+    @ExceptionHandler(InsufficientRoleException.class)
+    public ResponseEntity<ExceptionResponse> handleBusinessException(InsufficientRoleException ex) {
+        return ResponseEntity
+                .status(FORBIDDEN)
+                .body(ExceptionResponse.builder()
+                        .businessErrorCode(BusinessErrorCodes.BRANCH_CREATION_FORBIDDEN.getCode())
+                        .businessErrorDescription(BusinessErrorCodes.BRANCH_CREATION_FORBIDDEN.getDescription())
+                        .error(ex.getMessage())
+                        .build());
+    }
     @ExceptionHandler(DuplicateIngredientNameException.class)
     public ResponseEntity<ExceptionResponse> handleDuplicateIngredientNameException(DuplicateIngredientNameException ex) {
         return ResponseEntity
@@ -115,7 +125,7 @@ public class GlobalExceptionHandler {
 //    @ExceptionHandler(LockedException.class)
 //    public ResponseEntity<ExceptionResponse> handleException(LockedException exp) {
 //        return ResponseEntity
-//                .status(UNAUTHORIZED)
+//                .branchAccessRequestStatus(UNAUTHORIZED)
 //                .body(
 //                        ExceptionResponse.builder()
 //                                .businessErrorCode(ACCOUNT_LOCKED.getCode())
@@ -128,7 +138,7 @@ public class GlobalExceptionHandler {
 //    @ExceptionHandler(DisabledException.class)
 //    public ResponseEntity<ExceptionResponse> handleException(DisabledException exp) {
 //        return ResponseEntity
-//                .status(UNAUTHORIZED)
+//                .branchAccessRequestStatus(UNAUTHORIZED)
 //                .body(
 //                        ExceptionResponse.builder()
 //                                .businessErrorCode(ACCOUNT_DISABLED.getCode())
@@ -141,7 +151,7 @@ public class GlobalExceptionHandler {
 //    @ExceptionHandler(BadCredentialsException.class)
 //    public ResponseEntity<ExceptionResponse> handleException() {
 //        return ResponseEntity
-//                .status(UNAUTHORIZED)
+//                .branchAccessRequestStatus(UNAUTHORIZED)
 //                .body(
 //                        ExceptionResponse.builder()
 //                                .businessErrorCode(BAD_CREDENTIALS.getCode())

@@ -1,5 +1,6 @@
 package leoric.pizzacipollastorage.services.interfaces;
 
+import leoric.pizzacipollastorage.auth.models.User;
 import leoric.pizzacipollastorage.loans.dtos.BranchCreateDto;
 import leoric.pizzacipollastorage.loans.dtos.BranchResponseDto;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,7 @@ import java.util.UUID;
 
 @Service
 public interface BranchService {
-    BranchResponseDto createBranch(BranchCreateDto dto);
+    BranchResponseDto createBranch(BranchCreateDto dto, User currentUser);
 
     void deleteBranch(UUID id);
 
