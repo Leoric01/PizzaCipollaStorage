@@ -8,7 +8,6 @@ import leoric.pizzacipollastorage.branch.models.Branch;
 import leoric.pizzacipollastorage.branch.repositories.BranchRepository;
 import leoric.pizzacipollastorage.handler.BusinessErrorCodes;
 import leoric.pizzacipollastorage.handler.exceptions.BusinessException;
-import leoric.pizzacipollastorage.handler.exceptions.DuplicateIngredientNameException;
 import leoric.pizzacipollastorage.handler.exceptions.IngredientInUseException;
 import leoric.pizzacipollastorage.inventory.models.InventorySnapshot;
 import leoric.pizzacipollastorage.inventory.repositories.InventorySnapshotRepository;
@@ -59,14 +58,24 @@ public class IngredientServiceImpl implements IngredientService {
         Ingredient existing = ingredientRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Ingredient not found: " + id));
 
-        if (!existing.getName().equalsIgnoreCase(dto.getName()) &&
-            ingredientRepository.existsByNameIgnoreCaseAndBranchId(dto.getName(), branchId)) {
-            throw new DuplicateIngredientNameException("Ingredient with name '" + dto.getName() + "' already exists");
+        if (!existing.getBranch().getId().equals(branchId)) {
+            throw new BusinessException(BusinessErrorCodes.NOT_AUTHORIZED_FOR_BRANCH);
         }
 
+        String name = dto.getName().trim();
+
+        if (!existing.getName().equalsIgnoreCase(name) &&
+            ingredientRepository.existsByNameIgnoreCaseAndBranchId(name, branchId)) {
+            throw new BusinessException(BusinessErrorCodes.DUPLICATE_INGREDIENT_NAME);
+        }
+
+        String categoryName = dto.getProductCategory() == null || dto.getProductCategory().isBlank()
+                ? "UNKNOWN"
+                : dto.getProductCategory().trim().toUpperCase();
+
         ProductCategory category = productCategoryRepository
-                .findByNameIgnoreCaseAndBranchId(dto.getProductCategory(), branchId)
-                .orElseThrow(() -> new IllegalArgumentException("Category not found: " + dto.getProductCategory()));
+                .findByNameIgnoreCaseAndBranchId(categoryName, branchId)
+                .orElseThrow(() -> new EntityNotFoundException("Category not found: " + categoryName));
 
         ingredientMapper.update(existing, dto);
         existing.setProductCategory(category);
@@ -131,7 +140,7 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public List<IngredientResponseDto> getAllIngredients(UUID branchId) {
-        List<Ingredient> ingredients = ingredientRepository.findAll();
+        List<Ingredient> ingredients = ingredientRepository.findAllByBranchId(branchId);
         return ingredientMapper.toDtoList(ingredients);
     }
 
