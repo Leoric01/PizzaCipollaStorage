@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -215,20 +214,6 @@ public class MenuItemServiceImpl implements MenuItemService {
 
         MenuItem saved = menuItemRepository.save(menuItem);
         return menuItemMapper.toDto(saved);
-    }
-
-    private float getQuantity(MenuItem menuItem, float dishFactor, UUID defaultDishSizeId,
-                              Ingredient ingredient, Float providedQuantity, String ingredientIdForError) {
-        Optional<RecipeIngredient> base = recipeIngredientRepository
-                .findByMenuItemIdAndIngredientIdAndDishSizeId(menuItem.getId(), ingredient.getId(), defaultDishSizeId);
-
-        if (base.isPresent()) {
-            return base.get().getQuantity() * dishFactor;
-        } else if (providedQuantity != null) {
-            return providedQuantity;
-        } else {
-            throw new MissingQuantityException("Missing quantity for ingredient ID '" + ingredientIdForError + "' and no base recipe found.");
-        }
     }
 
     @Override

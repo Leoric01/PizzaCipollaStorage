@@ -1,6 +1,7 @@
 package leoric.pizzacipollastorage.models;
 
 import jakarta.persistence.*;
+import leoric.pizzacipollastorage.models.enums.DishSize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,8 +26,8 @@ public class MenuItemSale {
     @JoinColumn(name = "pizza_id")
     private MenuItem menuItem;
 
-    @ManyToOne
-    @JoinColumn(name = "dish_size_id")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private DishSize dishSize;
 
     private int quantitySold;

@@ -1,9 +1,7 @@
 package leoric.pizzacipollastorage.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+import leoric.pizzacipollastorage.models.enums.DishSize;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.UUID;
@@ -15,7 +13,8 @@ public class PackagingRule {
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
-    @ManyToOne
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private DishSize dishSize;
 
     @ManyToOne
