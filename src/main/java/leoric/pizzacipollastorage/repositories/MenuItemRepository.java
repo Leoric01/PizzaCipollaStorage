@@ -12,7 +12,8 @@ import java.util.UUID;
 
 @Repository
 public interface MenuItemRepository extends JpaRepository<MenuItem, UUID> {
-    Optional<MenuItem> findByName(String name);
+    Optional<MenuItem> findByNameIgnoreCaseAndBranchId(String name, UUID branchId)
+            ;
 
     @Query("SELECT m FROM MenuItem m JOIN m.recipeIngredients ri WHERE ri.ingredient.id = :ingredientId")
     List<MenuItem> findAllByRecipeIngredientsIngredientId(@Param("ingredientId") UUID ingredientId);

@@ -20,17 +20,24 @@ public class RecipeIngredient {
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "menu_item_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "menu_item_id", nullable = false)
     private MenuItem menuItem;
 
-    @ManyToOne
-    @JoinColumn(name = "ingredient_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "ingredient_id", nullable = false)
     private Ingredient ingredient;
 
-    @ManyToOne
-    @JoinColumn(name = "dish_size_id")
-    private DishSize dishSize;
-
+    /**
+     * Množství v jednotce ingredience – buď absolutní, nebo základní, dle autoScale.
+     */
     private Float quantity;
+
+    /**
+     * Má se množství automaticky vynásobit `dishSize.defaultFactor`?
+     * true = quantity je pro základní velikost, přepočítá se
+     * false = quantity je pro konkrétní velikost (ručně)
+     */
+    @Builder.Default
+    private boolean autoScaleWithDishSize = true;
 }

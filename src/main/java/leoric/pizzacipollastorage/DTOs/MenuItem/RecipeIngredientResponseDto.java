@@ -11,8 +11,10 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RecipeIngredientCreateDto {
-    private UUID menuItemId;
+public class RecipeIngredientResponseDto {
+    private UUID id;
     private UUID ingredientId;
+    private UUID dishSizeId;
     private Float quantity;
+    private Boolean autoScaleWithDishSize;
 }

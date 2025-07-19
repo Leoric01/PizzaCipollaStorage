@@ -11,21 +11,21 @@ public interface MenuItemService {
 
     MenuItemResponseDto createMenuItem(MenuItemCreateDto dto);
 
-    RecipeIngredientShortDto addIngredientToMenuItem(RecipeIngredientCreateDto dto);
+    RecipeIngredientShortDto addIngredientToMenuItem(UUID branchId, RecipeIngredientCreateDto dto);
 
     List<MenuItemResponseDto> getAllMenuItems();
 
-    List<RecipeIngredientShortDto> addIngredientsToMenuItemBulk(RecipeCreateBulkDto dto);
+    List<RecipeIngredientShortDto> addIngredientsToMenuItemBulk(UUID branchId, RecipeCreateBulkDto dto);
 
     MenuItemResponseDto getMenuItemById(UUID id);
 
-    MenuItemResponseDto createMenuItemWithOptionalIngredients(MenuItemFullCreateDto dto);
+    MenuItemResponseDto createMenuItemWithOptionalIngredients(UUID branchId, MenuItemFullCreateDto dto);
 
-    MenuItemResponseDto getMenuItemByName(String menuItemName);
+    MenuItemResponseDto getMenuItemByName(UUID branchId, String menuItemName);
 
     void deleteMenuItemById(UUID id);
 
-    MenuItemResponseDto updateMenuItem(UUID id, MenuItemFullCreateDto dto);
+    MenuItemResponseDto updateMenuItem(UUID branchId, UUID id, MenuItemFullCreateDto dto);
 
     RecipeIngredientShortDto updateRecipeIngredient(UUID id, RecipeIngredientVeryShortDto dto);
 

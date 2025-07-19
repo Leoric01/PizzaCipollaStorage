@@ -2,6 +2,7 @@ package leoric.pizzacipollastorage.models;
 
 import jakarta.persistence.*;
 import leoric.pizzacipollastorage.branch.models.Branch;
+import leoric.pizzacipollastorage.models.enums.DishSize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,4 +39,7 @@ public class MenuItem {
     @OneToMany(mappedBy = "menuItem", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private DishSize dishSize;
 }
