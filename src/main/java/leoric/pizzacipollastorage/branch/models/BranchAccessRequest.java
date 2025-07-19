@@ -3,7 +3,6 @@ package leoric.pizzacipollastorage.branch.models;
 import jakarta.persistence.*;
 import leoric.pizzacipollastorage.auth.models.User;
 import leoric.pizzacipollastorage.branch.models.constants.BranchAccessRequestStatus;
-import leoric.pizzacipollastorage.loans.models.Branch;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 

@@ -20,6 +20,11 @@ public enum BusinessErrorCodes {
     SNAPSHOT_ALREADY_EXISTS(308, CONFLICT, "Snapshot for this ingredient already exists in the last 6 hours"),
     INGREDIENT_IN_USE_IN_MENUITEM(310, CONFLICT, "Ingredient is used in one or more menu items"),
     BRANCH_CREATION_FORBIDDEN(311, FORBIDDEN, "Only users with MANAGER role can create a branch"),
+    BRANCH_ALREADY_ACCESSIBLE(312, CONFLICT, "User already has access to this branch"),
+    BRANCH_ACCESS_REQUEST_ALREADY_PENDING(313, CONFLICT, "There is already a pending access request for this user and branch"),
+    NOT_AUTHORIZED_FOR_BRANCH(314, FORBIDDEN, "You are not authorized to manage this branch"),
+    REQUEST_ALREADY_RESOLVED(315, CONFLICT, "This access request has already been resolved"),
+
     EMAIL_ALREADY_IN_USE(305, CONFLICT, "Email is already in use");
 
     private final int code;

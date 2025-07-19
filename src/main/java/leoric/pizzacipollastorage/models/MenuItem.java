@@ -1,6 +1,7 @@
 package leoric.pizzacipollastorage.models;
 
 import jakarta.persistence.*;
+import leoric.pizzacipollastorage.branch.models.Branch;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,11 +24,16 @@ public class MenuItem {
     private UUID id;
 
     private String name;
+
     private String description;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     private MenuItemCategory category;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "branch_id", nullable = false)
+    private Branch branch;
 
     @OneToMany(mappedBy = "menuItem", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecipeIngredient> recipeIngredients = new ArrayList<>();

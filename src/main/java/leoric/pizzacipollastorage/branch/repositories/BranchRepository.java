@@ -1,6 +1,6 @@
-package leoric.pizzacipollastorage.loans.repositories;
+package leoric.pizzacipollastorage.branch.repositories;
 
-import leoric.pizzacipollastorage.loans.models.Branch;
+import leoric.pizzacipollastorage.branch.models.Branch;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

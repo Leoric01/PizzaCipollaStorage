@@ -1,14 +1,14 @@
 package leoric.pizzacipollastorage.loans.services;
 
 import jakarta.persistence.EntityNotFoundException;
+import leoric.pizzacipollastorage.branch.models.Branch;
+import leoric.pizzacipollastorage.branch.repositories.BranchRepository;
 import leoric.pizzacipollastorage.inventory.services.InventoryService;
 import leoric.pizzacipollastorage.loans.dtos.IngredientLoanCreateDto;
 import leoric.pizzacipollastorage.loans.dtos.IngredientLoanPatchDto;
 import leoric.pizzacipollastorage.loans.dtos.IngredientLoanResponseDto;
-import leoric.pizzacipollastorage.loans.models.Branch;
 import leoric.pizzacipollastorage.loans.models.IngredientLoan;
 import leoric.pizzacipollastorage.loans.models.IngredientLoanItem;
-import leoric.pizzacipollastorage.loans.repositories.BranchRepository;
 import leoric.pizzacipollastorage.loans.repositories.IngredientLoanRepository;
 import leoric.pizzacipollastorage.mapstruct.IngredientLoanMapper;
 import leoric.pizzacipollastorage.models.Ingredient;

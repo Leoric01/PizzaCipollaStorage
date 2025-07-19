@@ -57,6 +57,19 @@ public class GlobalExceptionHandler {
                         .error(ex.getMessage())
                         .build());
     }
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ExceptionResponse> handleBusinessException(BusinessException ex) {
+        BusinessErrorCodes code = ex.getErrorCode();
+        return ResponseEntity
+                .status(code.getHttpStatus())
+                .body(ExceptionResponse.builder()
+                        .businessErrorCode(code.getCode())
+                        .businessErrorDescription(code.getDescription())
+                        .error(ex.getMessage())
+                        .build());
+    }
+
     @ExceptionHandler(DuplicateIngredientNameException.class)
     public ResponseEntity<ExceptionResponse> handleDuplicateIngredientNameException(DuplicateIngredientNameException ex) {
         return ResponseEntity

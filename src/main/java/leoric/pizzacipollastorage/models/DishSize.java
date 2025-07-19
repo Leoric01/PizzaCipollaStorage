@@ -1,8 +1,7 @@
 package leoric.pizzacipollastorage.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import leoric.pizzacipollastorage.branch.models.Branch;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,4 +24,8 @@ public class DishSize {
     private String name;
     private float factor;
     private boolean defaultSize;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "branch_id", nullable = false)
+    private Branch branch;
 }

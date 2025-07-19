@@ -1,6 +1,7 @@
 package leoric.pizzacipollastorage.models;
 
 import jakarta.persistence.*;
+import leoric.pizzacipollastorage.branch.models.Branch;
 import leoric.pizzacipollastorage.inventory.models.InventorySnapshot;
 import leoric.pizzacipollastorage.vat.models.ProductCategory;
 import lombok.AllArgsConstructor;
@@ -48,4 +49,8 @@ public class Ingredient {
     @ManyToOne(optional = false)
     @JoinColumn(name = "product_category_id")
     private ProductCategory productCategory;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "branch_id", nullable = false)
+    private Branch branch;
 }

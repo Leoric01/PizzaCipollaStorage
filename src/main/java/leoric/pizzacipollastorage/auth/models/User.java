@@ -1,7 +1,7 @@
 package leoric.pizzacipollastorage.auth.models;
 
 import jakarta.persistence.*;
-import leoric.pizzacipollastorage.loans.models.Branch;
+import leoric.pizzacipollastorage.branch.models.Branch;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.data.annotation.CreatedDate;

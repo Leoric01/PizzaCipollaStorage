@@ -1,4 +1,4 @@
-package leoric.pizzacipollastorage.loans.dtos;
+package leoric.pizzacipollastorage.branch.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

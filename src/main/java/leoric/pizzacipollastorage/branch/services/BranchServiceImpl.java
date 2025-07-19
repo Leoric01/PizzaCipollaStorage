@@ -1,17 +1,18 @@
-package leoric.pizzacipollastorage.loans.services;
+package leoric.pizzacipollastorage.branch.services;
 
 import jakarta.persistence.EntityNotFoundException;
 import leoric.pizzacipollastorage.auth.models.User;
 import leoric.pizzacipollastorage.auth.repositories.UserRepository;
-import leoric.pizzacipollastorage.loans.dtos.BranchCreateDto;
-import leoric.pizzacipollastorage.loans.dtos.BranchResponseDto;
-import leoric.pizzacipollastorage.loans.models.Branch;
-import leoric.pizzacipollastorage.loans.repositories.BranchRepository;
+import leoric.pizzacipollastorage.branch.dtos.BranchCreateDto;
+import leoric.pizzacipollastorage.branch.dtos.BranchResponseDto;
+import leoric.pizzacipollastorage.branch.models.Branch;
+import leoric.pizzacipollastorage.branch.repositories.BranchRepository;
+import leoric.pizzacipollastorage.branch.services.interfaces.BranchService;
 import leoric.pizzacipollastorage.mapstruct.BranchMapper;
-import leoric.pizzacipollastorage.services.interfaces.BranchService;
 import leoric.pizzacipollastorage.utils.CustomUtilityString;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ public class BranchServiceImpl implements BranchService {
     private final BranchMapper branchMapper;
 
     @Override
+    @Transactional
     public BranchResponseDto createBranch(BranchCreateDto dto, User currentUser) {
         Branch branch = branchMapper.toEntity(dto);
         if (branch.getUsers() == null) {
@@ -75,5 +77,11 @@ public class BranchServiceImpl implements BranchService {
                 .findFirst()
                 .map(branchMapper::toDto)
                 .orElseThrow(() -> new EntityNotFoundException("Branch not found with name: " + name));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<BranchResponseDto> getBranchesForUser(User user) {
+        return branchMapper.toDtoList(user.getBranches());
     }
 }

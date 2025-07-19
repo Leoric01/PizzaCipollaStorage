@@ -1,7 +1,7 @@
 package leoric.pizzacipollastorage.init;
 
-import leoric.pizzacipollastorage.loans.models.Branch;
-import leoric.pizzacipollastorage.loans.repositories.BranchRepository;
+import leoric.pizzacipollastorage.branch.models.Branch;
+import leoric.pizzacipollastorage.branch.repositories.BranchRepository;
 import leoric.pizzacipollastorage.utils.CustomUtilityString;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

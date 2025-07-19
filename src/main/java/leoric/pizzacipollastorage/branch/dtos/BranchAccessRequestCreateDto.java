@@ -7,5 +7,4 @@ import java.util.UUID;
 @Data
 public class BranchAccessRequestCreateDto {
     private UUID branchId;
-    private UUID userId;
 }

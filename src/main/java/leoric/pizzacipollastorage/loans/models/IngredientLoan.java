@@ -1,6 +1,7 @@
 package leoric.pizzacipollastorage.loans.models;
 
 import jakarta.persistence.*;
+import leoric.pizzacipollastorage.branch.models.Branch;
 import leoric.pizzacipollastorage.models.enums.LoanStatus;
 import leoric.pizzacipollastorage.models.enums.LoanType;
 import lombok.AllArgsConstructor;

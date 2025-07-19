@@ -1,8 +1,8 @@
-package leoric.pizzacipollastorage.services.interfaces;
+package leoric.pizzacipollastorage.branch.services.interfaces;
 
 import leoric.pizzacipollastorage.auth.models.User;
-import leoric.pizzacipollastorage.loans.dtos.BranchCreateDto;
-import leoric.pizzacipollastorage.loans.dtos.BranchResponseDto;
+import leoric.pizzacipollastorage.branch.dtos.BranchCreateDto;
+import leoric.pizzacipollastorage.branch.dtos.BranchResponseDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,4 +20,6 @@ public interface BranchService {
     BranchResponseDto getBranchById(UUID id);
 
     BranchResponseDto getBranchByName(String name);
+
+    List<BranchResponseDto> getBranchesForUser(User user);
 }
