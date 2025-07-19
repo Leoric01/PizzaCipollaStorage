@@ -1,9 +1,7 @@
 package leoric.pizzacipollastorage.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+import leoric.pizzacipollastorage.branch.models.Branch;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,4 +27,8 @@ public class MenuItemCategory {
 
     @OneToMany(mappedBy = "category")
     private List<MenuItem> menuItems = new ArrayList<>();
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "branch_id", nullable = false)
+    private Branch branch;
 }

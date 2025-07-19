@@ -12,31 +12,38 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/menu-item-category")
+@RequestMapping("/api/menu-item-category/{branchId}")
 @RequiredArgsConstructor
 public class MenuItemCategoryController {
     private final MenuItemCategoryService menuItemCategoryService;
 
     @GetMapping
-    public ResponseEntity<List<MenuItemCategoryResponseDto>> getAllMenuItems() {
-        return ResponseEntity.ok(menuItemCategoryService.findAll());
+    public ResponseEntity<List<MenuItemCategoryResponseDto>> getAllMenuItems(
+            @PathVariable UUID branchId) {
+        return ResponseEntity.ok(menuItemCategoryService.findAll(branchId));
     }
 
     @PostMapping
-    public ResponseEntity<MenuItemCategoryResponseDto> addCategory(@RequestBody MenuItemCategoryCreateDto dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(menuItemCategoryService.add(dto));
+    public ResponseEntity<MenuItemCategoryResponseDto> addCategory(
+            @PathVariable UUID branchId,
+            @RequestBody MenuItemCategoryCreateDto dto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(menuItemCategoryService.add(branchId, dto));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<MenuItemCategoryResponseDto> updateCategory(
+            @PathVariable UUID branchId,
             @PathVariable UUID id,
             @RequestBody MenuItemCategoryCreateDto dto) {
-        return ResponseEntity.ok(menuItemCategoryService.update(id, dto));
+        return ResponseEntity.ok(menuItemCategoryService.update(branchId, id, dto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable UUID id) {
-        menuItemCategoryService.delete(id);
+    public ResponseEntity<Void> deleteCategory(
+            @PathVariable UUID branchId,
+            @PathVariable UUID id) {
+        menuItemCategoryService.delete(branchId, id);
         return ResponseEntity.noContent().build();
     }
 }

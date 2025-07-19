@@ -6,7 +6,10 @@ import leoric.pizzacipollastorage.DTOs.MenuItem.*;
 import leoric.pizzacipollastorage.handler.exceptions.MissingQuantityException;
 import leoric.pizzacipollastorage.mapstruct.MenuItemMapper;
 import leoric.pizzacipollastorage.mapstruct.RecipeIngredientMapper;
-import leoric.pizzacipollastorage.models.*;
+import leoric.pizzacipollastorage.models.DishSize;
+import leoric.pizzacipollastorage.models.Ingredient;
+import leoric.pizzacipollastorage.models.MenuItem;
+import leoric.pizzacipollastorage.models.RecipeIngredient;
 import leoric.pizzacipollastorage.repositories.*;
 import leoric.pizzacipollastorage.services.interfaces.IngredientAliasService;
 import leoric.pizzacipollastorage.services.interfaces.MenuItemService;
@@ -179,16 +182,16 @@ public class MenuItemServiceImpl implements MenuItemService {
         menuItem.setName(dto.getName());
         menuItem.setDescription(dto.getDescription());
 
-        if (dto.getMenuItemCategory() != null && dto.getMenuItemCategory().getName() != null) {
-            String categoryName = dto.getMenuItemCategory().getName().trim();
-            MenuItemCategory category = menuItemCategoryRepository.findByNameIgnoreCase(categoryName)
-                    .orElseGet(() -> {
-                        MenuItemCategory newCategory = new MenuItemCategory();
-                        newCategory.setName(categoryName);
-                        return menuItemCategoryRepository.save(newCategory);
-                    });
-            menuItem.setCategory(category);
-        }
+//        if (dto.getMenuItemCategory() != null && dto.getMenuItemCategory().getName() != null) {
+//            String categoryName = dto.getMenuItemCategory().getName().trim();
+//            MenuItemCategory category = menuItemCategoryRepository.findByNameIgnoreCase(categoryName)
+//                    .orElseGet(() -> {
+//                        MenuItemCategory newCategory = new MenuItemCategory();
+//                        newCategory.setName(categoryName);
+//                        return menuItemCategoryRepository.save(newCategory);
+//                    });
+//            menuItem.setCategory(category);
+//        }
 
         List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 

@@ -15,19 +15,19 @@ public class MenuItemCategoryInitializer {
 
     @PostConstruct
     public void insertDefaultCategories() {
-        createIfNotExists("PIZZA");
-        createIfNotExists("PASTA");
-        createIfNotExists("GNOCCHI");
-        createIfNotExists("PATATE");
-        createIfNotExists("DRINK");
-        createIfNotExists("DESSERT");
-        createIfNotExists("SAUCE");
-        createIfNotExists("OTHER");
-        createIfNotExists("ALCOHOL");
-        createIfNotExists("STARTER");
-        createIfNotExists("SIDE");
-        createIfNotExists("SPECIAL");
-        createIfNotExists("VEGAN");
+//        createIfNotExists("PIZZA");
+//        createIfNotExists("PASTA");
+//        createIfNotExists("GNOCCHI");
+//        createIfNotExists("PATATE");
+//        createIfNotExists("DRINK");
+//        createIfNotExists("DESSERT");
+//        createIfNotExists("SAUCE");
+//        createIfNotExists("OTHER");
+//        createIfNotExists("ALCOHOL");
+//        createIfNotExists("STARTER");
+//        createIfNotExists("SIDE");
+//        createIfNotExists("SPECIAL");
+//        createIfNotExists("VEGAN");
     }
 
     private void createIfNotExists(String name) {

@@ -3,6 +3,10 @@ package leoric.pizzacipollastorage.services;
 import jakarta.persistence.EntityNotFoundException;
 import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemCategoryCreateDto;
 import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemCategoryResponseDto;
+import leoric.pizzacipollastorage.branch.models.Branch;
+import leoric.pizzacipollastorage.branch.repositories.BranchRepository;
+import leoric.pizzacipollastorage.handler.BusinessErrorCodes;
+import leoric.pizzacipollastorage.handler.exceptions.BusinessException;
 import leoric.pizzacipollastorage.mapstruct.MenuItemCategoryMapper;
 import leoric.pizzacipollastorage.models.MenuItemCategory;
 import leoric.pizzacipollastorage.repositories.MenuItemCategoryRepository;
@@ -16,52 +20,68 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class MenuItemCategoryServiceImpl implements MenuItemCategoryService {
+
+    private final BranchRepository branchRepository;
     private final MenuItemCategoryRepository menuItemCategoryRepository;
     private final MenuItemCategoryMapper menuItemCategoryMapper;
 
     @Override
-    public List<MenuItemCategoryResponseDto> findAll() {
-        return menuItemCategoryMapper.toDtoList(menuItemCategoryRepository.findAll());
+    public List<MenuItemCategoryResponseDto> findAll(UUID branchId) {
+        return menuItemCategoryMapper.toDtoList(
+                menuItemCategoryRepository.findAllByBranchId(branchId)
+        );
     }
 
     @Override
-    public MenuItemCategoryResponseDto add(MenuItemCategoryCreateDto dto) {
+    public MenuItemCategoryResponseDto add(UUID branchId, MenuItemCategoryCreateDto dto) {
         String name = dto.getName().trim();
-        if (menuItemCategoryRepository.findByNameIgnoreCase(name).isPresent()) {
-            throw new IllegalArgumentException("Category with name '" + name + "' already exists.");
-        }
+        Branch branch = branchRepository.findById(branchId)
+                .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
 
-        MenuItemCategory newCategory = menuItemCategoryMapper.toEntity(dto);
-        newCategory.setName(name);
+        menuItemCategoryRepository.findByNameIgnoreCaseAndBranchId(name, branchId)
+                .ifPresent(existing -> {
+                    throw new BusinessException(BusinessErrorCodes.MENU_CATEGORY_ALREADY_EXISTS);
+                });
+
+        MenuItemCategory newCategory = MenuItemCategory.builder()
+                .name(name)
+                .branch(branch)
+                .build();
+
         return menuItemCategoryMapper.toDto(menuItemCategoryRepository.save(newCategory));
     }
 
     @Override
-    public MenuItemCategoryResponseDto update(UUID id, MenuItemCategoryCreateDto dto) {
+    public MenuItemCategoryResponseDto update(UUID branchId, UUID id, MenuItemCategoryCreateDto dto) {
         MenuItemCategory category = menuItemCategoryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Category not found"));
 
-        String newName = dto.getName().trim();
+        if (!category.getBranch().getId().equals(branchId)) {
+            throw new BusinessException(BusinessErrorCodes.NOT_AUTHORIZED_FOR_BRANCH);
+        }
 
-        menuItemCategoryRepository.findByNameIgnoreCase(newName)
-                .filter(existingCategory -> !existingCategory.getId().equals(id))
-                .ifPresent(existingCategory -> {
-                    throw new IllegalArgumentException("Category with name '" + newName + "' already exists.");
+        String newName = dto.getName().trim();
+        menuItemCategoryRepository.findByNameIgnoreCaseAndBranchId(newName, branchId)
+                .filter(existing -> !existing.getId().equals(id))
+                .ifPresent(existing -> {
+                    throw new BusinessException(BusinessErrorCodes.MENU_CATEGORY_ALREADY_EXISTS);
                 });
 
-        menuItemCategoryMapper.update(category, dto);
-        category.setName(newName); // ensure trimmed name
-
+        category.setName(newName);
         return menuItemCategoryMapper.toDto(menuItemCategoryRepository.save(category));
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(UUID branchId, UUID id) {
         MenuItemCategory category = menuItemCategoryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Category not found"));
 
+        if (!category.getBranch().getId().equals(branchId)) {
+            throw new BusinessException(BusinessErrorCodes.NOT_AUTHORIZED_FOR_BRANCH);
+        }
+
         if (!category.getMenuItems().isEmpty()) {
-            throw new IllegalStateException("Cannot delete category while it has menu items assigned.");
+            throw new BusinessException(BusinessErrorCodes.MENU_CATEGORY_IN_USE);
         }
 
         menuItemCategoryRepository.delete(category);

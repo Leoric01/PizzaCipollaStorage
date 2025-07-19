@@ -9,11 +9,11 @@ import java.util.UUID;
 
 @Service
 public interface MenuItemCategoryService {
-    List<MenuItemCategoryResponseDto> findAll();
+    List<MenuItemCategoryResponseDto> findAll(UUID branchId);
 
-    MenuItemCategoryResponseDto add(MenuItemCategoryCreateDto dto);
+    MenuItemCategoryResponseDto add(UUID branchId, MenuItemCategoryCreateDto dto);
 
-    MenuItemCategoryResponseDto update(UUID id, MenuItemCategoryCreateDto dto);
+    MenuItemCategoryResponseDto update(UUID branchId, UUID id, MenuItemCategoryCreateDto dto);
 
-    void delete(UUID id);
+    void delete(UUID branchId, UUID id);
 }
