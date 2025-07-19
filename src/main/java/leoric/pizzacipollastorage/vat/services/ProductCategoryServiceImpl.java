@@ -3,6 +3,10 @@ package leoric.pizzacipollastorage.vat.services;
 import jakarta.persistence.EntityNotFoundException;
 import leoric.pizzacipollastorage.DTOs.ProductCategory.ProductCategoryCreateDto;
 import leoric.pizzacipollastorage.DTOs.ProductCategory.ProductCategoryResponseDto;
+import leoric.pizzacipollastorage.branch.models.Branch;
+import leoric.pizzacipollastorage.branch.repositories.BranchRepository;
+import leoric.pizzacipollastorage.handler.BusinessErrorCodes;
+import leoric.pizzacipollastorage.handler.exceptions.BusinessException;
 import leoric.pizzacipollastorage.mapstruct.IngredientMapper;
 import leoric.pizzacipollastorage.vat.dtos.VatRateShortDto;
 import leoric.pizzacipollastorage.vat.models.ProductCategory;
@@ -23,42 +27,47 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ProductCategoryServiceImpl implements ProductCategoryService {
 
+    private final BranchRepository branchRepository;
     private final ProductCategoryRepository productCategoryRepository;
     private final VatRateRepository vatRateRepository;
     private final IngredientMapper ingredientMapper;
 
     @Override
-    public ProductCategoryResponseDto addProductCategory(ProductCategoryCreateDto dto) {
+    public ProductCategoryResponseDto addProductCategory(UUID branchId, ProductCategoryCreateDto dto) {
         String normalizedName = dto.getName().trim().toUpperCase();
 
-        productCategoryRepository.findByNameIgnoreCase(normalizedName).ifPresent(existing -> {
-            throw new IllegalArgumentException("Kategorie s názvem '" + dto.getName() + "' již existuje.");
-        });
+        Branch branch = branchRepository.findById(branchId)
+                .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
 
-        UUID vatRateId = dto.getVatRate().getId();
-        VatRate vatRate = vatRateRepository.findById(vatRateId)
-                .orElseThrow(() -> new EntityNotFoundException("DPH sazba s ID " + vatRateId + " nenalezena."));
+        productCategoryRepository.findByNameIgnoreCaseAndBranchId(normalizedName, branchId)
+                .ifPresent(existing -> {
+                    throw new BusinessException(BusinessErrorCodes.CATEGORY_ALREADY_EXISTS);
+                });
+
+        VatRate vatRate = vatRateRepository.findById(dto.getVatId())
+                .orElseThrow(() -> new EntityNotFoundException("DPH sazba nenalezena."));
 
         ProductCategory category = ProductCategory.builder()
                 .name(normalizedName)
                 .vatRate(vatRate)
+                .branch(branch)
                 .build();
 
-        ProductCategory saved = productCategoryRepository.save(category);
-        return mapToResponse(saved);
+        return mapToResponse(productCategoryRepository.save(category));
     }
 
     @Override
-    public List<ProductCategoryResponseDto> getAllCategories() {
-        return productCategoryRepository.findAll().stream()
+    public List<ProductCategoryResponseDto> getAllCategories(UUID branchId) {
+        return productCategoryRepository.findAllByBranchId(branchId).stream()
                 .map(this::mapToResponse)
                 .toList();
     }
 
     @Override
     public ProductCategoryResponseDto getProductCategoryById(UUID id) {
-        ProductCategory productCategory = productCategoryRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("DPH sazba s ID " + id + " nenalezena."));
-        return ingredientMapper.toDto(productCategory);
+        ProductCategory category = productCategoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Kategorie nenalezena."));
+        return ingredientMapper.toDto(category);
     }
 
     private ProductCategoryResponseDto mapToResponse(ProductCategory category) {

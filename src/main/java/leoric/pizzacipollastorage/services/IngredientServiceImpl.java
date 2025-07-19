@@ -50,7 +50,7 @@ public class IngredientServiceImpl implements IngredientService {
     private final IngredientAliasService ingredientAliasService;
 
     @Override
-    public IngredientResponseDto updateIngredient(UUID id, IngredientCreateDto dto) {
+    public IngredientResponseDto updateIngredient(UUID branchId, UUID id, IngredientCreateDto dto) {
         Ingredient existing = ingredientRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Ingredient not found: " + id));
 
@@ -60,7 +60,7 @@ public class IngredientServiceImpl implements IngredientService {
         }
 
         ProductCategory category = productCategoryRepository
-                .findByNameIgnoreCase(dto.getProductCategory())
+                .findByNameIgnoreCaseAndBranchId(dto.getProductCategory(), branchId)
                 .orElseThrow(() -> new IllegalArgumentException("Category not found: " + dto.getProductCategory()));
 
         ingredientMapper.update(existing, dto);
@@ -71,7 +71,7 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public void deleteById(UUID id) {
+    public void deleteById(UUID branchId, UUID id) {
         Ingredient ingredient = ingredientRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Ingredient with id " + id + " not found"));
 
@@ -88,7 +88,7 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public IngredientResponseDto createIngredient(IngredientCreateDto dto) {
+    public IngredientResponseDto createIngredient(UUID branchId, IngredientCreateDto dto) {
         if (ingredientRepository.existsByName(dto.getName())) {
             throw new DuplicateIngredientNameException("Ingredient with name '" + dto.getName() + "' already exists");
         }
@@ -106,7 +106,7 @@ public class IngredientServiceImpl implements IngredientService {
 
         // Find or create product category
         ProductCategory category = productCategoryRepository
-                .findByNameIgnoreCase(categoryName)
+                .findByNameIgnoreCaseAndBranchId(categoryName, branchId)
                 .orElseGet(() -> productCategoryRepository.save(
                         ProductCategory.builder()
                                 .name(categoryName)
@@ -117,6 +117,12 @@ public class IngredientServiceImpl implements IngredientService {
         ingredient.setProductCategory(category);
         Ingredient saved = ingredientRepository.save(ingredient);
         return ingredientMapper.toDto(saved);
+    }
+
+    @Override
+    public List<IngredientResponseDto> getAllIngredients(UUID branchId) {
+        List<Ingredient> ingredients = ingredientRepository.findAll();
+        return ingredientMapper.toDtoList(ingredients);
     }
 
     @Override
@@ -184,12 +190,6 @@ public class IngredientServiceImpl implements IngredientService {
 
         // 3. Poslední možnost: default fallback
         return 1f;
-    }
-
-    @Override
-    public List<IngredientResponseDto> getAllIngredients() {
-        List<Ingredient> ingredients = ingredientRepository.findAll();
-        return ingredientMapper.toDtoList(ingredients);
     }
 
     @Override

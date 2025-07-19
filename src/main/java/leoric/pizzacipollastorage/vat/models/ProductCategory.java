@@ -1,6 +1,7 @@
 package leoric.pizzacipollastorage.vat.models;
 
 import jakarta.persistence.*;
+import leoric.pizzacipollastorage.branch.models.Branch;
 import leoric.pizzacipollastorage.models.Ingredient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,4 +33,8 @@ public class ProductCategory {
 
     @OneToMany(mappedBy = "productCategory")
     private List<Ingredient> ingredients;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "branch_id", nullable = false)
+    private Branch branch;
 }

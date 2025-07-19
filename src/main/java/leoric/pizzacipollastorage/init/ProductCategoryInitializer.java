@@ -1,8 +1,6 @@
 package leoric.pizzacipollastorage.init;
 
 import jakarta.annotation.PostConstruct;
-import leoric.pizzacipollastorage.vat.models.ProductCategory;
-import leoric.pizzacipollastorage.vat.models.VatRate;
 import leoric.pizzacipollastorage.vat.repositories.ProductCategoryRepository;
 import leoric.pizzacipollastorage.vat.repositories.VatRateRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,16 +25,16 @@ public class ProductCategoryInitializer {
     }
 
     private void insert(String name, UUID vatRateId) {
-        if (productCategoryRepository.findByNameIgnoreCase(name).isEmpty()) {
-            VatRate vatRate = vatRateRepository.findById(vatRateId)
-                    .orElseThrow(() -> new IllegalStateException("Missing default VAT rate for category"));
-
-            ProductCategory category = ProductCategory.builder()
-                    .name(name)
-                    .vatRate(vatRate)
-                    .build();
-
-            productCategoryRepository.save(category);
-        }
+//        if (productCategoryRepository.findByNameIgnoreCase(name).isEmpty()) {
+//            VatRate vatRate = vatRateRepository.findById(vatRateId)
+//                    .orElseThrow(() -> new IllegalStateException("Missing default VAT rate for category"));
+//
+//            ProductCategory category = ProductCategory.builder()
+//                    .name(name)
+//                    .vatRate(vatRate)
+//                    .build();
+//
+//            productCategoryRepository.save(category);
+//        }
     }
 }

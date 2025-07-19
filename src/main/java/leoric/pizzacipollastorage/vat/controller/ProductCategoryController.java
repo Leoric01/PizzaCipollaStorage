@@ -18,15 +18,17 @@ public class ProductCategoryController {
 
     private final ProductCategoryService productCategoryService;
 
-    @PostMapping
-    public ResponseEntity<ProductCategoryResponseDto> createCategory(@RequestBody ProductCategoryCreateDto dto) {
-        ProductCategoryResponseDto created = productCategoryService.addProductCategory(dto);
+    @PostMapping("/{branchId}")
+    public ResponseEntity<ProductCategoryResponseDto> createCategory(
+            @PathVariable UUID branchId,
+            @RequestBody ProductCategoryCreateDto dto) {
+        ProductCategoryResponseDto created = productCategoryService.addProductCategory(branchId, dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<ProductCategoryResponseDto>> getAllCategories() {
-        return ResponseEntity.ok(productCategoryService.getAllCategories());
+    @GetMapping("/{branchId}")
+    public ResponseEntity<List<ProductCategoryResponseDto>> getAllCategories(@PathVariable UUID branchId) {
+        return ResponseEntity.ok(productCategoryService.getAllCategories(branchId));
     }
 
     @GetMapping

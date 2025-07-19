@@ -23,6 +23,8 @@ public enum BusinessErrorCodes {
     BRANCH_ALREADY_ACCESSIBLE(312, CONFLICT, "User already has access to this branch"),
     BRANCH_ACCESS_REQUEST_ALREADY_PENDING(313, CONFLICT, "There is already a pending access request for this user and branch"),
     NOT_AUTHORIZED_FOR_BRANCH(314, FORBIDDEN, "You are not authorized to manage this branch"),
+    CATEGORY_ALREADY_EXISTS(316, CONFLICT, "Category with this name already exists for this branch"),
+
     REQUEST_ALREADY_RESOLVED(315, CONFLICT, "This access request has already been resolved"),
 
     EMAIL_ALREADY_IN_USE(305, CONFLICT, "Email is already in use");

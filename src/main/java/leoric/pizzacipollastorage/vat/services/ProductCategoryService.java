@@ -8,9 +8,9 @@ import java.util.UUID;
 
 public interface ProductCategoryService {
 
-    ProductCategoryResponseDto addProductCategory(ProductCategoryCreateDto dto);
+    ProductCategoryResponseDto addProductCategory(UUID branchId, ProductCategoryCreateDto dto);
 
-    List<ProductCategoryResponseDto> getAllCategories();
+    List<ProductCategoryResponseDto> getAllCategories(UUID branchId);
 
     ProductCategoryResponseDto getProductCategoryById(UUID id);
 }

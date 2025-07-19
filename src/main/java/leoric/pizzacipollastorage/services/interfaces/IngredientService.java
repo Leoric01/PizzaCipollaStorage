@@ -14,17 +14,18 @@ import java.util.UUID;
 
 @Service
 public interface IngredientService {
-    IngredientResponseDto createIngredient(IngredientCreateDto dto);
+    IngredientResponseDto createIngredient(UUID branchId, IngredientCreateDto dto);
+
+    IngredientResponseDto updateIngredient(UUID branchId, UUID id, IngredientCreateDto dto);
+
+    List<IngredientResponseDto> getAllIngredients(UUID branchId);
+
+    void deleteById(UUID branchId, UUID id);
 
     InventoryStatus checkInventoryStatus(Ingredient ingredient);
-
-    List<IngredientResponseDto> getAllIngredients();
 
     Optional<IngredientAliasOverviewDto> getAliasOverviewByName(String inputName);
 
     PurchaseOrder generateAutoPurchaseOrder();
 
-    IngredientResponseDto updateIngredient(UUID id, IngredientCreateDto dto);
-
-    void deleteById(UUID id);
 }

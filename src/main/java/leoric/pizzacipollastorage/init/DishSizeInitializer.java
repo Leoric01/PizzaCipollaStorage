@@ -15,8 +15,8 @@ public class DishSizeInitializer {
 
     @PostConstruct
     public void insertDefaultDishSizes() {
-        createIfNotExists("mala", 1.0f, true);
-        createIfNotExists("Velká", 1.7f);
+//        createIfNotExists("mala", 1.0f, true);
+//        createIfNotExists("Velká", 1.7f);
     }
 
     private void createIfNotExists(String name, float factor) {
