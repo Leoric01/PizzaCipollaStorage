@@ -1,188 +1,53 @@
-### Create VAT Rates
-POST http://localhost:8080/api/vat-rates
-Content-Type: application/json
-
-{
-  "name": "dph - snizena",
-  "rate": 0.11
-}
-
-###
-// @sleep 30
-
-POST http://localhost:8080/api/vat-rates
-Content-Type: application/json
-
-{
-  "name": "dph - potraviny",
-  "rate": 0.15
-}
-
-###
-// @sleep 30
-
-POST http://localhost:8080/api/vat-rates
-Content-Type: application/json
-
-{
-  "name": "dph - standartni",
-  "rate": 0.21
-}
-
-### Create default dish size (Base)
-// @sleep 30
-POST http://localhost:8080/api/dish-sizes
-Content-Type: application/json
-
-{
-  "name": "mala/base",
-  "factor": 1.0
-}
-
-###
-// @sleep 30
-POST http://localhost:8080/api/dish-sizes
-Content-Type: application/json
-
-{
-  "name": "Velká",
-  "factor": 1.7
-}
-
-
-### Create Ingredients
-// @sleep 30
-POST http://localhost:8080/api/ingredients
-Content-Type: application/json
-
-{
-  "name": "Mouka",
-  "unit": "kg",
-  "lossCleaningFactor": 0.05,
-  "lossUsageFactor": 0.02,
-  "vatRateId": 1
-}
-
-###
-// @sleep 30
-
-###
-POST http://localhost:8080/api/ingredients
-Content-Type: application/json
-
-{
-  "name": "Mozzarella",
-  "unit": "g",
-  "lossCleaningFactor": 0.01,
-  "lossUsageFactor": 0.03,
-  "vatRateId": 1
-}
-
-###
-// @sleep 30
-
-###
-POST http://localhost:8080/api/ingredients
-Content-Type: application/json
-
-{
-  "name": "Rajčatová omáčka",
-  "unit": "g",
-  "lossCleaningFactor": 0.0,
-  "lossUsageFactor": 0.05,
-  "vatRateId": 1
-}
-
-###
-// @sleep 30
-
-###
-POST http://localhost:8080/api/ingredients
-Content-Type: application/json
-
-{
-  "name": "Bazalka",
-  "unit": "g",
-  "lossCleaningFactor": 0.1,
-  "lossUsageFactor": 0.1,
-  "vatRateId": 1
-}
-
-###
-// @sleep 30
-
-###
-POST http://localhost:8080/api/ingredients
-Content-Type: application/json
-
-{
-  "name": "Šunka",
-  "unit": "g",
-  "lossCleaningFactor": 0.15,
-  "lossUsageFactor": 0.1,
-  "vatRateId": 1
-}
-
-
 ### Přidání více aliasů najednou
 POST http://localhost:8080/api/ingredient-aliases/batch
 Content-Type: application/json
 
 [
-  { "aliasName": "rajčatova omacka", "ingredientId": 3 },
-  { "aliasName": "rajcatová", "ingredientId": 3 },
-  { "aliasName": "rajcatova", "ingredientId": 3 },
-  { "aliasName": "sugo", "ingredientId": 3 },
-  { "aliasName": "sugo di pomodoro", "ingredientId": 3 },
-  { "aliasName": "paradajkova omacka", "ingredientId": 3 },
-  { "aliasName": "paradajkova", "ingredientId": 3 },
-  { "aliasName": "tomato sauce", "ingredientId": 3 },
-  { "aliasName": "omacka z rajcat", "ingredientId": 3 },
-  { "aliasName": "z rajcat", "ingredientId": 3 }
+  {
+    "aliasName": "rajčatova omacka",
+    "ingredientId": "5b5cd5e5-b53a-4977-8ad8-ae0c7d5008c4"
+  },
+  {
+    "aliasName": "rajcatová",
+    "ingredientId": "5b5cd5e5-b53a-4977-8ad8-ae0c7d5008c4"
+  },
+  {
+    "aliasName": "rajcatova",
+    "ingredientId": "5b5cd5e5-b53a-4977-8ad8-ae0c7d5008c4"
+  },
+  {
+    "aliasName": "sugo",
+    "ingredientId": "5b5cd5e5-b53a-4977-8ad8-ae0c7d5008c4"
+  },
+  {
+    "aliasName": "sugo di pomodoro",
+    "ingredientId": "5b5cd5e5-b53a-4977-8ad8-ae0c7d5008c4"
+  },
+  {
+    "aliasName": "paradajkova omacka",
+    "ingredientId": "5b5cd5e5-b53a-4977-8ad8-ae0c7d5008c4"
+  },
+  {
+    "aliasName": "paradajkova",
+    "ingredientId": "5b5cd5e5-b53a-4977-8ad8-ae0c7d5008c4"
+  },
+  {
+    "aliasName": "tomato sauce",
+    "ingredientId": "5b5cd5e5-b53a-4977-8ad8-ae0c7d5008c4"
+  },
+  {
+    "aliasName": "omacka z rajcat",
+    "ingredientId": "5b5cd5e5-b53a-4977-8ad8-ae0c7d5008c4"
+  },
+  {
+    "aliasName": "z rajcat",
+    "ingredientId": "5b5cd5e5-b53a-4977-8ad8-ae0c7d5008c4"
+  }
 ]
 
-### Create Pizza
-// @sleep 30
-POST http://localhost:8080/api/pizzas
-Content-Type: application/json
-
-{
-  "name": "Margherita",
-  "description": "Klasická pizza s rajčatovou omáčkou a mozzarellou"
-}
-
-###
-// @sleep 30
-
-###
-POST http://localhost:8080/api/pizzas
-Content-Type: application/json
-
-{
-  "name": "Prosciutto",
-  "description": "Pizza se šunkou, rajčatovou omáčkou a mozzarellou"
-}
-###
-// @sleep 30
-POST http://localhost:8080/api/pizzas
-Content-Type: application/json
-
-{
-"name": "Funghi",
-"description": "Pizza se šunkou, rajčatovou omáčkou a mozzarellou"
-}
-###
-// @sleep 30
-POST http://localhost:8080/api/pizzas
-Content-Type: application/json
-
-{
-  "name": "Vesuvio",
-  "description": "Pizza se šunkou, rajčatovou omáčkou a mozzarellou"
-}
 ### Add Ingredients to Pizzas (Recipes)
 // @sleep 30
-POST http://localhost:8080/api/pizzas/recipes
+POST http://localhost:8080/api/menu-items/recipes
 Content-Type: application/json
 
 {
@@ -195,7 +60,7 @@ Content-Type: application/json
 // @sleep 30
 
 ###
-POST http://localhost:8080/api/pizzas/recipes
+POST http://localhost:8080/api/menu-items/recipes
 Content-Type: application/json
 
 {
@@ -208,7 +73,7 @@ Content-Type: application/json
 // @sleep 30
 
 ###
-POST http://localhost:8080/api/pizzas/recipes
+POST http://localhost:8080/api/menu-items/recipes
 Content-Type: application/json
 
 {
@@ -220,7 +85,7 @@ Content-Type: application/json
 ###
 // @sleep 30
 ###
-POST http://localhost:8080/api/pizzas/recipes
+POST http://localhost:8080/api/menu-items/recipes
 Content-Type: application/json
 
 {
@@ -232,7 +97,7 @@ Content-Type: application/json
 ###
 // @sleep 30
 ###
-POST http://localhost:8080/api/pizzas/recipes
+POST http://localhost:8080/api/menu-items/recipes
 Content-Type: application/json
 
 {
@@ -244,7 +109,7 @@ Content-Type: application/json
 ###
 // @sleep 30
 ###
-POST http://localhost:8080/api/pizzas/recipes
+POST http://localhost:8080/api/menu-items/recipes
 Content-Type: application/json
 
 {
@@ -256,7 +121,7 @@ Content-Type: application/json
 ###
 // @sleep 30
 ###
-POST http://localhost:8080/api/pizzas/recipes
+POST http://localhost:8080/api/menu-items/recipes
 Content-Type: application/json
 
 {
@@ -268,129 +133,11 @@ Content-Type: application/json
 ###
 // @sleep 30
 ###
-POST http://localhost:8080/api/pizzas/recipes
+POST http://localhost:8080/api/menu-items/recipes
 Content-Type: application/json
 
 {
   "pizzaId": 2,
   "ingredientId": 5,
   "quantity": 90
-}
-
-### Bulk Add Recipe to Pizza
-// @sleep 30
-POST http://localhost:8080/api/pizzas/recipes/bulk
-Content-Type: application/json
-
-{
-  "pizzaName": "Vesuvio",
-  "dishSizeId": 1,
-  "ingredients": [
-    { "ingredientName": "Mouka", "quantity": 0.25 },
-    { "ingredientName": "Mozzarella", "quantity": 110 },
-    { "ingredientName": "Rajčatová omáčka", "quantity": 80 },
-    { "ingredientName": "Šunka", "quantity": 100 }
-  ]
-}
-###
-// @sleep 30
-POST http://localhost:8080/api/pizzas/recipes/bulk
-Content-Type: application/json
-
-{
-  "pizzaName": "Funghi",
-  "dishSizeId": 1,
-  "ingredients": [
-    { "ingredientName": "Mouka", "quantity": 0.25 },
-    { "ingredientName": "Mozzarella", "quantity": 110 },
-    { "ingredientName": "Rajčatová omáčka", "quantity": 80 },
-    { "ingredientName": "Žampiony", "quantity": 120 }
-  ]
-}
-### Create Inventory Snapshots
-// @sleep 30
-POST http://localhost:8080/api/inventory/snapshot
-Content-Type: application/json
-
-{
-  "ingredientId": 1,
-  "timestamp": "31/05/2025 14",
-  "measuredQuantity": 100.0,
-  "note": "Start",
-  "form": "RAW"
-}
-
-###
-// @sleep 30
-###
-POST http://localhost:8080/api/inventory/snapshot
-Content-Type: application/json
-
-{
-  "ingredientId": 2,
-  "timestamp": "31/05/2025 14",
-  "measuredQuantity": 5000.0,
-  "note": "Start",
-  "form": "PREPARED"
-}
-
-###
-// @sleep 30
-###
-POST http://localhost:8080/api/inventory/snapshot
-Content-Type: application/json
-
-{
-  "ingredientId": 3,
-  "timestamp": "31/05/2025 14",
-  "measuredQuantity": 3000.0,
-  "note": "Start",
-  "form": "PREPARED"
-}
-
-###
-// @sleep 30
-###
-POST http://localhost:8080/api/inventory/snapshot
-Content-Type: application/json
-
-{
-  "ingredientId": 4,
-  "timestamp": "31/05/2025 14",
-  "measuredQuantity": 200.0,
-  "note": "Start",
-  "form": "RAW"
-}
-
-###
-// @sleep 30
-###
-POST http://localhost:8080/api/inventory/snapshot
-Content-Type: application/json
-
-{
-  "ingredientId": 5,
-  "timestamp": "31/05/2025 14",
-  "measuredQuantity": 4000.0,
-  "note": "Start",
-  "form": "PREPARED"
-}
-
-### Přidání dodavatele
-// @sleep 30
-POST http://localhost:8080/api/suppliers
-Content-Type: application/json
-
-{
-  "name": "Nowaco s.r.o.",
-  "contactInfo": "kontakt@nowaco.cz"
-}
-
-###
-POST http://localhost:8080/api/suppliers
-Content-Type: application/json
-
-{
-  "name": "Cortelazzi s.r.o.",
-  "contactInfo": "kontakt@cortellazi.cz"
 }

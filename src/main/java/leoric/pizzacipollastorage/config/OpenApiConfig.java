@@ -6,9 +6,9 @@ import org.springframework.context.annotation.Configuration;
 
 @OpenAPIDefinition(
         info = @Info(
-                title = "Pizza ERP API",
+                title = "Gastro Inventory ERP API",
                 version = "1.0",
-                description = "Swagger dokumentace pro Pizza ERP backend"
+                description = "Swagger dokumentace pro Gastro Inventory ERP backend"
         )
 )
 @Configuration

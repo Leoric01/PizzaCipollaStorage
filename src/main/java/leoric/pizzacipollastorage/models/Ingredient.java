@@ -1,9 +1,17 @@
 package leoric.pizzacipollastorage.models;
 
 import jakarta.persistence.*;
-import lombok.*;
+import leoric.pizzacipollastorage.branch.models.Branch;
+import leoric.pizzacipollastorage.inventory.models.InventorySnapshot;
+import leoric.pizzacipollastorage.vat.models.ProductCategory;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -11,18 +19,20 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Ingredient {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @UuidGenerator(style = UuidGenerator.Style.AUTO)
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID id;
 
     private String name;
     private String unit;
     private float lossCleaningFactor;
     private float lossUsageFactor;
 
-    @ManyToOne
-    @JoinColumn(name = "vat_rate_id")
-    private VatRate vatRate;
+    private Float preferredFullStockLevel;
+    private Float warningStockLevel;
+    private Float minimumStockLevel;
 
     @OneToMany(mappedBy = "ingredient")
     private List<IngredientPrice> prices;
@@ -35,4 +45,12 @@ public class Ingredient {
 
     @OneToMany(mappedBy = "ingredient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<IngredientAlias> aliases;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "product_category_id")
+    private ProductCategory productCategory;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "branch_id", nullable = false)
+    private Branch branch;
 }

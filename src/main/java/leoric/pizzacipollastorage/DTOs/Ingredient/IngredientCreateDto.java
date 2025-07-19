@@ -8,5 +8,9 @@ public class IngredientCreateDto {
     private String unit;
     private float lossCleaningFactor;
     private float lossUsageFactor;
-    private Long vatRateId;
+    private String productCategory;
+
+    private Float preferredFullStockLevel;
+    private Float warningStockLevel;
+    private Float minimumStockLevel;
 }

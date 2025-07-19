@@ -1,7 +1,13 @@
 package leoric.pizzacipollastorage.models;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UuidGenerator;
+
+import java.util.UUID;
 
 @Entity
 @Data
@@ -10,20 +16,28 @@ import lombok.*;
 @Builder
 public class RecipeIngredient {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @UuidGenerator(style = UuidGenerator.Style.AUTO)
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "pizza_id")
-    private Pizza pizza;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "menu_item_id", nullable = false)
+    private MenuItem menuItem;
 
-    @ManyToOne
-    @JoinColumn(name = "ingredient_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "ingredient_id", nullable = false)
     private Ingredient ingredient;
 
-    @ManyToOne
-    @JoinColumn(name = "dish_size_id")
-    private DishSize dishSize;
-
+    /**
+     * Množství v jednotce ingredience – buď absolutní, nebo základní, dle autoScale.
+     */
     private Float quantity;
+
+    /**
+     * Má se množství automaticky vynásobit `dishSize.defaultFactor`?
+     * true = quantity je pro základní velikost, přepočítá se
+     * false = quantity je pro konkrétní velikost (ručně)
+     */
+    @Builder.Default
+    private boolean autoScaleWithDishSize = true;
 }

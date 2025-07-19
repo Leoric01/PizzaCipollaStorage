@@ -1,10 +1,10 @@
 ### Create Pizza Sale
-POST http://localhost:8080/api/pizza-sales
+POST http://localhost:8080/api/menuitems-sales
 Content-Type: application/json
 
 {
-  "pizzaId": 1,
-  "dishSizeId": 1,
+  "menuItemId": "6e7aab5c-094d-4270-9fe1-dd63d0b5266c",
+  "dishSizeId": "bdda6903-ee0d-4cfd-9d2f-97b8c8a79b7f",
   "quantitySold": 10,
   "cookName": "Karel"
 }
@@ -32,7 +32,7 @@ Content-Type: application/json
       "unitPriceWithoutTax": 0.26
     },
     {
-      "ingredientName": "Rajčatová omáčka",
+      "ingredientName": "Sugo",
       "quantity": 3000.0,
       "unitPriceWithoutTax": 0.18
     },

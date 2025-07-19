@@ -7,8 +7,14 @@ GET http://localhost:8080/api/ingredients
 ### Get current inventory status
 GET http://localhost:8080/api/inventory/current-status
 
-### Get all pizzas
-GET http://localhost:8080/api/pizzas
+### Get all MenuItems
+GET http://localhost:8080/api/menu-items
+
+### Get MenuItem by id
+GET http://localhost:8080/api/menu-items/fab0e5d6-d6dc-422c-9469-70ff21a75656
+
+### Get MenuItem by name
+GET http://localhost:8080/api/menu-items/name/Diavola
 
 ### Get All Dish Sizes
 GET http://localhost:8080/api/dish-sizes
@@ -24,3 +30,12 @@ GET http://localhost:8080/api/ingredients/by-name/sugo
 
 ### Neexistující ingredience
 GET http://localhost:8080/api/ingredients/by-name/neexistujici
+
+### Zobrazit vsechny pobocky
+GET http://localhost:8080/api/branches
+
+### Zobrazit vsechny pujcky zbozi in/out
+GET http://localhost:8080/api/loans
+
+### Get All Product Categories
+GET http://localhost:8080/api/product-categories/all

@@ -6,14 +6,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public interface IngredientAliasService {
     IngredientAliasDto addAlias(IngredientAliasDto aliasDto);
 
-    List<IngredientAliasDto> getAliasesByIngredientId(Long ingredientId);
+    List<IngredientAliasDto> getAliasesByIngredientId(UUID ingredientId);
 
-    void deleteAlias(Long aliasId);
+    void deleteAlias(UUID aliasId);
 
     Optional<Ingredient> findIngredientByNameFlexible(String inputName);
 }

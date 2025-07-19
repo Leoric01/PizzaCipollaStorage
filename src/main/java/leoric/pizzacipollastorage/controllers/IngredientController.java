@@ -1,7 +1,5 @@
 package leoric.pizzacipollastorage.controllers;
 
-import jakarta.persistence.EntityNotFoundException;
-import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientAlias.IngredientAliasOverviewDto;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientCreateDto;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientResponseDto;
 import leoric.pizzacipollastorage.services.interfaces.IngredientService;
@@ -10,27 +8,48 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/ingredients")
+@RequestMapping("/api/ingredients/{branchId}")
 @RequiredArgsConstructor
 public class IngredientController {
     private final IngredientService ingredientService;
 
     @PostMapping
-    public ResponseEntity<IngredientResponseDto> createIngredient(@RequestBody IngredientCreateDto dto) {
-        return ResponseEntity.ok(ingredientService.createIngredient(dto));
+    public ResponseEntity<IngredientResponseDto> createIngredient(
+            @PathVariable UUID branchId,
+            @RequestBody IngredientCreateDto dto
+    ) {
+        return ResponseEntity.ok(ingredientService.createIngredient(branchId, dto));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<IngredientResponseDto> updateIngredientById(
+            @PathVariable UUID branchId,
+            @PathVariable UUID id,
+            @RequestBody IngredientCreateDto dto
+    ) {
+        return ResponseEntity.ok(ingredientService.updateIngredient(branchId, id, dto));
     }
 
     @GetMapping
-    public ResponseEntity<List<IngredientResponseDto>> getAllIngredients() {
-        return ResponseEntity.ok(ingredientService.getAllIngredients());
+    public ResponseEntity<List<IngredientResponseDto>> getAllIngredients(
+            @PathVariable UUID branchId
+    ) {
+        return ResponseEntity.ok(ingredientService.getAllIngredients(branchId));
     }
 
-    @GetMapping("/by-name/{name}")
-    public ResponseEntity<IngredientAliasOverviewDto> getAliasOverviewByName(@PathVariable String name) {
-        return ingredientService.getAliasOverviewByName(name)
-                .map(ResponseEntity::ok)
-                .orElseThrow(() -> new EntityNotFoundException("Ingredient not found for name or alias: " + name));
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteIngredientById(@PathVariable UUID branchId, @PathVariable UUID id) {
+        ingredientService.deleteById(branchId, id);
+        return ResponseEntity.noContent().build();
     }
+
+    //    @GetMapping("/by-name/{name}")
+//    public ResponseEntity<IngredientAliasOverviewDto> getAliasOverviewByName(@PathVariable String name) {
+//        return ingredientService.getAliasOverviewByName(name)
+//                .map(ResponseEntity::ok)
+//                .orElseThrow(() -> new EntityNotFoundException("Ingredient not found for name or alias: " + name));
+//    }
 }

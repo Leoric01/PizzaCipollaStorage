@@ -19,6 +19,20 @@ import static org.springframework.http.HttpStatus.*;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(IngredientInUseException.class)
+    public ResponseEntity<ExceptionResponse> handleIngredientInUseException(IngredientInUseException ex) {
+        log.warn("Ingredient in use: {}", ex.getMessage());
+        return ResponseEntity
+                .status(CONFLICT)
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorCode(BusinessErrorCodes.INGREDIENT_IN_USE_IN_MENUITEM.getCode())
+                                .businessErrorDescription(BusinessErrorCodes.INGREDIENT_IN_USE_IN_MENUITEM.getDescription())
+                                .error(ex.getMessage())
+                                .build()
+                );
+    }
+
     @ExceptionHandler(EmailAlreadyInUseException.class)
     public ResponseEntity<ExceptionResponse> handleEmailAlreadyInUseException(EmailAlreadyInUseException ex) {
         log.warn("Email already in use: {}", ex.getMessage());
@@ -31,6 +45,29 @@ public class GlobalExceptionHandler {
                                 .error(ex.getMessage())
                                 .build()
                 );
+    }
+
+    @ExceptionHandler(InsufficientRoleException.class)
+    public ResponseEntity<ExceptionResponse> handleBusinessException(InsufficientRoleException ex) {
+        return ResponseEntity
+                .status(FORBIDDEN)
+                .body(ExceptionResponse.builder()
+                        .businessErrorCode(BusinessErrorCodes.BRANCH_CREATION_FORBIDDEN.getCode())
+                        .businessErrorDescription(BusinessErrorCodes.BRANCH_CREATION_FORBIDDEN.getDescription())
+                        .error(ex.getMessage())
+                        .build());
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ExceptionResponse> handleBusinessException(BusinessException ex) {
+        BusinessErrorCodes code = ex.getErrorCode();
+        return ResponseEntity
+                .status(code.getHttpStatus())
+                .body(ExceptionResponse.builder()
+                        .businessErrorCode(code.getCode())
+                        .businessErrorDescription(code.getDescription())
+                        .error(ex.getMessage())
+                        .build());
     }
 
     @ExceptionHandler(DuplicateIngredientNameException.class)
@@ -101,7 +138,7 @@ public class GlobalExceptionHandler {
 //    @ExceptionHandler(LockedException.class)
 //    public ResponseEntity<ExceptionResponse> handleException(LockedException exp) {
 //        return ResponseEntity
-//                .status(UNAUTHORIZED)
+//                .branchAccessRequestStatus(UNAUTHORIZED)
 //                .body(
 //                        ExceptionResponse.builder()
 //                                .businessErrorCode(ACCOUNT_LOCKED.getCode())
@@ -114,7 +151,7 @@ public class GlobalExceptionHandler {
 //    @ExceptionHandler(DisabledException.class)
 //    public ResponseEntity<ExceptionResponse> handleException(DisabledException exp) {
 //        return ResponseEntity
-//                .status(UNAUTHORIZED)
+//                .branchAccessRequestStatus(UNAUTHORIZED)
 //                .body(
 //                        ExceptionResponse.builder()
 //                                .businessErrorCode(ACCOUNT_DISABLED.getCode())
@@ -127,7 +164,7 @@ public class GlobalExceptionHandler {
 //    @ExceptionHandler(BadCredentialsException.class)
 //    public ResponseEntity<ExceptionResponse> handleException() {
 //        return ResponseEntity
-//                .status(UNAUTHORIZED)
+//                .branchAccessRequestStatus(UNAUTHORIZED)
 //                .body(
 //                        ExceptionResponse.builder()
 //                                .businessErrorCode(BAD_CREDENTIALS.getCode())

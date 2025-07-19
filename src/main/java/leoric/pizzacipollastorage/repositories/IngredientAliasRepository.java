@@ -6,9 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface IngredientAliasRepository extends JpaRepository<IngredientAlias, Long> {
-    List<IngredientAlias> findAllByIngredientId(Long ingredientId);
+public interface IngredientAliasRepository extends JpaRepository<IngredientAlias, UUID> {
+    List<IngredientAlias> findAllByIngredientId(UUID ingredientId);
     Optional<IngredientAlias> findByAliasNameIgnoreCase(String aliasName);
 }

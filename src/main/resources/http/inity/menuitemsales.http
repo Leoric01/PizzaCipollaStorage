@@ -1,0 +1,29 @@
+### Create MenuItem Sale
+POST http://localhost:8080/api/menuitems-sales
+Content-Type: application/json
+
+{
+  "pizzaId": 1,
+  "dishSizeId": 1,
+  "quantitySold": 10,
+  "cookName": "Karel"
+}
+
+### Create MenuItem Sale Bulk
+POST http://localhost:8080/api/menuitems-sales/bulk
+Content-Type: application/json
+
+[
+  {
+    "menuItemId": "07f78817-e30a-4565-81bb-89f3d55d34c5",
+    "dishSizeId": "806f73fb-ba2a-4a3e-b6d1-e544d3c8de71",
+    "quantitySold": 10,
+    "cookName": "Karel"
+  },
+  {
+    "menuItemId": "07f78817-e30a-4565-81bb-89f3d55d34c5",
+    "dishSizeId": "1fbbb956-4b1f-4571-8d33-949cbc956d48",
+    "quantitySold": 5,
+    "cookName": "Anna"
+  }
+]
