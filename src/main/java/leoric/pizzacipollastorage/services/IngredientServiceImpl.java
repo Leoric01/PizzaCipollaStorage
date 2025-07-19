@@ -4,6 +4,10 @@ import jakarta.persistence.EntityNotFoundException;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientAlias.IngredientAliasOverviewDto;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientCreateDto;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientResponseDto;
+import leoric.pizzacipollastorage.branch.models.Branch;
+import leoric.pizzacipollastorage.branch.repositories.BranchRepository;
+import leoric.pizzacipollastorage.handler.BusinessErrorCodes;
+import leoric.pizzacipollastorage.handler.exceptions.BusinessException;
 import leoric.pizzacipollastorage.handler.exceptions.DuplicateIngredientNameException;
 import leoric.pizzacipollastorage.handler.exceptions.IngredientInUseException;
 import leoric.pizzacipollastorage.inventory.models.InventorySnapshot;
@@ -39,6 +43,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class IngredientServiceImpl implements IngredientService {
 
+    private final BranchRepository branchRepository;
     private final IngredientRepository ingredientRepository;
     private final ProductCategoryRepository productCategoryRepository;
     private final InventorySnapshotRepository inventorySnapshotRepository;
@@ -55,7 +60,7 @@ public class IngredientServiceImpl implements IngredientService {
                 .orElseThrow(() -> new EntityNotFoundException("Ingredient not found: " + id));
 
         if (!existing.getName().equalsIgnoreCase(dto.getName()) &&
-            ingredientRepository.existsByName(dto.getName())) {
+            ingredientRepository.existsByNameIgnoreCaseAndBranchId(dto.getName(), branchId)) {
             throw new DuplicateIngredientNameException("Ingredient with name '" + dto.getName() + "' already exists");
         }
 
@@ -89,32 +94,37 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public IngredientResponseDto createIngredient(UUID branchId, IngredientCreateDto dto) {
-        if (ingredientRepository.existsByName(dto.getName())) {
-            throw new DuplicateIngredientNameException("Ingredient with name '" + dto.getName() + "' already exists");
+        String name = dto.getName().trim();
+
+        if (ingredientRepository.existsByNameIgnoreCaseAndBranchId(name, branchId)) {
+            throw new BusinessException(BusinessErrorCodes.DUPLICATE_INGREDIENT_NAME);
         }
 
-        Ingredient ingredient = ingredientMapper.toEntity(dto);
+        Branch branch = branchRepository.findById(branchId)
+                .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
 
-        String categoryName = (dto.getProductCategory() == null || dto.getProductCategory().isBlank())
-                ? "UNKNOWN"
-                : dto.getProductCategory();
-
-        // Load default VAT rate (dph - základní, ID = 000...001)
         UUID defaultVatRateId = UUID.fromString("00000000-0000-0000-0000-000000000001");
         VatRate defaultVatRate = vatRateRepository.findById(defaultVatRateId)
-                .orElseThrow(() -> new IllegalStateException("Default VAT rate (dph - základní) not found"));
+                .orElseThrow(() -> new IllegalStateException("Default VAT rate not found"));
 
-        // Find or create product category
+        String categoryName = dto.getProductCategory() == null || dto.getProductCategory().isBlank()
+                ? "UNKNOWN"
+                : dto.getProductCategory().trim().toUpperCase();
+
         ProductCategory category = productCategoryRepository
                 .findByNameIgnoreCaseAndBranchId(categoryName, branchId)
                 .orElseGet(() -> productCategoryRepository.save(
                         ProductCategory.builder()
                                 .name(categoryName)
                                 .vatRate(defaultVatRate)
+                                .branch(branch)
                                 .build()
                 ));
 
+        Ingredient ingredient = ingredientMapper.toEntity(dto);
+        ingredient.setBranch(branch);
         ingredient.setProductCategory(category);
+
         Ingredient saved = ingredientRepository.save(ingredient);
         return ingredientMapper.toDto(saved);
     }
