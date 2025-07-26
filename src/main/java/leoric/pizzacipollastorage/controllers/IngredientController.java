@@ -24,6 +24,14 @@ public class IngredientController {
         return ResponseEntity.ok(ingredientService.createIngredient(branchId, dto));
     }
 
+    @PostMapping("/bulk")
+    public ResponseEntity<List<IngredientResponseDto>> createIngredientsBulk(
+            @PathVariable UUID branchId,
+            @RequestBody List<IngredientCreateDto> dtos
+    ) {
+        return ResponseEntity.ok(ingredientService.createIngredientsBulk(branchId, dtos));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<IngredientResponseDto> updateIngredientById(
             @PathVariable UUID branchId,

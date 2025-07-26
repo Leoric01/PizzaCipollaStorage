@@ -33,6 +33,18 @@ public class GlobalExceptionHandler {
                 );
     }
 
+    @ExceptionHandler(IngredientNotInBranchException.class)
+    public ResponseEntity<ExceptionResponse> handleIngredientNotInBranch(IngredientNotInBranchException ex) {
+        return ResponseEntity
+                .status(FORBIDDEN)
+                .body(ExceptionResponse.builder()
+                        .businessErrorCode(BusinessErrorCodes.INGREDIENT_NOT_IN_BRANCH.getCode())
+                        .businessErrorDescription(BusinessErrorCodes.INGREDIENT_NOT_IN_BRANCH.getDescription())
+                        .error(ex.getMessage())
+                        .build());
+    }
+
+
     @ExceptionHandler(EmailAlreadyInUseException.class)
     public ResponseEntity<ExceptionResponse> handleEmailAlreadyInUseException(EmailAlreadyInUseException ex) {
         log.warn("Email already in use: {}", ex.getMessage());

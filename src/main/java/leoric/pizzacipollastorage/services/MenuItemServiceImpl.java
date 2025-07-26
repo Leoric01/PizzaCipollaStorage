@@ -5,6 +5,8 @@ import jakarta.transaction.Transactional;
 import leoric.pizzacipollastorage.DTOs.MenuItem.*;
 import leoric.pizzacipollastorage.branch.models.Branch;
 import leoric.pizzacipollastorage.branch.repositories.BranchRepository;
+import leoric.pizzacipollastorage.handler.BusinessErrorCodes;
+import leoric.pizzacipollastorage.handler.exceptions.BusinessException;
 import leoric.pizzacipollastorage.handler.exceptions.MissingQuantityException;
 import leoric.pizzacipollastorage.mapstruct.MenuItemMapper;
 import leoric.pizzacipollastorage.mapstruct.RecipeIngredientMapper;
@@ -176,18 +178,23 @@ public class MenuItemServiceImpl implements MenuItemService {
     @Override
     @Transactional
     public MenuItemResponseDto createMenuItemWithOptionalIngredients(UUID branchId, MenuItemFullCreateDto dto) {
+        Branch branch = branchRepository.findById(branchId)
+                .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
+
         MenuItem menuItem = new MenuItem();
         menuItem.setName(dto.getName());
         menuItem.setDescription(dto.getDescription());
         menuItem.setDishSize(dto.getSize());
-
-        Branch branch = branchRepository.findById(branchId)
-                .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
         menuItem.setBranch(branch);
 
         if (dto.getMenuItemCategoryId() != null) {
             MenuItemCategory category = menuItemCategoryRepository.findById(dto.getMenuItemCategoryId())
                     .orElseThrow(() -> new EntityNotFoundException("Category not found"));
+
+            if (!category.getBranch().getId().equals(branchId)) {
+                throw new BusinessException(BusinessErrorCodes.NOT_AUTHORIZED_FOR_BRANCH);
+            }
+
             menuItem.setCategory(category);
         }
 
@@ -197,8 +204,12 @@ public class MenuItemServiceImpl implements MenuItemService {
             Ingredient ingredient = ingredientRepository.findById(ingDto.getIngredientId())
                     .orElseThrow(() -> new EntityNotFoundException("Ingredient not found: " + ingDto.getIngredientId()));
 
+            if (!ingredient.getBranch().getId().equals(branchId)) {
+                throw new BusinessException(BusinessErrorCodes.INGREDIENT_NOT_IN_BRANCH);
+            }
+
             if (ingDto.getQuantity() == null) {
-                throw new MissingQuantityException("Missing quantity for ingredient ID: " + ingDto.getIngredientId());
+                throw new BusinessException(BusinessErrorCodes.MISSING_INGREDIENT_QUANTITY);
             }
 
             RecipeIngredient ri = new RecipeIngredient();
@@ -210,7 +221,6 @@ public class MenuItemServiceImpl implements MenuItemService {
         }
 
         menuItem.setRecipeIngredients(recipeIngredients);
-        recipeIngredients.forEach(ri -> ri.setMenuItem(menuItem));
 
         MenuItem saved = menuItemRepository.save(menuItem);
         return menuItemMapper.toDto(saved);

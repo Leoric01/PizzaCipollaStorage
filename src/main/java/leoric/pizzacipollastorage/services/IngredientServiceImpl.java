@@ -1,6 +1,7 @@
 package leoric.pizzacipollastorage.services;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientAlias.IngredientAliasOverviewDto;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientCreateDto;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientResponseDto;
@@ -33,6 +34,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -188,6 +190,50 @@ public class IngredientServiceImpl implements IngredientService {
         order.setItems(items);
 
         return order;
+    }
+
+    @Override
+    @Transactional
+    public List<IngredientResponseDto> createIngredientsBulk(UUID branchId, List<IngredientCreateDto> dtos) {
+        Branch branch = branchRepository.findById(branchId)
+                .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
+
+        UUID defaultVatRateId = UUID.fromString("00000000-0000-0000-0000-000000000001");
+        VatRate defaultVatRate = vatRateRepository.findById(defaultVatRateId)
+                .orElseThrow(() -> new IllegalStateException("Default VAT rate not found"));
+
+        List<Ingredient> ingredientsToSave = new ArrayList<>();
+        for (IngredientCreateDto dto : dtos) {
+            String name = dto.getName().trim();
+
+            if (ingredientRepository.existsByNameIgnoreCaseAndBranchId(name, branchId)) {
+                continue;
+            }
+
+            String categoryName = dto.getProductCategory() == null || dto.getProductCategory().isBlank()
+                    ? "UNKNOWN"
+                    : dto.getProductCategory().trim().toUpperCase();
+
+            ProductCategory category = productCategoryRepository
+                    .findByNameIgnoreCaseAndBranchId(categoryName, branchId)
+                    .orElseGet(() -> productCategoryRepository.save(
+                            ProductCategory.builder()
+                                    .name(categoryName)
+                                    .vatRate(defaultVatRate)
+                                    .branch(branch)
+                                    .build()
+                    ));
+
+            Ingredient ingredient = ingredientMapper.toEntity(dto);
+            ingredient.setBranch(branch);
+            ingredient.setProductCategory(category);
+            ingredientsToSave.add(ingredient);
+        }
+
+        List<Ingredient> saved = ingredientRepository.saveAll(ingredientsToSave);
+        return saved.stream()
+                .map(ingredientMapper::toDto)
+                .toList();
     }
 
     private float calculateSuggestedQuantity(Ingredient ingredient) {

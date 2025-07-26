@@ -28,4 +28,5 @@ public interface IngredientService {
 
     PurchaseOrder generateAutoPurchaseOrder();
 
+    List<IngredientResponseDto> createIngredientsBulk(UUID branchId, List<IngredientCreateDto> dtos);
 }

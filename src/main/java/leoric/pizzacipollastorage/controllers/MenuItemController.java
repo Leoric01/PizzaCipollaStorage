@@ -64,11 +64,6 @@ public class MenuItemController {
         menuItemService.deleteRecipeIngredientById(id);
         return ResponseEntity.noContent().build();
     }
-//
-//    @PostMapping("/without-ingredients")
-//    public ResponseEntity<MenuItemResponseDto> createMenuItemWithoutIngredients(@RequestBody MenuItemCreateDto dtos) {
-//        return ResponseEntity.ok(menuItemService.createMenuItem(dtos));
-//    }
 
     @PostMapping("/recipes")
     public ResponseEntity<RecipeIngredientShortDto> addIngredientToMenuItem(@PathVariable UUID branchId, @RequestBody RecipeIngredientCreateDto dto) {
