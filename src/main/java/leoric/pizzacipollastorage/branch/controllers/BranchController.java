@@ -40,25 +40,9 @@ public class BranchController {
                 .body(branchAccessRequestService.createRequest(dto, currentUser));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        branchService.deleteBranch(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PatchMapping("/{id}")
-    public ResponseEntity<BranchResponseDto> update(@PathVariable UUID id, @RequestBody BranchCreateDto dto) {
-        return ResponseEntity.ok(branchService.updateBranch(id, dto));
-    }
-
     @GetMapping
     public ResponseEntity<List<BranchResponseDto>> getAll() {
         return ResponseEntity.ok(branchService.getAllBranches());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<BranchResponseDto> getById(@PathVariable UUID id) {
-        return ResponseEntity.ok(branchService.getBranchById(id));
     }
 
     @GetMapping("/by-name/{name}")
@@ -97,4 +81,21 @@ public class BranchController {
     public ResponseEntity<List<BranchResponseDto>> getMyBranches(@AuthenticationPrincipal User currentUser) {
         return ResponseEntity.ok(branchService.getBranchesForUser(currentUser));
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<BranchResponseDto> getById(@PathVariable UUID id) {
+        return ResponseEntity.ok(branchService.getBranchById(id));
+    }
+
+    //    @DeleteMapping("/{id}")
+//    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+//        branchService.deleteBranch(id);
+//        return ResponseEntity.noContent().build();
+//    }
+//
+//    @PatchMapping("/{id}")
+//    public ResponseEntity<BranchResponseDto> update(@PathVariable UUID id, @RequestBody BranchCreateDto dto) {
+//        return ResponseEntity.ok(branchService.updateBranch(id, dto));
+
+    //    }
 }

@@ -32,15 +32,6 @@ public class IngredientController {
         return ResponseEntity.ok(ingredientService.createIngredientsBulk(branchId, dtos));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<IngredientResponseDto> updateIngredientById(
-            @PathVariable UUID branchId,
-            @PathVariable UUID id,
-            @RequestBody IngredientCreateDto dto
-    ) {
-        return ResponseEntity.ok(ingredientService.updateIngredient(branchId, id, dto));
-    }
-
     @GetMapping
     public ResponseEntity<List<IngredientResponseDto>> getAllIngredients(
             @PathVariable UUID branchId
@@ -48,12 +39,19 @@ public class IngredientController {
         return ResponseEntity.ok(ingredientService.getAllIngredients(branchId));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteIngredientById(@PathVariable UUID branchId, @PathVariable UUID id) {
-        ingredientService.deleteById(branchId, id);
-        return ResponseEntity.noContent().build();
-    }
-
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<Void> deleteIngredientById(@PathVariable UUID branchId, @PathVariable UUID id) {
+//        ingredientService.deleteById(branchId, id);
+//        return ResponseEntity.noContent().build();
+//    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<IngredientResponseDto> updateIngredientById(
+//            @PathVariable UUID branchId,
+//            @PathVariable UUID id,
+//            @RequestBody IngredientCreateDto dto
+//    ) {
+//        return ResponseEntity.ok(ingredientService.updateIngredient(branchId, id, dto));
+//    }
     //    @GetMapping("/by-name/{name}")
 //    public ResponseEntity<IngredientAliasOverviewDto> getAliasOverviewByName(@PathVariable String name) {
 //        return ingredientService.getAliasOverviewByName(name)
