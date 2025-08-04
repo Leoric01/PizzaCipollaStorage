@@ -26,9 +26,7 @@ services:
     restart: unless-stopped
 
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: leorickk/pizzacipollastorage-backend:latest
     container_name: ppcstorage-backend
     ports:
       - 8080:8080

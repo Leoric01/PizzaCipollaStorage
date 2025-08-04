@@ -23,6 +23,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -97,15 +99,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private void sendValidationEmail(User user) throws MessagingException {
         String newToken = generateAndSaveActivationToken(user);
+
+        String encodedEmail = URLEncoder.encode(user.getEmail(), StandardCharsets.UTF_8);
+        String fullActivationUrl = activationUrl + newToken + "&email=" + encodedEmail;
+
         emailService.sendEmail(
                 user.getEmail(),
                 user.getFullname(),
                 EmailTemplateName.ACTIVATE_ACCOUNT,
-                activationUrl,
+                fullActivationUrl,
                 newToken,
                 "Account activation"
         );
     }
+
     private String generateAndSaveActivationToken(User user) {
         int length = 6;
         String generatedToken = generateActivationCode(length);
