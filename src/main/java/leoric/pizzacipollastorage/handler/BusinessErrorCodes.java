@@ -25,6 +25,7 @@ public enum BusinessErrorCodes {
     NOT_AUTHORIZED_FOR_BRANCH(314, FORBIDDEN, "You are not authorized to manage this branch"),
     CATEGORY_ALREADY_EXISTS(316, CONFLICT, "Category with this name already exists for this branch"),
     MENU_CATEGORY_ALREADY_EXISTS(316, CONFLICT, "Menu category with this name already exists in this branch"),
+    PRODUCT_CATEGORY_ALREADY_EXISTS(320, CONFLICT, "Product category with this name already exists in this branch"),
     MENU_CATEGORY_IN_USE(317, CONFLICT, "Menu category is still in use by menu items"),
     REQUEST_ALREADY_RESOLVED(315, CONFLICT, "This access request has already been resolved"),
 

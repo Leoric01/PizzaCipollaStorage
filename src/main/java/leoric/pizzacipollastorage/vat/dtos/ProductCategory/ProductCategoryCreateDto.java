@@ -1,4 +1,4 @@
-package leoric.pizzacipollastorage.DTOs.ProductCategory;
+package leoric.pizzacipollastorage.vat.dtos.ProductCategory;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

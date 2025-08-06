@@ -13,4 +13,7 @@ public interface ProductCategoryRepository extends JpaRepository<ProductCategory
     Optional<ProductCategory> findByNameIgnoreCaseAndBranchId(String name, UUID branchId);
 
     List<ProductCategory> findAllByBranchId(UUID branchId);
+
+    List<ProductCategory> findAllByNameInIgnoreCaseAndBranchId(List<String> names, UUID branchId);
+
 }

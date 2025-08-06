@@ -1,6 +1,6 @@
 package leoric.pizzacipollastorage.DTOs.Ingredient;
 
-import leoric.pizzacipollastorage.DTOs.ProductCategory.ProductCategoryResponseDto;
+import leoric.pizzacipollastorage.vat.dtos.ProductCategory.ProductCategoryResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,16 +1,19 @@
 package leoric.pizzacipollastorage.vat.services;
 
-import leoric.pizzacipollastorage.DTOs.ProductCategory.ProductCategoryCreateDto;
-import leoric.pizzacipollastorage.DTOs.ProductCategory.ProductCategoryResponseDto;
+import leoric.pizzacipollastorage.auth.models.User;
+import leoric.pizzacipollastorage.vat.dtos.ProductCategory.ProductCategoryCreateDto;
+import leoric.pizzacipollastorage.vat.dtos.ProductCategory.ProductCategoryResponseDto;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface ProductCategoryService {
 
-    ProductCategoryResponseDto addProductCategory(UUID branchId, ProductCategoryCreateDto dto);
+    ProductCategoryResponseDto addProductCategory(UUID branchId, ProductCategoryCreateDto dto, User currentUser);
 
-    List<ProductCategoryResponseDto> getAllCategories(UUID branchId);
+    List<ProductCategoryResponseDto> getAllCategories(UUID branchId, User currentUser);
 
     ProductCategoryResponseDto getProductCategoryById(UUID id);
+
+    List<ProductCategoryResponseDto> bulkAddProductCategories(UUID branchId, List<ProductCategoryCreateDto> categories, User currentUser);
 }

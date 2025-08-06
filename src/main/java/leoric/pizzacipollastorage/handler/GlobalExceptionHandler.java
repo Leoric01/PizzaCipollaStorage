@@ -211,6 +211,20 @@ public class GlobalExceptionHandler {
                 );
     }
 
+    @ExceptionHandler(DuplicateCategoryNameException.class)
+    public ResponseEntity<ExceptionResponse> handleException(DuplicateCategoryNameException exp) {
+        BusinessErrorCodes code = BusinessErrorCodes.PRODUCT_CATEGORY_ALREADY_EXISTS;
+        return ResponseEntity
+                .status(code.getHttpStatus())
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorCode(code.getCode())
+                                .businessErrorDescription(code.getDescription())
+                                .error(exp.getMessage())
+                                .build()
+                );
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exp) {
         Set<String> errors = new HashSet<>();
