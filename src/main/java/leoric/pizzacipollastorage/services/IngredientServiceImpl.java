@@ -56,7 +56,7 @@ public class IngredientServiceImpl implements IngredientService {
     private final IngredientAliasService ingredientAliasService;
 
     @Override
-    public IngredientResponseDto updateIngredient(UUID branchId, UUID id, IngredientCreateDto dto) {
+    public IngredientResponseDto ingredientUpdate(UUID branchId, UUID id, IngredientCreateDto dto) {
         Ingredient existing = ingredientRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Ingredient not found: " + id));
 
@@ -87,7 +87,7 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public void deleteById(UUID branchId, UUID id) {
+    public void ingredientDeleteById(UUID branchId, UUID id) {
         Ingredient ingredient = ingredientRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Ingredient with id " + id + " not found"));
 
@@ -104,7 +104,7 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public IngredientResponseDto createIngredient(UUID branchId, IngredientCreateDto dto) {
+    public IngredientResponseDto ingredientCreate(UUID branchId, IngredientCreateDto dto) {
         String name = dto.getName().trim();
 
         if (ingredientRepository.existsByNameIgnoreCaseAndBranchId(name, branchId)) {
@@ -141,7 +141,7 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public List<IngredientResponseDto> getAllIngredients(UUID branchId) {
+    public List<IngredientResponseDto> ingredientGetAll(UUID branchId) {
         List<Ingredient> ingredients = ingredientRepository.findAllByBranchId(branchId);
         return ingredientMapper.toDtoList(ingredients);
     }
@@ -194,7 +194,7 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     @Transactional
-    public List<IngredientResponseDto> createIngredientsBulk(UUID branchId, List<IngredientCreateDto> dtos) {
+    public List<IngredientResponseDto> ingredientCreateBulk(UUID branchId, List<IngredientCreateDto> dtos) {
         Branch branch = branchRepository.findById(branchId)
                 .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
 
@@ -237,7 +237,7 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public IngredientResponseDto getIngredientById(UUID ingredientId) {
+    public IngredientResponseDto ingredientGetById(UUID ingredientId) {
         return ingredientMapper.toDto(ingredientRepository.findById(ingredientId)
                 .orElseThrow(() -> new EntityNotFoundException("Ingredient not found")));
     }

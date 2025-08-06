@@ -30,7 +30,7 @@ public class IngredientController {
     ) {
         branchServiceAccess.assertHasAccess(branchId, currentUser);
 
-        return ResponseEntity.ok(ingredientService.createIngredient(branchId, dto));
+        return ResponseEntity.ok(ingredientService.ingredientCreate(branchId, dto));
     }
 
     @PostMapping("/{branchId}/bulk")
@@ -42,7 +42,7 @@ public class IngredientController {
     ) {
         branchServiceAccess.assertHasAccess(branchId, currentUser);
 
-        return ResponseEntity.ok(ingredientService.createIngredientsBulk(branchId, dtos));
+        return ResponseEntity.ok(ingredientService.ingredientCreateBulk(branchId, dtos));
     }
 
     @GetMapping("/{branchId}")
@@ -52,12 +52,12 @@ public class IngredientController {
     ) {
         branchServiceAccess.assertHasAccess(branchId, currentUser);
 
-        return ResponseEntity.ok(ingredientService.getAllIngredients(branchId));
+        return ResponseEntity.ok(ingredientService.ingredientGetAll(branchId));
     }
 
     @GetMapping("/{ingredientId}")
     public ResponseEntity<IngredientResponseDto> ingredientGetById(@PathVariable UUID ingredientId) {
-        return ResponseEntity.ok(ingredientService.getIngredientById(ingredientId));
+        return ResponseEntity.ok(ingredientService.ingredientGetById(ingredientId));
     }
 
     @PutMapping("/{branchId}/{ingredientId}")
@@ -70,7 +70,7 @@ public class IngredientController {
     ) {
         branchServiceAccess.assertHasAccess(branchId, currentUser);
 
-        return ResponseEntity.ok(ingredientService.updateIngredient(branchId, ingredientId, dto));
+        return ResponseEntity.ok(ingredientService.ingredientUpdate(branchId, ingredientId, dto));
     }
 
     @DeleteMapping("/{branchId}/{ingredientId}")
@@ -81,7 +81,7 @@ public class IngredientController {
     ) {
         branchServiceAccess.assertHasAccess(branchId, currentUser);
 
-        ingredientService.deleteById(branchId, ingredientId);
+        ingredientService.ingredientDeleteById(branchId, ingredientId);
         return ResponseEntity.noContent().build();
     }
 
