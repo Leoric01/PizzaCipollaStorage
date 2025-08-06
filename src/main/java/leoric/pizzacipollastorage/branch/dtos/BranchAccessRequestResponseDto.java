@@ -12,6 +12,7 @@ public class BranchAccessRequestResponseDto {
     private UUID id;
     private UUID branchId;
     private UUID userId;
+    private String fullname;
     private String status;
     private LocalDateTime requestDate;
     private LocalDateTime approvalDate;

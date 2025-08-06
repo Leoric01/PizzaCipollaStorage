@@ -12,6 +12,7 @@ public interface BranchAccessRequestMapper {
 
     @Mapping(source = "branch.id", target = "branchId")
     @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "user.fullname", target = "fullname")
     @Mapping(source = "approvedBy.id", target = "approvedBy")
     @Mapping(source = "branchAccessRequestStatus", target = "status")
     BranchAccessRequestResponseDto toDto(BranchAccessRequest request);

@@ -17,4 +17,6 @@ public interface BranchAccessRequestRepository extends JpaRepository<BranchAcces
 
     List<BranchAccessRequest> findAllByBranchOrderByRequestDateDesc(Branch branch);
 
+    List<BranchAccessRequest> findAllByBranchInOrderByRequestDateDesc(List<Branch> branches);
+
 }

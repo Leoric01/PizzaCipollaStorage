@@ -52,11 +52,19 @@ public class BranchController {
 
     @GetMapping("/access-requests/{branchId}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
-    public ResponseEntity<List<BranchAccessRequestResponseDto>> branchGetAllAccessRequestsById(
+    public ResponseEntity<List<BranchAccessRequestResponseDto>> branchGetAllAccessRequestsByBranchId(
             @PathVariable UUID branchId,
             @AuthenticationPrincipal User currentUser
     ) {
-        return ResponseEntity.ok(branchAccessRequestService.getAllByBranch(branchId, currentUser));
+        return ResponseEntity.ok(branchAccessRequestService.getAllAccessRequestsByBranch(branchId, currentUser));
+    }
+
+    @GetMapping("/access-requests")
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
+    public ResponseEntity<List<BranchAccessRequestResponseDto>> branchGetAllAccessRequestsToAllMineBranches(
+            @AuthenticationPrincipal User currentUser
+    ) {
+        return ResponseEntity.ok(branchAccessRequestService.getAllAccessRequestsToMyBranches(currentUser));
     }
 
     @PostMapping("/access-requests/{id}/approve")

@@ -61,7 +61,7 @@ public class BranchAccessRequestServiceImpl implements BranchAccessRequestServic
 
     @Override
     @Transactional(readOnly = true)
-    public List<BranchAccessRequestResponseDto> getAllByBranch(UUID branchId, User currentUser) {
+    public List<BranchAccessRequestResponseDto> getAllAccessRequestsByBranch(UUID branchId, User currentUser) {
         Branch branch = branchRepository.findById(branchId)
                 .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
 
@@ -71,6 +71,22 @@ public class BranchAccessRequestServiceImpl implements BranchAccessRequestServic
 
         List<BranchAccessRequest> requests = accessRequestRepository.findAllByBranchOrderByRequestDateDesc(branch);
         return branchAccessRequestMapper.toDtoList(requests);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<BranchAccessRequestResponseDto> getAllAccessRequestsToMyBranches(User currentUser) {
+
+        List<Branch> myBranches = branchRepository.findAllByCreatedByManager(currentUser);
+
+        if (myBranches.isEmpty()) {
+            return List.of();
+        }
+
+        List<BranchAccessRequest> accessRequests =
+                accessRequestRepository.findAllByBranchInOrderByRequestDateDesc(myBranches);
+
+        return branchAccessRequestMapper.toDtoList(accessRequests);
     }
 
     @Override
@@ -123,5 +139,4 @@ public class BranchAccessRequestServiceImpl implements BranchAccessRequestServic
 
         return branchAccessRequestMapper.toDto(request);
     }
-
 }

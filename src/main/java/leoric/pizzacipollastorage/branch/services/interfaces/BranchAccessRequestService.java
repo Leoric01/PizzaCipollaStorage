@@ -12,10 +12,11 @@ import java.util.UUID;
 public interface BranchAccessRequestService {
     BranchAccessRequestResponseDto createRequest(BranchAccessRequestCreateDto dto, User currentUser);
 
-    List<BranchAccessRequestResponseDto> getAllByBranch(UUID branchId, User currentUser);
+    List<BranchAccessRequestResponseDto> getAllAccessRequestsByBranch(UUID branchId, User currentUser);
 
     BranchAccessRequestResponseDto approveRequest(UUID requestId, User currentUser);
 
     BranchAccessRequestResponseDto rejectRequest(UUID requestId, User currentUser);
 
+    List<BranchAccessRequestResponseDto> getAllAccessRequestsToMyBranches(User currentUser);
 }
