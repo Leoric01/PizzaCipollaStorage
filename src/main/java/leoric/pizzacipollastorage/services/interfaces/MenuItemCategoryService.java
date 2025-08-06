@@ -16,4 +16,8 @@ public interface MenuItemCategoryService {
     MenuItemCategoryResponseDto update(UUID branchId, UUID id, MenuItemCategoryCreateDto dto);
 
     void delete(UUID branchId, UUID id);
+
+    List<MenuItemCategoryResponseDto> addBulk(UUID branchId, List<MenuItemCategoryCreateDto> dtos);
+
+    MenuItemCategoryResponseDto findById(UUID menuItemCategoryId);
 }
