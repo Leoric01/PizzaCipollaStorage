@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 @RestController
-@RequestMapping("/api/menu-item-categories")
+@RequestMapping("/api/menu-item-category")
 @RequiredArgsConstructor
 public class MenuItemCategoryController {
 
@@ -29,7 +29,7 @@ public class MenuItemCategoryController {
             @AuthenticationPrincipal User currentUser
     ) {
         branchServiceAccess.assertHasAccess(branchId, currentUser);
-        return ResponseEntity.ok(menuItemCategoryService.add(branchId, dto));
+        return ResponseEntity.ok(menuItemCategoryService.menuItemCategoryAdd(branchId, dto));
     }
 
     @PostMapping("/{branchId}/bulk")
@@ -40,7 +40,7 @@ public class MenuItemCategoryController {
             @AuthenticationPrincipal User currentUser
     ) {
         branchServiceAccess.assertHasAccess(branchId, currentUser);
-        return ResponseEntity.ok(menuItemCategoryService.addBulk(branchId, dtos));
+        return ResponseEntity.ok(menuItemCategoryService.menuItemCategoryAddBulk(branchId, dtos));
     }
 
     @GetMapping("/{branchId}")
@@ -49,14 +49,14 @@ public class MenuItemCategoryController {
             @AuthenticationPrincipal User currentUser
     ) {
         branchServiceAccess.assertHasAccess(branchId, currentUser);
-        return ResponseEntity.ok(menuItemCategoryService.findAll(branchId));
+        return ResponseEntity.ok(menuItemCategoryService.menuItemCategoryFindAll(branchId));
     }
 
     @GetMapping("/by-id/{menuItemCategoryId}")
     public ResponseEntity<MenuItemCategoryResponseDto> menuItemCategoryGetById(
             @PathVariable UUID menuItemCategoryId
     ) {
-        return ResponseEntity.ok(menuItemCategoryService.findById(menuItemCategoryId));
+        return ResponseEntity.ok(menuItemCategoryService.menuItemCategoryFindById(menuItemCategoryId));
     }
 
     @PutMapping("/{branchId}/{menuItemCategoryId}")
@@ -68,7 +68,7 @@ public class MenuItemCategoryController {
             @AuthenticationPrincipal User currentUser
     ) {
         branchServiceAccess.assertHasAccess(branchId, currentUser);
-        return ResponseEntity.ok(menuItemCategoryService.update(branchId, menuItemCategoryId, dto));
+        return ResponseEntity.ok(menuItemCategoryService.menuItemCategoryUpdate(branchId, menuItemCategoryId, dto));
     }
 
     @DeleteMapping("/{branchId}/{menuItemCategoryId}")
@@ -79,7 +79,7 @@ public class MenuItemCategoryController {
             @AuthenticationPrincipal User currentUser
     ) {
         branchServiceAccess.assertHasAccess(branchId, currentUser);
-        menuItemCategoryService.delete(branchId, menuItemCategoryId);
+        menuItemCategoryService.menuItemCategoryDelete(branchId, menuItemCategoryId);
         return ResponseEntity.noContent().build();
     }
 }

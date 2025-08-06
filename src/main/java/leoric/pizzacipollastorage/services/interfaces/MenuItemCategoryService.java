@@ -9,15 +9,15 @@ import java.util.UUID;
 
 @Service
 public interface MenuItemCategoryService {
-    List<MenuItemCategoryResponseDto> findAll(UUID branchId);
+    List<MenuItemCategoryResponseDto> menuItemCategoryFindAll(UUID branchId);
 
-    MenuItemCategoryResponseDto add(UUID branchId, MenuItemCategoryCreateDto dto);
+    MenuItemCategoryResponseDto menuItemCategoryAdd(UUID branchId, MenuItemCategoryCreateDto dto);
 
-    MenuItemCategoryResponseDto update(UUID branchId, UUID id, MenuItemCategoryCreateDto dto);
+    MenuItemCategoryResponseDto menuItemCategoryUpdate(UUID branchId, UUID id, MenuItemCategoryCreateDto dto);
 
-    void delete(UUID branchId, UUID id);
+    void menuItemCategoryDelete(UUID branchId, UUID id);
 
-    List<MenuItemCategoryResponseDto> addBulk(UUID branchId, List<MenuItemCategoryCreateDto> dtos);
+    List<MenuItemCategoryResponseDto> menuItemCategoryAddBulk(UUID branchId, List<MenuItemCategoryCreateDto> dtos);
 
-    MenuItemCategoryResponseDto findById(UUID menuItemCategoryId);
+    MenuItemCategoryResponseDto menuItemCategoryFindById(UUID menuItemCategoryId);
 }
