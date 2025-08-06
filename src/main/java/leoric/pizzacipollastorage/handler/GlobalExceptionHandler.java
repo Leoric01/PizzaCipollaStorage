@@ -197,6 +197,20 @@ public class GlobalExceptionHandler {
                 );
     }
 
+    @ExceptionHandler(NotAuthorizedForBranchException.class)
+    public ResponseEntity<ExceptionResponse> handleException(NotAuthorizedForBranchException exp) {
+        BusinessErrorCodes code = BusinessErrorCodes.NOT_AUTHORIZED_FOR_BRANCH;
+        return ResponseEntity
+                .status(code.getHttpStatus())
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorCode(code.getCode())
+                                .businessErrorDescription(code.getDescription())
+                                .error(exp.getMessage())
+                                .build()
+                );
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exp) {
         Set<String> errors = new HashSet<>();

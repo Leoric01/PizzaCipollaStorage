@@ -43,7 +43,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/list-all")
-    public ResponseEntity<List<UserResponse>> listAll() {
+    public ResponseEntity<List<UserResponse>> usersListAll() {
         return ResponseEntity.ok(authenticationService.listAll());
     }
 }

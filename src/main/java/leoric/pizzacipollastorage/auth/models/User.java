@@ -109,4 +109,9 @@ public class User implements UserDetails, Principal {
     public String getFullname() {
         return this.firstName + " " + this.lastName;
     }
+
+    public boolean hasRole(String role) {
+        return this.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equalsIgnoreCase(role));
+    }
 }

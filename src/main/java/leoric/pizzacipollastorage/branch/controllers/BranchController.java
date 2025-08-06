@@ -32,7 +32,7 @@ public class BranchController {
     }
 
     @PostMapping("/access-request")
-    public ResponseEntity<BranchAccessRequestResponseDto> requestAccess(
+    public ResponseEntity<BranchAccessRequestResponseDto> branchRequestAccess(
             @RequestBody BranchAccessRequestCreateDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
@@ -41,18 +41,18 @@ public class BranchController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BranchResponseDto>> getAll() {
+    public ResponseEntity<List<BranchResponseDto>> branchGetAll() {
         return ResponseEntity.ok(branchService.getAllBranches());
     }
 
     @GetMapping("/by-name/{name}")
-    public ResponseEntity<BranchResponseDto> getByName(@PathVariable String name) {
+    public ResponseEntity<BranchResponseDto> branchGetByName(@PathVariable String name) {
         return ResponseEntity.ok(branchService.getBranchByName(name));
     }
 
     @GetMapping("/access-requests/{branchId}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
-    public ResponseEntity<List<BranchAccessRequestResponseDto>> getAllAccessRequestsById(
+    public ResponseEntity<List<BranchAccessRequestResponseDto>> branchGetAllAccessRequestsById(
             @PathVariable UUID branchId,
             @AuthenticationPrincipal User currentUser
     ) {
@@ -61,7 +61,7 @@ public class BranchController {
 
     @PostMapping("/access-requests/{id}/approve")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
-    public ResponseEntity<BranchAccessRequestResponseDto> approveRequest(
+    public ResponseEntity<BranchAccessRequestResponseDto> branchApproveAccessRequest(
             @PathVariable UUID id,
             @AuthenticationPrincipal User currentUser
     ) {
@@ -70,7 +70,7 @@ public class BranchController {
 
     @PostMapping("/access-requests/{id}/reject")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
-    public ResponseEntity<BranchAccessRequestResponseDto> rejectRequest(
+    public ResponseEntity<BranchAccessRequestResponseDto> branchRejectAccessRequest(
             @PathVariable UUID id,
             @AuthenticationPrincipal User currentUser
     ) {
@@ -78,24 +78,29 @@ public class BranchController {
     }
 
     @GetMapping("/mine")
-    public ResponseEntity<List<BranchResponseDto>> getMyBranches(@AuthenticationPrincipal User currentUser) {
+    public ResponseEntity<List<BranchResponseDto>> branchGetMine(@AuthenticationPrincipal User currentUser) {
         return ResponseEntity.ok(branchService.getBranchesForUser(currentUser));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BranchResponseDto> getById(@PathVariable UUID id) {
+    public ResponseEntity<BranchResponseDto> branchGetById(@PathVariable UUID id) {
         return ResponseEntity.ok(branchService.getBranchById(id));
     }
 
-    //    @DeleteMapping("/{id}")
-//    public ResponseEntity<Void> delete(@PathVariable UUID id) {
-//        branchService.deleteBranch(id);
-//        return ResponseEntity.noContent().build();
-//    }
-//
-//    @PatchMapping("/{id}")
-//    public ResponseEntity<BranchResponseDto> update(@PathVariable UUID id, @RequestBody BranchCreateDto dto) {
-//        return ResponseEntity.ok(branchService.updateBranch(id, dto));
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
+    public ResponseEntity<Void> branchDeleteById(@PathVariable UUID id, @AuthenticationPrincipal User currentUser) {
+        branchService.deleteBranch(id, currentUser);
+        return ResponseEntity.noContent().build();
+    }
 
-    //    }
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
+    public ResponseEntity<BranchResponseDto> branchUpdateById(
+            @PathVariable UUID id,
+            @RequestBody BranchCreateDto dto,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        return ResponseEntity.ok(branchService.updateBranch(id, dto, currentUser));
+    }
 }

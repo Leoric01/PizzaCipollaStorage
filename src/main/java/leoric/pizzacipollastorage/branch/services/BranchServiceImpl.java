@@ -8,6 +8,7 @@ import leoric.pizzacipollastorage.branch.dtos.BranchResponseDto;
 import leoric.pizzacipollastorage.branch.models.Branch;
 import leoric.pizzacipollastorage.branch.repositories.BranchRepository;
 import leoric.pizzacipollastorage.branch.services.interfaces.BranchService;
+import leoric.pizzacipollastorage.handler.exceptions.NotAuthorizedForBranchException;
 import leoric.pizzacipollastorage.mapstruct.BranchMapper;
 import leoric.pizzacipollastorage.utils.CustomUtilityString;
 import lombok.RequiredArgsConstructor;
@@ -43,17 +44,30 @@ public class BranchServiceImpl implements BranchService {
     }
 
     @Override
-    public void deleteBranch(UUID id) {
-        branchRepository.deleteById(id);
+    public void deleteBranch(UUID id, User currentUser) {
+        Branch branch = branchRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Branch not found with id: " + id));
+
+        if (!currentUser.hasRole("ADMIN") && !branch.getUsers().contains(currentUser)) {
+            throw new NotAuthorizedForBranchException("You are not allowed to delete this branch");
+        }
+
+        branchRepository.delete(branch);
     }
 
     @Override
-    public BranchResponseDto updateBranch(UUID id, BranchCreateDto dto) {
+    public BranchResponseDto updateBranch(UUID id, BranchCreateDto dto, User currentUser) {
         Branch branch = branchRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Branch not found: id = " + id));
+
+        if (!currentUser.hasRole("ADMIN") && !branch.getUsers().contains(currentUser)) {
+            throw new NotAuthorizedForBranchException("You are not allowed to edit this branch");
+        }
+
         branch.setName(dto.getName());
         branch.setAddress(dto.getAddress());
         branch.setContactInfo(dto.getContactInfo());
+
         return branchMapper.toDto(branchRepository.save(branch));
     }
 

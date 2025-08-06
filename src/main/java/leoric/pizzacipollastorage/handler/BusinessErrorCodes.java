@@ -27,6 +27,7 @@ public enum BusinessErrorCodes {
     MENU_CATEGORY_ALREADY_EXISTS(316, CONFLICT, "Menu category with this name already exists in this branch"),
     MENU_CATEGORY_IN_USE(317, CONFLICT, "Menu category is still in use by menu items"),
     REQUEST_ALREADY_RESOLVED(315, CONFLICT, "This access request has already been resolved"),
+
     INGREDIENT_NOT_IN_BRANCH(318, FORBIDDEN, "Ingredient is not available in your branch"),
 
     EMAIL_ALREADY_IN_USE(305, CONFLICT, "Email is already in use");
