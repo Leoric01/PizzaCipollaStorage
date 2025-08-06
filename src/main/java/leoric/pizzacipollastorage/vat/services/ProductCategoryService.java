@@ -16,4 +16,8 @@ public interface ProductCategoryService {
     ProductCategoryResponseDto getProductCategoryById(UUID id);
 
     List<ProductCategoryResponseDto> bulkAddProductCategories(UUID branchId, List<ProductCategoryCreateDto> categories, User currentUser);
+
+    ProductCategoryResponseDto editProductCategory(UUID id, ProductCategoryCreateDto dto, User currentUser);
+
+    void deleteProductCategory(UUID id, User currentUser);
 }

@@ -15,4 +15,6 @@ public interface BranchRepository extends JpaRepository<Branch, UUID> {
 
     List<Branch> findAllByCreatedByManager(User manager);
 
+    boolean existsByIdAndUsersContaining(UUID id, User user);
+
 }

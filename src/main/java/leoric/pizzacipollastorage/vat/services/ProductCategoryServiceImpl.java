@@ -1,6 +1,7 @@
 package leoric.pizzacipollastorage.vat.services;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import leoric.pizzacipollastorage.auth.models.User;
 import leoric.pizzacipollastorage.branch.models.Branch;
 import leoric.pizzacipollastorage.branch.services.interfaces.BranchServiceAccess;
@@ -107,6 +108,38 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         return productCategoryRepository.saveAll(toSave).stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public ProductCategoryResponseDto editProductCategory(UUID id, ProductCategoryCreateDto dto, User currentUser) {
+        ProductCategory category = productCategoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Kategorie nenalezena."));
+
+        String normalizedName = dto.getName().trim().toUpperCase();
+
+        productCategoryRepository.findByNameIgnoreCaseAndBranchId(normalizedName, category.getBranch().getId())
+                .filter(existing -> !existing.getId().equals(category.getId()))
+                .ifPresent(existing -> {
+                    throw new BusinessException(BusinessErrorCodes.CATEGORY_ALREADY_EXISTS);
+                });
+
+        VatRate vatRate = vatRateRepository.findById(dto.getVatId())
+                .orElseThrow(() -> new EntityNotFoundException("DPH sazba nenalezena."));
+
+        category.setName(normalizedName);
+        category.setVatRate(vatRate);
+
+        return mapToResponse(productCategoryRepository.save(category));
+    }
+
+    @Override
+    @Transactional
+    public void deleteProductCategory(UUID id, User currentUser) {
+        ProductCategory category = productCategoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Kategorie nenalezena."));
+
+        productCategoryRepository.delete(category);
     }
 
     @Override

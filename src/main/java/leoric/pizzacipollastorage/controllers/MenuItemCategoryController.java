@@ -18,13 +18,13 @@ public class MenuItemCategoryController {
     private final MenuItemCategoryService menuItemCategoryService;
 
     @GetMapping
-    public ResponseEntity<List<MenuItemCategoryResponseDto>> getAllMenuItems(
+    public ResponseEntity<List<MenuItemCategoryResponseDto>> menuItemCategoryGetAll(
             @PathVariable UUID branchId) {
         return ResponseEntity.ok(menuItemCategoryService.findAll(branchId));
     }
 
     @PostMapping
-    public ResponseEntity<MenuItemCategoryResponseDto> addCategory(
+    public ResponseEntity<MenuItemCategoryResponseDto> menuItemCreate(
             @PathVariable UUID branchId,
             @RequestBody MenuItemCategoryCreateDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED)

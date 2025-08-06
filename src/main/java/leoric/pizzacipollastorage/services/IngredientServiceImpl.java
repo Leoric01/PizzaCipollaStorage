@@ -236,24 +236,27 @@ public class IngredientServiceImpl implements IngredientService {
                 .toList();
     }
 
+    @Override
+    public IngredientResponseDto getIngredientById(UUID ingredientId) {
+        return ingredientMapper.toDto(ingredientRepository.findById(ingredientId)
+                .orElseThrow(() -> new EntityNotFoundException("Ingredient not found")));
+    }
+
     private float calculateSuggestedQuantity(Ingredient ingredient) {
         Optional<InventorySnapshot> latestSnapshotOpt =
                 inventorySnapshotRepository.findTopByIngredientOrderByTimestampDesc(ingredient);
 
         float measured = latestSnapshotOpt.map(InventorySnapshot::getMeasuredQuantity).orElse(0f);
 
-        // 1. Pokud máme definovanou "plnou" zásobu – dopočítáme rozdíl
         if (ingredient.getPreferredFullStockLevel() != null) {
             float deficit = ingredient.getPreferredFullStockLevel() - measured;
-            return Math.max(deficit, 0f); // nechceme záporné objednávky
+            return Math.max(deficit, 0f);
         }
 
-        // 2. Jinak – nouzové řešení: objednej 2× minimum
         if (ingredient.getMinimumStockLevel() != null) {
             return ingredient.getMinimumStockLevel() * 2;
         }
 
-        // 3. Poslední možnost: default fallback
         return 1f;
     }
 

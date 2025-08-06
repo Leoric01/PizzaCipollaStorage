@@ -27,4 +27,16 @@ public class BranchServiceAccessImpl implements BranchServiceAccess {
         }
         return branch;
     }
+
+    @Override
+    public void assertHasAccess(UUID branchId, User user) {
+        if (!branchRepository.existsByIdAndUsersContaining(branchId, user)) {
+            throw new NotAuthorizedForBranchException("Uživatel nemá přístup k této pobočce.");
+        }
+    }
+
+    @Override
+    public boolean hasAccess(UUID branchId, User user) {
+        return branchRepository.existsByIdAndUsersContaining(branchId, user);
+    }
 }

@@ -67,6 +67,13 @@ public class BranchController {
         return ResponseEntity.ok(branchAccessRequestService.getAllAccessRequestsToMyBranches(currentUser));
     }
 
+    @GetMapping("/access-requests/mine")
+    public ResponseEntity<List<BranchAccessRequestResponseDto>> branchGetAllAccessRequestsByUser(
+            @AuthenticationPrincipal User currentUser
+    ) {
+        return ResponseEntity.ok(branchAccessRequestService.getAllAccessRequestsMine(currentUser));
+    }
+
     @PostMapping("/access-requests/{id}/approve")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
     public ResponseEntity<BranchAccessRequestResponseDto> branchApproveAccessRequest(
@@ -83,6 +90,14 @@ public class BranchController {
             @AuthenticationPrincipal User currentUser
     ) {
         return ResponseEntity.ok(branchAccessRequestService.rejectRequest(id, currentUser));
+    }
+
+    @PostMapping("/access-requests/{id}/cancel")
+    public ResponseEntity<BranchAccessRequestResponseDto> branchCancelAccessRequest(
+            @PathVariable UUID id,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        return ResponseEntity.ok(branchAccessRequestService.cancelAccessRequest(id, currentUser));
     }
 
     @GetMapping("/mine")

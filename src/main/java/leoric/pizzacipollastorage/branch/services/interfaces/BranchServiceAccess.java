@@ -9,4 +9,9 @@ import java.util.UUID;
 @Service
 public interface BranchServiceAccess {
     Branch verifyAccess(UUID branchId, User user);
+
+    void assertHasAccess(UUID branchId, User user);
+
+    boolean hasAccess(UUID branchId, User user);
+
 }

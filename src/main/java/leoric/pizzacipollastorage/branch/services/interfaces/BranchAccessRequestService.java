@@ -19,4 +19,8 @@ public interface BranchAccessRequestService {
     BranchAccessRequestResponseDto rejectRequest(UUID requestId, User currentUser);
 
     List<BranchAccessRequestResponseDto> getAllAccessRequestsToMyBranches(User currentUser);
+
+    List<BranchAccessRequestResponseDto> getAllAccessRequestsMine(User currentUser);
+
+    BranchAccessRequestResponseDto cancelAccessRequest(UUID id, User currentUser);
 }

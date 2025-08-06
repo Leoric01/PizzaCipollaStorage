@@ -1,4 +1,4 @@
-package leoric.pizzacipollastorage.mapstruct;
+package leoric.pizzacipollastorage.branch;
 
 import leoric.pizzacipollastorage.branch.dtos.BranchCreateDto;
 import leoric.pizzacipollastorage.branch.dtos.BranchResponseDto;
