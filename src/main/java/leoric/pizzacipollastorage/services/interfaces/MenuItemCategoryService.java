@@ -2,6 +2,8 @@ package leoric.pizzacipollastorage.services.interfaces;
 
 import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemCategoryCreateDto;
 import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemCategoryResponseDto;
+import leoric.pizzacipollastorage.DTOs.MenuItem.RecipeIngredientShortDto;
+import leoric.pizzacipollastorage.DTOs.MenuItem.RecipeIngredientVeryShortDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

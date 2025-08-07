@@ -1,7 +1,6 @@
 package leoric.pizzacipollastorage.services.interfaces;
 
-import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemFullCreateDto;
-import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemResponseDto;
+import leoric.pizzacipollastorage.DTOs.MenuItem.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,13 +25,13 @@ public interface MenuItemService {
 
     // -------- RecipeIngredient methods --------
 
-//    RecipeIngredientShortDto addIngredientToMenuItem(UUID branchId, RecipeIngredientCreateDto dto);
-//
-//    List<RecipeIngredientShortDto> addIngredientsToMenuItemBulk(UUID branchId, RecipeCreateBulkDto dto);
-//
-//    RecipeIngredientShortDto updateRecipeIngredient(UUID branchId, UUID id, RecipeIngredientVeryShortDto dto);
-//
-//    RecipeIngredientShortDto getRecipeIngredientById(UUID branchId, UUID id);
-//
-//    void deleteRecipeIngredientById(UUID branchId, UUID id);
+    RecipeIngredientShortDto recipeIngredientAddToMenuItem(UUID branchId, RecipeIngredientCreateDto dto);
+
+    List<RecipeIngredientShortDto> recipeIngredientAddToMenuItemBulk(UUID branchId, RecipeCreateBulkDto dto);
+
+    RecipeIngredientShortDto updateRecipeIngredient(UUID branchId, UUID recipeIngredientId, RecipeIngredientVeryShortDto dto);
+
+    RecipeIngredientShortDto getRecipeIngredientById(UUID branchId, UUID recipeIngredientId);
+
+    void deleteRecipeIngredientById(UUID branchId, UUID id);
 }

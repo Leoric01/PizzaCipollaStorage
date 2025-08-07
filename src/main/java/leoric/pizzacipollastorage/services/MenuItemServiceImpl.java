@@ -1,13 +1,13 @@
 package leoric.pizzacipollastorage.services;
 
 import jakarta.persistence.EntityNotFoundException;
-import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemFullCreateDto;
-import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemResponseDto;
+import leoric.pizzacipollastorage.DTOs.MenuItem.*;
 import leoric.pizzacipollastorage.branch.models.Branch;
 import leoric.pizzacipollastorage.branch.repositories.BranchRepository;
 import leoric.pizzacipollastorage.handler.BusinessErrorCodes;
 import leoric.pizzacipollastorage.handler.exceptions.BusinessException;
 import leoric.pizzacipollastorage.handler.exceptions.MissingQuantityException;
+import leoric.pizzacipollastorage.handler.exceptions.NotAuthorizedForBranchException;
 import leoric.pizzacipollastorage.mapstruct.MenuItemMapper;
 import leoric.pizzacipollastorage.mapstruct.RecipeIngredientMapper;
 import leoric.pizzacipollastorage.models.Ingredient;
@@ -232,96 +232,90 @@ public class MenuItemServiceImpl implements MenuItemService {
         menuItemRepository.deleteById(menuItemId);
     }
 
-    //    @Override
-//    @Transactional
-//    public RecipeIngredientShortDto updateRecipeIngredient(UUID recipeIngredientId, RecipeIngredientVeryShortDto dto) {
-//        RecipeIngredient recipeIngredient = recipeIngredientRepository.findById(recipeIngredientId)
-//                .orElseThrow(() -> new EntityNotFoundException("RecipeIngredient not found: " + recipeIngredientId));
-//
-//        recipeIngredient.setQuantity(dto.getQuantity());
-//
-//        RecipeIngredient updated = recipeIngredientRepository.save(recipeIngredient);
-//
-//        return recipeIngredientMapper.toShortDto(updated);
-//    }
-//
-//    @Override
-//    public RecipeIngredientShortDto getRecipeIngredientById(UUID id) {
-//        RecipeIngredient recipeIngredient = recipeIngredientRepository.findById(id)
-//                .orElseThrow(() -> new EntityNotFoundException("RecipeIngredient not found: " + id));
-//        return recipeIngredientMapper.toShortDto(recipeIngredient);
-//    }
-//
-//    @Override
-//    public void deleteRecipeIngredientById(UUID id) {
-//        if (!recipeIngredientRepository.existsById(id)) {
-//            throw new EntityNotFoundException("RecipeIngredient not found: " + id);
-//        }
-//        recipeIngredientRepository.deleteById(id);
-//    }
-//
-//    @Override
-//    @Transactional
-//    public List<RecipeIngredientShortDto> addIngredientsToMenuItemBulk(UUID branchId, RecipeCreateBulkDto dto) {
-//        MenuItem menuItem = menuItemRepository.findByNameIgnoreCaseAndBranchId(dto.getMenuItem(), branchId)
-//                .orElseThrow(() -> new EntityNotFoundException("MenuItem not found: " + dto.getMenuItem()));
-//
-//        List<RecipeIngredient> newIngredients = new ArrayList<>();
-//
-//        for (RecipeIngredientBulkDto ing : dto.getIngredients()) {
-//            Ingredient ingredient = ingredientAliasService.findIngredientByNameFlexible(ing.getIngredientName())
-//                    .orElseThrow(() -> new EntityNotFoundException("Ingredient or alias not found: " + ing.getIngredientName()));
-//
-//            if (ing.getQuantity() == null) {
-//                throw new MissingQuantityException("Quantity is required for ingredient '" + ing.getIngredientName() + "'.");
-//            }
-//
-//            RecipeIngredient recipeIngredient = RecipeIngredient.builder()
-//                    .menuItem(menuItem)
-//                    .ingredient(ingredient)
-//                    .quantity(ing.getQuantity())
-//                    .build();
-//
-//            newIngredients.add(recipeIngredient);
-//        }
-//
-//        List<RecipeIngredient> saved = recipeIngredientRepository.saveAll(newIngredients);
-//        return saved.stream()
-//                .map(recipeIngredientMapper::toShortDto)
-//                .toList();
-//    }
-//    @Override
-//    public RecipeIngredientShortDto addIngredientToMenuItem(UUID branchId, RecipeIngredientCreateDto dto) {
-//        MenuItem menuItem = menuItemRepository.findById(dto.getMenuItemId())
-//                .orElseThrow(() -> new EntityNotFoundException("MenuItem not found"));
-//        Ingredient ingredient = ingredientRepository.findById(dto.getIngredientId())
-//                .orElseThrow(() -> new EntityNotFoundException("Ingredient not found"));
-//
-//        RecipeIngredient recipeIngredient = new RecipeIngredient();
-//        recipeIngredient.setMenuItem(menuItem);
-//        recipeIngredient.setIngredient(ingredient);
-//        recipeIngredient.setQuantity(dto.getQuantity());
-//
-//        return recipeIngredientMapper.toShortDto(recipeIngredientRepository.save(recipeIngredient));
-//    }
+    @Override
+    public RecipeIngredientShortDto getRecipeIngredientById(UUID branchId, UUID id) {
+        RecipeIngredient recipeIngredient = recipeIngredientRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("RecipeIngredient not found: " + id));
+        return recipeIngredientMapper.toShortDto(recipeIngredient);
+    }
 
-//    @Override
-//    public MenuItemResponseDto getMenuItemById(UUID id) {
-//        MenuItem menuItem = menuItemRepository.findById(id)
-//                .orElseThrow(() -> new EntityNotFoundException("MenuItem not found with ID: " + id));
-//        return menuItemMapper.toDto(menuItem);
-//    }
+    @Override
+    public void deleteRecipeIngredientById(UUID branchId, UUID id) {
+        if (!recipeIngredientRepository.existsById(id)) {
+            throw new EntityNotFoundException("RecipeIngredient not found: " + id);
+        }
+        recipeIngredientRepository.deleteById(id);
+    }
 
-//    @Override
-//    @Transactional
-//    public MenuItemResponseDto createMenuItem(MenuItemCreateDto dto) {
-//        MenuItem menuItem = menuItemMapper.toEntity(dto);
-//        MenuItem saved = menuItemRepository.save(menuItem);
-//        return menuItemMapper.toDto(saved);
-//    }
-//
-//    @Override
-//    public List<MenuItemResponseDto> getAllMenuItems() {
-//        return menuItemMapper.toDtoList(menuItemRepository.findAll());
-//    }
+    @Override
+    @Transactional
+    public List<RecipeIngredientShortDto> recipeIngredientAddToMenuItemBulk(UUID branchId, RecipeCreateBulkDto dto) {
+        MenuItem menuItem = menuItemRepository.findByNameIgnoreCaseAndBranchId(dto.getMenuItem(), branchId)
+                .orElseThrow(() -> new EntityNotFoundException("MenuItem not found: " + dto.getMenuItem()));
+
+        List<RecipeIngredient> newIngredients = new ArrayList<>();
+
+        for (RecipeIngredientBulkDto ing : dto.getIngredients()) {
+            Ingredient ingredient = ingredientAliasService.findIngredientByNameFlexible(ing.getIngredientName())
+                    .orElseThrow(() -> new EntityNotFoundException("Ingredient or alias not found: " + ing.getIngredientName()));
+
+            if (ing.getQuantity() == null) {
+                throw new MissingQuantityException("Quantity is required for ingredient '" + ing.getIngredientName() + "'.");
+            }
+
+            RecipeIngredient recipeIngredient = RecipeIngredient.builder()
+                    .menuItem(menuItem)
+                    .ingredient(ingredient)
+                    .quantity(ing.getQuantity())
+                    .build();
+
+            newIngredients.add(recipeIngredient);
+        }
+
+        List<RecipeIngredient> saved = recipeIngredientRepository.saveAll(newIngredients);
+        return saved.stream()
+                .map(recipeIngredientMapper::toShortDto)
+                .toList();
+    }
+
+    @Override
+    @Transactional
+    public RecipeIngredientShortDto updateRecipeIngredient(UUID branchId, UUID id, RecipeIngredientVeryShortDto dto) {
+        RecipeIngredient recipeIngredient = recipeIngredientRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("RecipeIngredient not found"));
+
+        UUID menuItemBranchId = recipeIngredient.getMenuItem().getBranch().getId();
+        if (!menuItemBranchId.equals(branchId)) {
+            throw new NotAuthorizedForBranchException("You don't have access to this RecipeIngredient in this branch.");
+        }
+
+        UUID newIngredientId = dto.getIngredient().getId();
+        if (!recipeIngredient.getIngredient().getId().equals(newIngredientId)) {
+            Ingredient newIngredient = ingredientRepository.findById(newIngredientId)
+                    .orElseThrow(() -> new EntityNotFoundException("Ingredient not found: " + newIngredientId));
+            recipeIngredient.setIngredient(newIngredient);
+        }
+
+        recipeIngredient.setQuantity(dto.getQuantity());
+
+        RecipeIngredient saved = recipeIngredientRepository.save(recipeIngredient);
+        return recipeIngredientMapper.toShortDto(saved);
+    }
+
+
+    @Override
+    public RecipeIngredientShortDto recipeIngredientAddToMenuItem(UUID branchId, RecipeIngredientCreateDto dto) {
+        MenuItem menuItem = menuItemRepository.findById(dto.getMenuItemId())
+                .orElseThrow(() -> new EntityNotFoundException("MenuItem not found"));
+        Ingredient ingredient = ingredientRepository.findById(dto.getIngredientId())
+                .orElseThrow(() -> new EntityNotFoundException("Ingredient not found"));
+
+        RecipeIngredient recipeIngredient = new RecipeIngredient();
+        recipeIngredient.setMenuItem(menuItem);
+        recipeIngredient.setIngredient(ingredient);
+        recipeIngredient.setQuantity(dto.getQuantity());
+
+        return recipeIngredientMapper.toShortDto(recipeIngredientRepository.save(recipeIngredient));
+    }
+
 }

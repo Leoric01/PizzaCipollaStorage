@@ -6,5 +6,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface StockEntryService {
-    StockEntryResponseDto createStockEntry(StockEntryCreateDto dto);
+//    StockEntryResponseDto createStockEntry(StockEntryCreateDto dto);
 }

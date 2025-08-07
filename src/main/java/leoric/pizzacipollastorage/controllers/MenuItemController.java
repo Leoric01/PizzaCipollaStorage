@@ -1,7 +1,6 @@
 package leoric.pizzacipollastorage.controllers;
 
-import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemFullCreateDto;
-import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemResponseDto;
+import leoric.pizzacipollastorage.DTOs.MenuItem.*;
 import leoric.pizzacipollastorage.auth.models.User;
 import leoric.pizzacipollastorage.branch.services.interfaces.BranchServiceAccess;
 import leoric.pizzacipollastorage.services.interfaces.MenuItemService;
@@ -93,56 +92,56 @@ public class MenuItemController {
     }
 
     // ---------- RecipeIngredient endpoints ----------
+// TODO nahazaet do postamana a protestovat
+    @PostMapping("/recipes")
+    public ResponseEntity<RecipeIngredientShortDto> recipeIngredientAdd(
+            @PathVariable UUID branchId,
+            @RequestBody RecipeIngredientCreateDto recipeIngredientCreateDto,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        return ResponseEntity.ok(menuItemService.recipeIngredientAddToMenuItem(branchId, recipeIngredientCreateDto));
+    }
 
-//    @PostMapping("/recipes")
-//    public ResponseEntity<RecipeIngredientShortDto> recipeIngredientAdd(
-//            @PathVariable UUID branchId,
-//            @RequestBody RecipeIngredientCreateDto dto,
-//            @AuthenticationPrincipal User currentUser
-//    ) {
-//        branchServiceAccess.assertHasAccess(branchId, currentUser);
-//        return ResponseEntity.ok(menuItemService.addIngredientToMenuItem(branchId, dto));
-//    }
-//
-//    @PostMapping("/recipes/bulk")
-//    public ResponseEntity<List<RecipeIngredientShortDto>> recipeIngredientAddBulk(
-//            @PathVariable UUID branchId,
-//            @RequestBody RecipeCreateBulkDto dto,
-//            @AuthenticationPrincipal User currentUser
-//    ) {
-//        branchServiceAccess.assertHasAccess(branchId, currentUser);
-//        return ResponseEntity.ok(menuItemService.addIngredientsToMenuItemBulk(branchId, dto));
-//    }
-//
-//    @PatchMapping("/recipes/{id}")
-//    public ResponseEntity<RecipeIngredientShortDto> recipeIngredientUpdate(
-//            @PathVariable UUID branchId,
-//            @PathVariable UUID id,
-//            @RequestBody RecipeIngredientVeryShortDto dto,
-//            @AuthenticationPrincipal User currentUser
-//    ) {
-//        branchServiceAccess.assertHasAccess(branchId, currentUser);
-//        return ResponseEntity.ok(menuItemService.updateRecipeIngredient(branchId, id, dto));
-//    }
-//
-//    @GetMapping("/recipes/{id}")
-//    public ResponseEntity<RecipeIngredientShortDto> recipeIngredientFindById(
-//            @PathVariable UUID branchId,
-//            @PathVariable UUID id,
-//            @AuthenticationPrincipal User currentUser
-//    ) {
-//        branchServiceAccess.assertHasAccess(branchId, currentUser);
-//        return ResponseEntity.ok(menuItemService.getRecipeIngredientById(branchId, id));
-//    }
-//
-//    @DeleteMapping("/recipes/{id}")
-//    public ResponseEntity<Void> recipeIngredientDelete(
-//            @PathVariable UUID branchId,
-//            @PathVariable UUID id,
-//            @AuthenticationPrincipal User currentUser
-//    ) {
-//        branchServiceAccess.assertHasAccess(branchId, currentUser);
-//        menuItemService.deleteRecipeIngredientById(branchId, id);
-//        return ResponseEntity.noContent().build();
-//    }
+    @PostMapping("/recipes/bulk")
+    public ResponseEntity<List<RecipeIngredientShortDto>> recipeIngredientAddBulk(
+            @PathVariable UUID branchId,
+            @RequestBody RecipeCreateBulkDto recipeCreateBulkDto,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        return ResponseEntity.ok(menuItemService.recipeIngredientAddToMenuItemBulk(branchId, recipeCreateBulkDto));
+    }
+
+    @PatchMapping("/recipes/{recipeIngredientId}")
+    public ResponseEntity<RecipeIngredientShortDto> recipeIngredientUpdate(
+            @PathVariable UUID branchId,
+            @PathVariable UUID recipeIngredientId,
+            @RequestBody RecipeIngredientVeryShortDto recipeIngredientVeryShortDto,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        return ResponseEntity.ok(menuItemService.updateRecipeIngredient(branchId, recipeIngredientId, recipeIngredientVeryShortDto));
+    }
+
+    @GetMapping("/recipes/{recipeIngredientId}")
+    public ResponseEntity<RecipeIngredientShortDto> recipeIngredientFindById(
+            @PathVariable UUID branchId,
+            @PathVariable UUID recipeIngredientId,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        return ResponseEntity.ok(menuItemService.getRecipeIngredientById(branchId, recipeIngredientId));
+    }
+
+    @DeleteMapping("/recipes/{recipeIngredientId}")
+    public ResponseEntity<Void> recipeIngredientDelete(
+            @PathVariable UUID branchId,
+            @PathVariable UUID recipeIngredientId,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        menuItemService.deleteRecipeIngredientById(branchId, recipeIngredientId);
+        return ResponseEntity.noContent().build();
+    }
 }

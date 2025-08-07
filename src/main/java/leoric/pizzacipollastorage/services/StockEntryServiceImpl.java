@@ -26,21 +26,21 @@ public class StockEntryServiceImpl implements StockEntryService {
 
     private final InventoryService inventoryService;
 
-    public StockEntryResponseDto createStockEntry(StockEntryCreateDto dto) {
-        Ingredient ingredient = ingredientRepository.findById(dto.getIngredientId())
-                .orElseThrow(() -> new EntityNotFoundException("Ingredient not found"));
-
-        Supplier supplier = supplierRepository.findById(dto.getSupplierId())
-                .orElseThrow(() -> new EntityNotFoundException("Supplier not found"));
-
-        StockEntry entry = stockEntryMapper.toEntity(dto);
-        entry.setIngredient(ingredient);
-        entry.setSupplier(supplier);
-
-        StockEntry saved = stockEntryRepository.save(entry);
-
-        inventoryService.addToInventory(ingredient.getId(), dto.getQuantityReceived());
-
-        return stockEntryMapper.toDto(saved);
-    }
+//    public StockEntryResponseDto createStockEntry(StockEntryCreateDto dto) {
+//        Ingredient ingredient = ingredientRepository.findById(dto.getIngredientId())
+//                .orElseThrow(() -> new EntityNotFoundException("Ingredient not found"));
+//
+//        Supplier supplier = supplierRepository.findById(dto.getSupplierId())
+//                .orElseThrow(() -> new EntityNotFoundException("Supplier not found"));
+//
+//        StockEntry entry = stockEntryMapper.toEntity(dto);
+//        entry.setIngredient(ingredient);
+//        entry.setSupplier(supplier);
+//
+//        StockEntry saved = stockEntryRepository.save(entry);
+//
+//        inventoryService.addToInventory(ingredient.getId(), dto.getQuantityReceived());
+//
+//        return stockEntryMapper.toDto(saved);
+//    }
 }
