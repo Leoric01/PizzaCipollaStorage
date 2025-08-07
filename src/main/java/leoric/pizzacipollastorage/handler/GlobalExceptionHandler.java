@@ -4,10 +4,12 @@ import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityNotFoundException;
 import leoric.pizzacipollastorage.handler.exceptions.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -67,6 +69,17 @@ public class GlobalExceptionHandler {
                         .businessErrorCode(BusinessErrorCodes.BRANCH_CREATION_FORBIDDEN.getCode())
                         .businessErrorDescription(BusinessErrorCodes.BRANCH_CREATION_FORBIDDEN.getDescription())
                         .error(ex.getMessage())
+                        .build());
+    }
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleNoHandlerFoundException(NoHandlerFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ExceptionResponse.builder()
+                        .businessErrorCode(BusinessErrorCodes.ENTITY_NOT_FOUND.getCode())
+                        .businessErrorDescription("Requested endpoint was not found")
+                        .error("No handler found for " + ex.getHttpMethod() + " " + ex.getRequestURL())
                         .build());
     }
 

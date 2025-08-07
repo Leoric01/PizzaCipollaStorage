@@ -30,6 +30,12 @@ public class BranchServiceImpl implements BranchService {
     @Override
     @Transactional
     public BranchResponseDto createBranch(BranchCreateDto dto, User currentUser) {
+        boolean branchExists = currentUser.getBranches().stream()
+                .anyMatch(b -> b.getName().equalsIgnoreCase(dto.name()));
+
+        if (branchExists) {
+            throw new IllegalArgumentException("Už máte pobočku se jménem '" + dto.name() + "'");
+        }
         Branch branch = branchMapper.toEntity(dto);
         if (branch.getUsers() == null) {
             branch.setUsers(new ArrayList<>());
@@ -64,9 +70,9 @@ public class BranchServiceImpl implements BranchService {
             throw new NotAuthorizedForBranchException("You are not allowed to edit this branch");
         }
 
-        branch.setName(dto.getName());
-        branch.setAddress(dto.getAddress());
-        branch.setContactInfo(dto.getContactInfo());
+        branch.setName(dto.name());
+        branch.setAddress(dto.address());
+        branch.setContactInfo(dto.contactInfo());
 
         return branchMapper.toDto(branchRepository.save(branch));
     }

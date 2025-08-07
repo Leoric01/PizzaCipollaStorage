@@ -1,5 +1,6 @@
 package leoric.pizzacipollastorage.controllers;
 
+import jakarta.validation.Valid;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientCreateDto;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientResponseDto;
 import leoric.pizzacipollastorage.auth.models.User;
@@ -40,7 +41,7 @@ public class IngredientController {
     @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
     public ResponseEntity<IngredientResponseDto> ingredientCreate(
             @PathVariable UUID branchId,
-            @RequestBody IngredientCreateDto dto,
+            @RequestBody @Valid IngredientCreateDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
         branchServiceAccess.assertHasAccess(branchId, currentUser);
@@ -52,7 +53,7 @@ public class IngredientController {
     @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
     public ResponseEntity<List<IngredientResponseDto>> ingredientCreateBulk(
             @PathVariable UUID branchId,
-            @RequestBody List<IngredientCreateDto> dtos,
+            @RequestBody @Valid List<IngredientCreateDto> dtos,
             @AuthenticationPrincipal User currentUser
     ) {
         branchServiceAccess.assertHasAccess(branchId, currentUser);
@@ -65,7 +66,7 @@ public class IngredientController {
     public ResponseEntity<IngredientResponseDto> ingredientUpdateById(
             @PathVariable UUID branchId,
             @PathVariable UUID ingredientId,
-            @RequestBody IngredientCreateDto dto,
+            @RequestBody @Valid IngredientCreateDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
         branchServiceAccess.assertHasAccess(branchId, currentUser);

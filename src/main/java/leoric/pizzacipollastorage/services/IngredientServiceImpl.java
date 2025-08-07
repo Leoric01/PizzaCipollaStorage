@@ -26,7 +26,6 @@ import leoric.pizzacipollastorage.repositories.MenuItemRepository;
 import leoric.pizzacipollastorage.services.interfaces.IngredientAliasService;
 import leoric.pizzacipollastorage.services.interfaces.IngredientService;
 import leoric.pizzacipollastorage.vat.models.ProductCategory;
-import leoric.pizzacipollastorage.vat.models.VatRate;
 import leoric.pizzacipollastorage.vat.repositories.ProductCategoryRepository;
 import leoric.pizzacipollastorage.vat.repositories.VatRateRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,10 +33,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -64,20 +61,18 @@ public class IngredientServiceImpl implements IngredientService {
             throw new BusinessException(BusinessErrorCodes.NOT_AUTHORIZED_FOR_BRANCH);
         }
 
-        String name = dto.getName().trim();
+        String name = dto.name().trim();
 
         if (!existing.getName().equalsIgnoreCase(name) &&
             ingredientRepository.existsByNameIgnoreCaseAndBranchId(name, branchId)) {
             throw new BusinessException(BusinessErrorCodes.DUPLICATE_INGREDIENT_NAME);
         }
 
-        String categoryName = dto.getProductCategory() == null || dto.getProductCategory().isBlank()
-                ? "UNKNOWN"
-                : dto.getProductCategory().trim().toUpperCase();
+        UUID categoryId = dto.productCategoryId();
 
-        ProductCategory category = productCategoryRepository
-                .findByNameIgnoreCaseAndBranchId(categoryName, branchId)
-                .orElseThrow(() -> new EntityNotFoundException("Category not found: " + categoryName));
+        ProductCategory category = productCategoryRepository.findById(categoryId)
+                .filter(cat -> cat.getBranch().getId().equals(branchId))
+                .orElseThrow(() -> new EntityNotFoundException("Category not found or not accessible: " + categoryId));
 
         ingredientMapper.update(existing, dto);
         existing.setProductCategory(category);
@@ -105,7 +100,7 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public IngredientResponseDto ingredientCreate(UUID branchId, IngredientCreateDto dto) {
-        String name = dto.getName().trim();
+        String name = dto.name().trim();
 
         if (ingredientRepository.existsByNameIgnoreCaseAndBranchId(name, branchId)) {
             throw new BusinessException(BusinessErrorCodes.DUPLICATE_INGREDIENT_NAME);
@@ -114,23 +109,14 @@ public class IngredientServiceImpl implements IngredientService {
         Branch branch = branchRepository.findById(branchId)
                 .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
 
-        UUID defaultVatRateId = UUID.fromString("00000000-0000-0000-0000-000000000001");
-        VatRate defaultVatRate = vatRateRepository.findById(defaultVatRateId)
-                .orElseThrow(() -> new IllegalStateException("Default VAT rate not found"));
+        UUID categoryId = dto.productCategoryId();
+        if (categoryId == null) {
+            throw new IllegalArgumentException("Product category ID is required");
+        }
 
-        String categoryName = dto.getProductCategory() == null || dto.getProductCategory().isBlank()
-                ? "UNKNOWN"
-                : dto.getProductCategory().trim().toUpperCase();
-
-        ProductCategory category = productCategoryRepository
-                .findByNameIgnoreCaseAndBranchId(categoryName, branchId)
-                .orElseGet(() -> productCategoryRepository.save(
-                        ProductCategory.builder()
-                                .name(categoryName)
-                                .vatRate(defaultVatRate)
-                                .branch(branch)
-                                .build()
-                ));
+        ProductCategory category = productCategoryRepository.findById(categoryId)
+                .filter(pc -> pc.getBranch().getId().equals(branchId))
+                .orElseThrow(() -> new EntityNotFoundException("Product category not found or does not belong to the branch"));
 
         Ingredient ingredient = ingredientMapper.toEntity(dto);
         ingredient.setBranch(branch);
@@ -204,35 +190,32 @@ public class IngredientServiceImpl implements IngredientService {
         Branch branch = branchRepository.findById(branchId)
                 .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
 
-        UUID defaultVatRateId = UUID.fromString("00000000-0000-0000-0000-000000000001");
-        VatRate defaultVatRate = vatRateRepository.findById(defaultVatRateId)
-                .orElseThrow(() -> new IllegalStateException("Default VAT rate not found"));
+        Set<UUID> categoryIds = dtos.stream()
+                .map(IngredientCreateDto::productCategoryId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+
+        Map<UUID, ProductCategory> categoriesById = productCategoryRepository.findAllById(categoryIds).stream()
+                .filter(cat -> cat.getBranch().getId().equals(branchId))
+                .collect(Collectors.toMap(ProductCategory::getId, Function.identity()));
 
         List<Ingredient> ingredientsToSave = new ArrayList<>();
+
         for (IngredientCreateDto dto : dtos) {
-            String name = dto.getName().trim();
+            String name = dto.name().trim();
 
             if (ingredientRepository.existsByNameIgnoreCaseAndBranchId(name, branchId)) {
                 continue;
             }
 
-            String categoryName = dto.getProductCategory() == null || dto.getProductCategory().isBlank()
-                    ? "UNKNOWN"
-                    : dto.getProductCategory().trim().toUpperCase();
-
-            ProductCategory category = productCategoryRepository
-                    .findByNameIgnoreCaseAndBranchId(categoryName, branchId)
-                    .orElseGet(() -> productCategoryRepository.save(
-                            ProductCategory.builder()
-                                    .name(categoryName)
-                                    .vatRate(defaultVatRate)
-                                    .branch(branch)
-                                    .build()
-                    ));
+            UUID categoryId = dto.productCategoryId();
+            if (categoryId == null || !categoriesById.containsKey(categoryId)) {
+                continue;
+            }
 
             Ingredient ingredient = ingredientMapper.toEntity(dto);
             ingredient.setBranch(branch);
-            ingredient.setProductCategory(category);
+            ingredient.setProductCategory(categoriesById.get(categoryId));
             ingredientsToSave.add(ingredient);
         }
 
