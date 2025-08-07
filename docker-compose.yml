@@ -27,10 +27,25 @@ services:
 
   # BE KONFIGURACE
 
+  #  backend:
+  #    build:
+  #      context: .
+  #      dockerfile: Dockerfile
+  #    container_name: ppcstorage-backend
+  #    ports:
+  #      - 8080:8080
+  #    environment:
+  #      SPRING_PROFILES_ACTIVE: docker
+  #    networks:
+  #      - spring-demo
+  #    depends_on:
+  #      - mysql
+  #      - maildev
+
+  # FE KONFIGURACE
+  #
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: leorickk/pizzacipollastorage-backend:latest
     container_name: ppcstorage-backend
     ports:
       - 8080:8080
@@ -41,21 +56,17 @@ services:
     depends_on:
       - mysql
       - maildev
+    restart: unless-stopped
 
-# FE KONFIGURACE
-#
-#  backend:
-#    image: leorickk/pizzacipollastorage-backend:latest
-#    container_name: ppcstorage-backend
-#    ports:
-#      - 8080:8080
-#    environment:
-#      SPRING_PROFILES_ACTIVE: docker
-#    networks:
-#      - spring-demo
-#    depends_on:
-#      - mysql
-#      - maildev
+  frontend:
+    image: leorickk/zradlo-fe:latest
+    container_name: zradlo-fe
+    ports:
+      - 3000:3000
+    networks:
+      - spring-demo
+    restart: unless-stopped
+
 
 networks:
   spring-demo:

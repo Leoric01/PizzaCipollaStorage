@@ -75,19 +75,26 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return new AuthenticationResponse(jwtToken, dateFormat.format(expiresDate));
     }
 
-    @Override
     @Transactional
-    public void activateAccount(String token) throws MessagingException {
+    public void activateAccount(String token, String email) throws MessagingException {
         Token savedToken = tokenRepository.findByToken(token)
-                // todo exception has to be defined
                 .orElseThrow(() -> new RuntimeException("Invalid token (OTP)"));
+
+        if (!savedToken.getUser().getEmail().equalsIgnoreCase(email)) {
+            throw new RuntimeException("Token does not belong to the specified email");
+        }
+
         if (LocalDateTime.now().isAfter(savedToken.getExpiresAt())) {
             sendValidationEmail(savedToken.getUser());
-            throw new RuntimeException("Activation token has expired. A new token has been send to the same email address");
+            throw new RuntimeException("Activation token has expired. A new token has been sent to the same email address");
         }
-        User user = userRepository.findById(savedToken.getUser().getId()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        User user = userRepository.findById(savedToken.getUser().getId())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
         user.setEnabled(true);
         userRepository.save(user);
+
         savedToken.setValidatedAt(LocalDateTime.now());
         tokenRepository.save(savedToken);
     }

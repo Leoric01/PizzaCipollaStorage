@@ -38,8 +38,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/activate-account")
-    public void confirm(@RequestParam String token) throws MessagingException {
-        authenticationService.activateAccount(token);
+    public void confirm(@RequestParam String token, @RequestParam String email) throws MessagingException {
+        authenticationService.activateAccount(token, email);
     }
 
     @GetMapping("/list-all")

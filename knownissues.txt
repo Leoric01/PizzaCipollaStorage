@@ -1,1 +1,8 @@
-vyresit mapovani pizz - nezobrazuje recept(ingredience)
+# FE
+zmenit aktivaci - uz to chce i mail
+proklik emailu nevyplni kod
+
+
+# BE
+udelat access role
+obrazky jidel/surovin
