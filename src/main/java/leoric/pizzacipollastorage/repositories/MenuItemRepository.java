@@ -12,9 +12,11 @@ import java.util.UUID;
 
 @Repository
 public interface MenuItemRepository extends JpaRepository<MenuItem, UUID> {
-    Optional<MenuItem> findByNameIgnoreCaseAndBranchId(String name, UUID branchId)
-            ;
+    Optional<MenuItem> findByNameIgnoreCaseAndBranchId(String name, UUID branchId);
 
     @Query("SELECT m FROM MenuItem m JOIN m.recipeIngredients ri WHERE ri.ingredient.id = :ingredientId")
     List<MenuItem> findAllByRecipeIngredientsIngredientId(@Param("ingredientId") UUID ingredientId);
+
+    List<MenuItem> findAllByBranchId(UUID branchId);
+
 }

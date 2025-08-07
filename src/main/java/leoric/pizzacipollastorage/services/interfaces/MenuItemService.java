@@ -1,6 +1,7 @@
 package leoric.pizzacipollastorage.services.interfaces;
 
-import leoric.pizzacipollastorage.DTOs.MenuItem.*;
+import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemFullCreateDto;
+import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemResponseDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,27 +10,29 @@ import java.util.UUID;
 @Service
 public interface MenuItemService {
 
-    MenuItemResponseDto createMenuItem(MenuItemCreateDto dto);
-
-    RecipeIngredientShortDto addIngredientToMenuItem(UUID branchId, RecipeIngredientCreateDto dto);
-
-    List<MenuItemResponseDto> getAllMenuItems();
-
-    List<RecipeIngredientShortDto> addIngredientsToMenuItemBulk(UUID branchId, RecipeCreateBulkDto dto);
-
-    MenuItemResponseDto getMenuItemById(UUID id);
-
     MenuItemResponseDto createMenuItemWithOptionalIngredients(UUID branchId, MenuItemFullCreateDto dto);
 
-    MenuItemResponseDto getMenuItemByName(UUID branchId, String menuItemName);
+    List<MenuItemResponseDto> createMenuItemsBulk(UUID branchId, List<MenuItemFullCreateDto> dtos);
 
-    void deleteMenuItemById(UUID id);
+    List<MenuItemResponseDto> menuItemGetAll(UUID branchId);
 
-    MenuItemResponseDto updateMenuItem(UUID branchId, UUID id, MenuItemFullCreateDto dto);
+    MenuItemResponseDto menuItemGetById(UUID branchId, UUID menuItemId);
 
-    RecipeIngredientShortDto updateRecipeIngredient(UUID id, RecipeIngredientVeryShortDto dto);
+    MenuItemResponseDto menuItemUpdate(UUID branchId, UUID menuItemId, MenuItemFullCreateDto dto);
 
-    RecipeIngredientShortDto getRecipeIngredientById(UUID id);
+    MenuItemResponseDto menuItemGetByName(UUID branchId, String menuItemName);
 
-    void deleteRecipeIngredientById(UUID id);
+    void menuItemDeleteById(UUID branchId, UUID menuItemId);
+
+    // -------- RecipeIngredient methods --------
+
+//    RecipeIngredientShortDto addIngredientToMenuItem(UUID branchId, RecipeIngredientCreateDto dto);
+//
+//    List<RecipeIngredientShortDto> addIngredientsToMenuItemBulk(UUID branchId, RecipeCreateBulkDto dto);
+//
+//    RecipeIngredientShortDto updateRecipeIngredient(UUID branchId, UUID id, RecipeIngredientVeryShortDto dto);
+//
+//    RecipeIngredientShortDto getRecipeIngredientById(UUID branchId, UUID id);
+//
+//    void deleteRecipeIngredientById(UUID branchId, UUID id);
 }

@@ -66,8 +66,12 @@ public class ProductCategoryController {
         return ResponseEntity.ok(productCategoryService.getAllCategories(branchId, currentUser));
     }
 
-    @GetMapping("/{productCategoryId}")
-    public ResponseEntity<ProductCategoryResponseDto> productCategoryGetById(@PathVariable UUID productCategoryId) {
+    @GetMapping("/{branchId}/{productCategoryId}")
+    public ResponseEntity<ProductCategoryResponseDto> productCategoryGetById(@PathVariable UUID productCategoryId,
+                                                                             @PathVariable UUID branchId,
+                                                                             @AuthenticationPrincipal User currentUser) {
+        branchServiceAccess.assertHasAccess(branchId, currentUser);
+
         return ResponseEntity.ok(productCategoryService.getProductCategoryById(productCategoryId));
     }
 
