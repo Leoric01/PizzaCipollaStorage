@@ -52,10 +52,15 @@ public class MenuItemCategoryController {
         return ResponseEntity.ok(menuItemCategoryService.menuItemCategoryFindAll(branchId));
     }
 
-    @GetMapping("/by-id/{menuItemCategoryId}")
+    @GetMapping("/{branchId}/{menuItemCategoryId}")
     public ResponseEntity<MenuItemCategoryResponseDto> menuItemCategoryGetById(
-            @PathVariable UUID menuItemCategoryId
+            @PathVariable UUID menuItemCategoryId,
+            @PathVariable UUID branchId,
+            @AuthenticationPrincipal User currentUser
+
+
     ) {
+        branchServiceAccess.assertHasAccess(branchId, currentUser);
         return ResponseEntity.ok(menuItemCategoryService.menuItemCategoryFindById(menuItemCategoryId));
     }
 
