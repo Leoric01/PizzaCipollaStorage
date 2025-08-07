@@ -127,4 +127,17 @@ public class User implements UserDetails, Principal {
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+               "id=" + id +
+               ", fullName='" + getFullname() + '\'' +
+               ", email='" + email + '\'' +
+               ", roles=" + roles.stream()
+                       .map(Role::getName)
+                       .toList() +
+               ", branchesCount=" + (branches != null ? branches.size() : 0) +
+               '}';
+    }
 }

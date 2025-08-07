@@ -21,6 +21,21 @@ public class IngredientController {
     private final IngredientService ingredientService;
     private final BranchServiceAccess branchServiceAccess;
 
+    @GetMapping("/{branchId}/all")
+    public ResponseEntity<List<IngredientResponseDto>> ingredientGetAll(
+            @PathVariable UUID branchId,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        branchServiceAccess.assertHasAccess(branchId, currentUser);
+
+        return ResponseEntity.ok(ingredientService.ingredientGetAll(branchId));
+    }
+
+    @GetMapping("/{ingredientId}")
+    public ResponseEntity<IngredientResponseDto> ingredientGetById(@PathVariable UUID ingredientId) {
+        return ResponseEntity.ok(ingredientService.ingredientGetById(ingredientId));
+    }
+
     @PostMapping("/{branchId}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
     public ResponseEntity<IngredientResponseDto> ingredientCreate(
@@ -43,21 +58,6 @@ public class IngredientController {
         branchServiceAccess.assertHasAccess(branchId, currentUser);
 
         return ResponseEntity.ok(ingredientService.ingredientCreateBulk(branchId, dtos));
-    }
-
-    @GetMapping("/{branchId}")
-    public ResponseEntity<List<IngredientResponseDto>> ingredientGetAll(
-            @PathVariable UUID branchId,
-            @AuthenticationPrincipal User currentUser
-    ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
-
-        return ResponseEntity.ok(ingredientService.ingredientGetAll(branchId));
-    }
-
-    @GetMapping("/{ingredientId}")
-    public ResponseEntity<IngredientResponseDto> ingredientGetById(@PathVariable UUID ingredientId) {
-        return ResponseEntity.ok(ingredientService.ingredientGetById(ingredientId));
     }
 
     @PutMapping("/{branchId}/{ingredientId}")
@@ -85,7 +85,7 @@ public class IngredientController {
         return ResponseEntity.noContent().build();
     }
 
-//    @GetMapping("/by-name/{name}")
+    //    @GetMapping("/by-name/{name}")
 //    public ResponseEntity<IngredientAliasOverviewDto> getAliasOverviewByName(@PathVariable String name) {
 //        return ingredientService.getAliasOverviewByName(name)
 //                .map(ResponseEntity::ok)

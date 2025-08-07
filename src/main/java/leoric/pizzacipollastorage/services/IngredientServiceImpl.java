@@ -141,6 +141,12 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
+    public IngredientResponseDto ingredientGetById(UUID ingredientId) {
+        return ingredientMapper.toDto(ingredientRepository.findById(ingredientId)
+                .orElseThrow(() -> new EntityNotFoundException("Ingredient not found")));
+    }
+
+    @Override
     public List<IngredientResponseDto> ingredientGetAll(UUID branchId) {
         List<Ingredient> ingredients = ingredientRepository.findAllByBranchId(branchId);
         return ingredientMapper.toDtoList(ingredients);
@@ -234,12 +240,6 @@ public class IngredientServiceImpl implements IngredientService {
         return saved.stream()
                 .map(ingredientMapper::toDto)
                 .toList();
-    }
-
-    @Override
-    public IngredientResponseDto ingredientGetById(UUID ingredientId) {
-        return ingredientMapper.toDto(ingredientRepository.findById(ingredientId)
-                .orElseThrow(() -> new EntityNotFoundException("Ingredient not found")));
     }
 
     private float calculateSuggestedQuantity(Ingredient ingredient) {
