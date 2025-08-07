@@ -1,5 +1,6 @@
 package leoric.pizzacipollastorage.DTOs.MenuItemSale;
 
+import leoric.pizzacipollastorage.models.enums.DishSize;
 import lombok.Data;
 
 import java.util.UUID;
@@ -7,7 +8,7 @@ import java.util.UUID;
 @Data
 public class MenuItemSaleCreateDto {
     private UUID menuItemId;
-    private UUID dishSizeId;
+    private DishSize dishSize;
     private int quantitySold;
     private String cookName;
 }
