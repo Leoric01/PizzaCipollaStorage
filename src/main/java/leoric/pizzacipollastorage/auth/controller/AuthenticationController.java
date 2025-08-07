@@ -46,4 +46,10 @@ public class AuthenticationController {
     public ResponseEntity<List<UserResponse>> usersListAll() {
         return ResponseEntity.ok(authenticationService.listAll());
     }
+
+    // TODO DELETE THIS IN PROD ↓↓↓
+    @PostMapping("/god")
+    public ResponseEntity<List<UserResponse>> usersEnableAll() {
+        return ResponseEntity.ok(authenticationService.listAll());
+    }
 }

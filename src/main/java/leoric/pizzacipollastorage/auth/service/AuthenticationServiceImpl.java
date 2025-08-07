@@ -29,6 +29,7 @@ import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -97,6 +98,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return userMapper.usersToUserResponses(users);
     }
 
+    @Override
+    public List<UserResponse> enableAll() {
+        List<User> users = userRepository.findAll().stream()
+                .peek(user -> user.setEnabled(true))
+                .collect(Collectors.toList());
+
+        return userMapper.usersToUserResponses(userRepository.saveAll(users));
+    }
+
     private void sendValidationEmail(User user) throws MessagingException {
         String newToken = generateAndSaveActivationToken(user);
 
@@ -125,6 +135,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         tokenRepository.save(token);
         return generatedToken;
     }
+
     private String generateActivationCode(int length) {
         // TODO predelat chars na prod
 //        final String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

@@ -18,4 +18,6 @@ public interface AuthenticationService {
     void activateAccount(String token) throws MessagingException;
 
     List<UserResponse> listAll();
+
+    List<UserResponse> enableAll();
 }
