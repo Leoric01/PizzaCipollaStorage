@@ -35,14 +35,15 @@ public class InventoryController {
     }
 
     @PostMapping("/{branchId}/snapshot/bulk")
-//    @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
     public ResponseEntity<List<InventorySnapshotResponseDto>> inventoryCreateSnapshotBulk(
             @PathVariable UUID branchId,
             @RequestBody List<InventorySnapshotCreateDto> dtos,
             @AuthenticationPrincipal User currentUser
     ) {
-//        branchServiceAccess.assertHasAccess(branchId, currentUser);
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, "MANAGER");
+        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        // TODO VYTVORIT TY ACCESS ROLE
+//        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, "MANAGER");
 
         return ResponseEntity.ok(inventoryService.createSnapshotBulk(branchId, dtos));
     }
