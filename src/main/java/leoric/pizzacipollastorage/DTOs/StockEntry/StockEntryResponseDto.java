@@ -1,5 +1,6 @@
 package leoric.pizzacipollastorage.DTOs.StockEntry;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientShortDto;
 import leoric.pizzacipollastorage.purchase.dtos.Supplier.SupplierShortDto;
 import lombok.Data;
@@ -14,5 +15,6 @@ public class StockEntryResponseDto {
     private SupplierShortDto supplier;
     private float quantityReceived;
     private float pricePerUnitWithoutTax;
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate receivedDate;
 }

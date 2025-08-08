@@ -1,5 +1,6 @@
 package leoric.pizzacipollastorage.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import leoric.pizzacipollastorage.purchase.models.PurchaseInvoiceItem;
 import leoric.pizzacipollastorage.purchase.models.Supplier;
@@ -37,5 +38,6 @@ public class StockEntry {
 
     private float quantityReceived;
     private float pricePerUnitWithoutTax;
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate receivedDate;
 }
