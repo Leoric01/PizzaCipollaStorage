@@ -119,7 +119,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return userMapper.usersToUserResponses(userRepository.saveAll(users));
     }
 
-    private void sendValidationEmail(User user) throws MessagingException {
+    protected void sendValidationEmail(User user) throws MessagingException {
         String newToken = generateAndSaveActivationToken(user);
 
         String encodedEmail = URLEncoder.encode(user.getEmail(), StandardCharsets.UTF_8);
