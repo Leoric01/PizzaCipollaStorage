@@ -1,8 +1,9 @@
 # FE
 zmenit aktivaci - uz to chce i mail
-proklik emailu nevyplni kod
+proklik emailu nevyplni kod - chcanka
 supplier
 stockentry
+udelat dockerfile a docker img
 
 # BE
 udelat access role
