@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -62,6 +63,9 @@ public class User implements UserDetails, Principal {
             inverseJoinColumns = @JoinColumn(name = "branch_id")
     )
     private List<Branch> branches;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserBranchRole> userBranchRoles = new ArrayList<>();
 
     @Override
     public String getName() {
@@ -139,5 +143,15 @@ public class User implements UserDetails, Principal {
                        .toList() +
                ", branchesCount=" + (branches != null ? branches.size() : 0) +
                '}';
+    }
+
+    public boolean hasGlobalRole(String roleName) {
+        return roles.stream().anyMatch(r -> r.getName().equalsIgnoreCase(roleName));
+    }
+
+    public boolean hasRoleOnBranch(String roleName, UUID branchId) {
+        return userBranchRoles.stream()
+                .anyMatch(ubr -> ubr.getBranch().getId().equals(branchId) &&
+                                 ubr.getRole().getName().equalsIgnoreCase(roleName));
     }
 }

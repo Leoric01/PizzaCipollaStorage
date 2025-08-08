@@ -2,20 +2,20 @@ package leoric.pizzacipollastorage.auth;
 
 import leoric.pizzacipollastorage.auth.dtos.RegistrationRequest;
 import leoric.pizzacipollastorage.auth.dtos.UserResponse;
+import leoric.pizzacipollastorage.auth.dtos.UserResponseFullDto;
 import leoric.pizzacipollastorage.auth.models.Role;
 import leoric.pizzacipollastorage.auth.models.User;
+import leoric.pizzacipollastorage.branch.BranchMapper;
+import leoric.pizzacipollastorage.branch.UserBranchRoleMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {BranchMapper.class, UserBranchRoleMapper.class})
 public interface UserMapper {
-
-    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     @Named("mapRolesToNames")
     static List<String> mapRolesToNames(List<Role> roles) {
@@ -25,6 +25,12 @@ public interface UserMapper {
     @Mapping(source = "roles", target = "role", qualifiedByName = "mapRolesToNames")
     @Mapping(target = "fullname", expression = "java(user.getFullname())")
     UserResponse userToUserResponse(User user);
+
+    @Mapping(source = "roles", target = "role", qualifiedByName = "mapRolesToNames")
+    @Mapping(target = "fullname", expression = "java(user.getFullname())")
+    @Mapping(source = "branches", target = "branches")
+    @Mapping(source = "userBranchRoles", target = "userBranchRoles")
+    UserResponseFullDto userToUserResponseFull(User user);
 
     List<UserResponse> usersToUserResponses(List<User> users);
 

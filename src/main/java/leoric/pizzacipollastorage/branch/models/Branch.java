@@ -2,6 +2,7 @@ package leoric.pizzacipollastorage.branch.models;
 
 import jakarta.persistence.*;
 import leoric.pizzacipollastorage.auth.models.User;
+import leoric.pizzacipollastorage.auth.models.UserBranchRole;
 import leoric.pizzacipollastorage.loans.models.IngredientLoan;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,4 +41,6 @@ public class Branch {
     @OneToMany(mappedBy = "toBranch")
     private List<IngredientLoan> loansReceived = new ArrayList<>();
 
+    @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserBranchRole> userBranchRoles = new ArrayList<>();
 }
