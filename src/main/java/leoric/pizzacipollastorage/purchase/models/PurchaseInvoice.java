@@ -28,6 +28,7 @@ public class PurchaseInvoice {
     @ManyToOne
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
+
     private LocalDate issuedDate;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate receivedDate;

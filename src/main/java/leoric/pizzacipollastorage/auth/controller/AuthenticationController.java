@@ -8,7 +8,6 @@ import leoric.pizzacipollastorage.auth.dtos.AuthenticationResponse;
 import leoric.pizzacipollastorage.auth.dtos.RegistrationRequest;
 import leoric.pizzacipollastorage.auth.dtos.UserResponse;
 import leoric.pizzacipollastorage.auth.service.AuthenticationService;
-import leoric.pizzacipollastorage.auth.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +22,6 @@ import java.util.List;
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
-    private final UserService userService;
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.ACCEPTED)
