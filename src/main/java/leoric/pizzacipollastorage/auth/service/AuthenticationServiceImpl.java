@@ -26,9 +26,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,16 +65,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        var auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.email(), request.password()));
+        var auth = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.email(), request.password())
+        );
+
         Map<String, Object> claims = new HashMap<>();
         User user = (User) auth.getPrincipal();
         claims.put("id", user.getId());
         claims.put("fullName", user.getFullname());
+
         String jwtToken = jwtService.generateToken(claims, user);
         Date expiresDate = jwtService.extractExpirationTime(jwtToken);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss dd.MM.yyyy", Locale.getDefault());
-        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return new AuthenticationResponse(jwtToken, dateFormat.format(expiresDate));
+
+        return new AuthenticationResponse(jwtToken, expiresDate);
     }
 
     @Transactional

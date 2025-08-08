@@ -8,3 +8,4 @@ udelat dockerfile a docker img
 # BE
 udelat access role
 obrazky jidel/surovin
+doplnit supplier controler do postmana
