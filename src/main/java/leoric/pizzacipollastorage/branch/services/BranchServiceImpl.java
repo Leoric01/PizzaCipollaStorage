@@ -3,12 +3,13 @@ package leoric.pizzacipollastorage.branch.services;
 import jakarta.persistence.EntityNotFoundException;
 import leoric.pizzacipollastorage.auth.models.User;
 import leoric.pizzacipollastorage.auth.repositories.UserRepository;
+import leoric.pizzacipollastorage.branch.BranchMapper;
 import leoric.pizzacipollastorage.branch.dtos.BranchCreateDto;
 import leoric.pizzacipollastorage.branch.dtos.BranchResponseDto;
 import leoric.pizzacipollastorage.branch.models.Branch;
 import leoric.pizzacipollastorage.branch.repositories.BranchRepository;
 import leoric.pizzacipollastorage.branch.services.interfaces.BranchService;
-import leoric.pizzacipollastorage.mapstruct.BranchMapper;
+import leoric.pizzacipollastorage.handler.exceptions.NotAuthorizedForBranchException;
 import leoric.pizzacipollastorage.utils.CustomUtilityString;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,12 @@ public class BranchServiceImpl implements BranchService {
     @Override
     @Transactional
     public BranchResponseDto createBranch(BranchCreateDto dto, User currentUser) {
+        boolean branchExists = currentUser.getBranches().stream()
+                .anyMatch(b -> b.getName().equalsIgnoreCase(dto.name()));
+
+        if (branchExists) {
+            throw new IllegalArgumentException("Už máte pobočku se jménem '" + dto.name() + "'");
+        }
         Branch branch = branchMapper.toEntity(dto);
         if (branch.getUsers() == null) {
             branch.setUsers(new ArrayList<>());
@@ -43,17 +50,30 @@ public class BranchServiceImpl implements BranchService {
     }
 
     @Override
-    public void deleteBranch(UUID id) {
-        branchRepository.deleteById(id);
+    public void deleteBranch(UUID id, User currentUser) {
+        Branch branch = branchRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Branch not found with id: " + id));
+
+        if (!currentUser.hasRole("ADMIN") && !branch.getUsers().contains(currentUser)) {
+            throw new NotAuthorizedForBranchException("You are not allowed to delete this branch");
+        }
+
+        branchRepository.delete(branch);
     }
 
     @Override
-    public BranchResponseDto updateBranch(UUID id, BranchCreateDto dto) {
+    public BranchResponseDto updateBranch(UUID id, BranchCreateDto dto, User currentUser) {
         Branch branch = branchRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Branch not found: id = " + id));
-        branch.setName(dto.getName());
-        branch.setAddress(dto.getAddress());
-        branch.setContactInfo(dto.getContactInfo());
+
+        if (!currentUser.hasRole("ADMIN") && !branch.getUsers().contains(currentUser)) {
+            throw new NotAuthorizedForBranchException("You are not allowed to edit this branch");
+        }
+
+        branch.setName(dto.name());
+        branch.setAddress(dto.address());
+        branch.setContactInfo(dto.contactInfo());
+
         return branchMapper.toDto(branchRepository.save(branch));
     }
 

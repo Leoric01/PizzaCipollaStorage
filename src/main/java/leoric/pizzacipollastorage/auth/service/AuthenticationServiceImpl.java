@@ -23,10 +23,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -72,19 +75,26 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return new AuthenticationResponse(jwtToken, dateFormat.format(expiresDate));
     }
 
-    @Override
     @Transactional
-    public void activateAccount(String token) throws MessagingException {
+    public void activateAccount(String token, String email) throws MessagingException {
         Token savedToken = tokenRepository.findByToken(token)
-                // todo exception has to be defined
                 .orElseThrow(() -> new RuntimeException("Invalid token (OTP)"));
+
+        if (!savedToken.getUser().getEmail().equalsIgnoreCase(email)) {
+            throw new RuntimeException("Token does not belong to the specified email");
+        }
+
         if (LocalDateTime.now().isAfter(savedToken.getExpiresAt())) {
             sendValidationEmail(savedToken.getUser());
-            throw new RuntimeException("Activation token has expired. A new token has been send to the same email address");
+            throw new RuntimeException("Activation token has expired. A new token has been sent to the same email address");
         }
-        User user = userRepository.findById(savedToken.getUser().getId()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        User user = userRepository.findById(savedToken.getUser().getId())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
         user.setEnabled(true);
         userRepository.save(user);
+
         savedToken.setValidatedAt(LocalDateTime.now());
         tokenRepository.save(savedToken);
     }
@@ -95,17 +105,31 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return userMapper.usersToUserResponses(users);
     }
 
+    @Override
+    public List<UserResponse> enableAll() {
+        List<User> users = userRepository.findAll().stream()
+                .peek(user -> user.setEnabled(true))
+                .collect(Collectors.toList());
+
+        return userMapper.usersToUserResponses(userRepository.saveAll(users));
+    }
+
     private void sendValidationEmail(User user) throws MessagingException {
         String newToken = generateAndSaveActivationToken(user);
+
+        String encodedEmail = URLEncoder.encode(user.getEmail(), StandardCharsets.UTF_8);
+        String fullActivationUrl = activationUrl + newToken + "&email=" + encodedEmail;
+
         emailService.sendEmail(
                 user.getEmail(),
                 user.getFullname(),
                 EmailTemplateName.ACTIVATE_ACCOUNT,
-                activationUrl,
+                fullActivationUrl,
                 newToken,
                 "Account activation"
         );
     }
+
     private String generateAndSaveActivationToken(User user) {
         int length = 6;
         String generatedToken = generateActivationCode(length);
@@ -118,6 +142,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         tokenRepository.save(token);
         return generatedToken;
     }
+
     private String generateActivationCode(int length) {
         // TODO predelat chars na prod
 //        final String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

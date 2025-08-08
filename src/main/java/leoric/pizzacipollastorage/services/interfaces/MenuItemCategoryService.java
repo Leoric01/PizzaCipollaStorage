@@ -2,6 +2,8 @@ package leoric.pizzacipollastorage.services.interfaces;
 
 import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemCategoryCreateDto;
 import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemCategoryResponseDto;
+import leoric.pizzacipollastorage.DTOs.MenuItem.RecipeIngredientShortDto;
+import leoric.pizzacipollastorage.DTOs.MenuItem.RecipeIngredientVeryShortDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,11 +11,15 @@ import java.util.UUID;
 
 @Service
 public interface MenuItemCategoryService {
-    List<MenuItemCategoryResponseDto> findAll(UUID branchId);
+    List<MenuItemCategoryResponseDto> menuItemCategoryFindAll(UUID branchId);
 
-    MenuItemCategoryResponseDto add(UUID branchId, MenuItemCategoryCreateDto dto);
+    MenuItemCategoryResponseDto menuItemCategoryAdd(UUID branchId, MenuItemCategoryCreateDto dto);
 
-    MenuItemCategoryResponseDto update(UUID branchId, UUID id, MenuItemCategoryCreateDto dto);
+    MenuItemCategoryResponseDto menuItemCategoryUpdate(UUID branchId, UUID id, MenuItemCategoryCreateDto dto);
 
-    void delete(UUID branchId, UUID id);
+    void menuItemCategoryDelete(UUID branchId, UUID id);
+
+    List<MenuItemCategoryResponseDto> menuItemCategoryAddBulk(UUID branchId, List<MenuItemCategoryCreateDto> dtos);
+
+    MenuItemCategoryResponseDto menuItemCategoryFindById(UUID menuItemCategoryId);
 }

@@ -1,9 +1,7 @@
 package leoric.pizzacipollastorage.purchase.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+import leoric.pizzacipollastorage.branch.models.Branch;
 import leoric.pizzacipollastorage.models.IngredientPrice;
 import leoric.pizzacipollastorage.models.StockEntry;
 import lombok.AllArgsConstructor;
@@ -34,4 +32,8 @@ public class Supplier {
 
     @OneToMany(mappedBy = "supplier")
     private List<IngredientPrice> prices;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "branch_id")
+    private Branch branch;
 }

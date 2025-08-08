@@ -1,16 +1,21 @@
 package leoric.pizzacipollastorage.DTOs.Ingredient;
 
-import lombok.Data;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-@Data
-public class IngredientCreateDto {
-    private String name;
-    private String unit;
-    private float lossCleaningFactor;
-    private float lossUsageFactor;
-    private String productCategory;
+import java.util.UUID;
 
-    private Float preferredFullStockLevel;
-    private Float warningStockLevel;
-    private Float minimumStockLevel;
+public record IngredientCreateDto(
+        @NotBlank(message = "Název ingredience (name) nesmí být prázdný")
+        String name,
+        @NotBlank(message = "unit nesmí být prázdná")
+        String unit,
+        float lossCleaningFactor,
+        float lossUsageFactor,
+        @NotNull(message = "Chybí productCategoryId")
+        UUID productCategoryId,
+        Float preferredFullStockLevel,
+        Float warningStockLevel,
+        Float minimumStockLevel
+) {
 }

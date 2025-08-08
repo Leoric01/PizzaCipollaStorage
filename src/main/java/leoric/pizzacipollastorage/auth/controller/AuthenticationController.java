@@ -8,6 +8,7 @@ import leoric.pizzacipollastorage.auth.dtos.AuthenticationResponse;
 import leoric.pizzacipollastorage.auth.dtos.RegistrationRequest;
 import leoric.pizzacipollastorage.auth.dtos.UserResponse;
 import leoric.pizzacipollastorage.auth.service.AuthenticationService;
+import leoric.pizzacipollastorage.auth.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import java.util.List;
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
+    private final UserService userService;
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.ACCEPTED)
@@ -37,13 +39,19 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
 
-    @GetMapping("/activate-account")
-    public void confirm(@RequestParam String token) throws MessagingException {
-        authenticationService.activateAccount(token);
+    @PostMapping("/activate-account")
+    public void confirm(@RequestParam String token, @RequestParam String email) throws MessagingException {
+        authenticationService.activateAccount(token, email);
     }
 
     @GetMapping("/list-all")
-    public ResponseEntity<List<UserResponse>> listAll() {
+    public ResponseEntity<List<UserResponse>> usersListAll() {
+        return ResponseEntity.ok(authenticationService.listAll());
+    }
+
+    // TODO DELETE THIS IN PROD ↓↓↓
+    @PostMapping("/god")
+    public ResponseEntity<List<UserResponse>> usersEnableAll() {
         return ResponseEntity.ok(authenticationService.listAll());
     }
 }

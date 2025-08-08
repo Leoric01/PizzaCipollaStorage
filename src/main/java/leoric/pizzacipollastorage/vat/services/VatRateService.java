@@ -16,4 +16,6 @@ public interface VatRateService {
     List<VatRateShortDto> getAll();
 
     VatRateDeleteResponseDto deleteVatRateById(UUID id);
+
+    VatRateShortDto getVatRateById(UUID id);
 }

@@ -14,13 +14,13 @@ import java.util.UUID;
 
 @Service
 public interface IngredientService {
-    IngredientResponseDto createIngredient(UUID branchId, IngredientCreateDto dto);
+    IngredientResponseDto ingredientCreate(UUID branchId, IngredientCreateDto dto);
 
-    IngredientResponseDto updateIngredient(UUID branchId, UUID id, IngredientCreateDto dto);
+    IngredientResponseDto ingredientUpdate(UUID branchId, UUID id, IngredientCreateDto dto);
 
-    List<IngredientResponseDto> getAllIngredients(UUID branchId);
+    List<IngredientResponseDto> ingredientGetAll(UUID branchId);
 
-    void deleteById(UUID branchId, UUID id);
+    void ingredientDeleteById(UUID branchId, UUID id);
 
     InventoryStatus checkInventoryStatus(Ingredient ingredient);
 
@@ -28,4 +28,7 @@ public interface IngredientService {
 
     PurchaseOrder generateAutoPurchaseOrder();
 
+    List<IngredientResponseDto> ingredientCreateBulk(UUID branchId, List<IngredientCreateDto> dtos);
+
+    IngredientResponseDto ingredientGetById(UUID ingredientId);
 }

@@ -15,7 +15,9 @@ public interface AuthenticationService {
 
     AuthenticationResponse authenticate(AuthenticationRequest request);
 
-    void activateAccount(String token) throws MessagingException;
+    void activateAccount(String token, String email) throws MessagingException;
 
     List<UserResponse> listAll();
+
+    List<UserResponse> enableAll();
 }

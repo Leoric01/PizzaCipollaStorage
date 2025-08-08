@@ -12,9 +12,10 @@ import java.util.UUID;
 public interface BranchService {
     BranchResponseDto createBranch(BranchCreateDto dto, User currentUser);
 
-    void deleteBranch(UUID id);
+    void deleteBranch(UUID id, User currentUser);
 
-    BranchResponseDto updateBranch(UUID id, BranchCreateDto dto);
+    BranchResponseDto updateBranch(UUID id, BranchCreateDto dto, User currentUser);
+
     List<BranchResponseDto> getAllBranches();
 
     BranchResponseDto getBranchById(UUID id);

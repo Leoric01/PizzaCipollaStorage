@@ -9,27 +9,29 @@ import java.util.UUID;
 @Service
 public interface MenuItemService {
 
-    MenuItemResponseDto createMenuItem(MenuItemCreateDto dto);
-
-    RecipeIngredientShortDto addIngredientToMenuItem(UUID branchId, RecipeIngredientCreateDto dto);
-
-    List<MenuItemResponseDto> getAllMenuItems();
-
-    List<RecipeIngredientShortDto> addIngredientsToMenuItemBulk(UUID branchId, RecipeCreateBulkDto dto);
-
-    MenuItemResponseDto getMenuItemById(UUID id);
-
     MenuItemResponseDto createMenuItemWithOptionalIngredients(UUID branchId, MenuItemFullCreateDto dto);
 
-    MenuItemResponseDto getMenuItemByName(UUID branchId, String menuItemName);
+    List<MenuItemResponseDto> createMenuItemsBulk(UUID branchId, List<MenuItemFullCreateDto> dtos);
 
-    void deleteMenuItemById(UUID id);
+    List<MenuItemResponseDto> menuItemGetAll(UUID branchId);
 
-    MenuItemResponseDto updateMenuItem(UUID branchId, UUID id, MenuItemFullCreateDto dto);
+    MenuItemResponseDto menuItemGetById(UUID branchId, UUID menuItemId);
 
-    RecipeIngredientShortDto updateRecipeIngredient(UUID id, RecipeIngredientVeryShortDto dto);
+    MenuItemResponseDto menuItemUpdate(UUID branchId, UUID menuItemId, MenuItemFullCreateDto dto);
 
-    RecipeIngredientShortDto getRecipeIngredientById(UUID id);
+    MenuItemResponseDto menuItemGetByName(UUID branchId, String menuItemName);
 
-    void deleteRecipeIngredientById(UUID id);
+    void menuItemDeleteById(UUID branchId, UUID menuItemId);
+
+    // -------- RecipeIngredient methods --------
+
+    RecipeIngredientShortDto recipeIngredientAddToMenuItem(UUID branchId, RecipeIngredientCreateDto dto);
+
+    List<RecipeIngredientShortDto> recipeIngredientAddToMenuItemBulk(UUID branchId, RecipeCreateBulkDto dto);
+
+    RecipeIngredientShortDto updateRecipeIngredient(UUID branchId, UUID recipeIngredientId, RecipeIngredientVeryShortDto dto);
+
+    RecipeIngredientShortDto getRecipeIngredientById(UUID branchId, UUID recipeIngredientId);
+
+    void deleteRecipeIngredientById(UUID branchId, UUID id);
 }

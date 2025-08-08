@@ -19,15 +19,15 @@ public class MenuItemSaleController {
 
     private final MenuItemSaleService menuItemSaleService;
 
-    @PostMapping
-    public ResponseEntity<MenuItemSaleResponseDto> createSale(@RequestBody MenuItemSaleCreateDto dto) {
-        MenuItemSaleResponseDto response = menuItemSaleService.createSale(dto);
-        return ResponseEntity.ok(response);
-    }
-
-    @PostMapping("/bulk")
-    public ResponseEntity<List<MenuItemSaleResponseDto>> createSaleBulk(@RequestBody List<MenuItemSaleCreateDto> dtos) {
-        List<MenuItemSaleResponseDto> responses = menuItemSaleService.createSaleBulk(dtos);
-        return ResponseEntity.ok(responses);
-    }
+//    @PostMapping
+//    public ResponseEntity<MenuItemSaleResponseDto> saleCreate(@RequestBody MenuItemSaleCreateDto menuItemSaleCreateDto) {
+//        MenuItemSaleResponseDto response = menuItemSaleService.createSale(menuItemSaleCreateDto);
+//        return ResponseEntity.ok(response);
+//    }
+//
+//    @PostMapping("/bulk")
+//    public ResponseEntity<List<MenuItemSaleResponseDto>> saleCreateBulk(@RequestBody List<MenuItemSaleCreateDto> menuItemSaleCreateDtoList) {
+//        List<MenuItemSaleResponseDto> responses = menuItemSaleService.createSaleBulk(menuItemSaleCreateDtoList);
+//        return ResponseEntity.ok(responses);
+//    }
 }

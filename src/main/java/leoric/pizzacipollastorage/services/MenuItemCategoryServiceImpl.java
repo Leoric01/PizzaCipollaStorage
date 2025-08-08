@@ -26,14 +26,14 @@ public class MenuItemCategoryServiceImpl implements MenuItemCategoryService {
     private final MenuItemCategoryMapper menuItemCategoryMapper;
 
     @Override
-    public List<MenuItemCategoryResponseDto> findAll(UUID branchId) {
+    public List<MenuItemCategoryResponseDto> menuItemCategoryFindAll(UUID branchId) {
         return menuItemCategoryMapper.toDtoList(
                 menuItemCategoryRepository.findAllByBranchId(branchId)
         );
     }
 
     @Override
-    public MenuItemCategoryResponseDto add(UUID branchId, MenuItemCategoryCreateDto dto) {
+    public MenuItemCategoryResponseDto menuItemCategoryAdd(UUID branchId, MenuItemCategoryCreateDto dto) {
         String name = dto.getName().trim();
         Branch branch = branchRepository.findById(branchId)
                 .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
@@ -52,7 +52,39 @@ public class MenuItemCategoryServiceImpl implements MenuItemCategoryService {
     }
 
     @Override
-    public MenuItemCategoryResponseDto update(UUID branchId, UUID id, MenuItemCategoryCreateDto dto) {
+    public List<MenuItemCategoryResponseDto> menuItemCategoryAddBulk(UUID branchId, List<MenuItemCategoryCreateDto> dtos) {
+        Branch branch = branchRepository.findById(branchId)
+                .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
+
+        List<MenuItemCategory> toSave = dtos.stream()
+                .map(dto -> {
+                    String name = dto.getName().trim();
+                    menuItemCategoryRepository.findByNameIgnoreCaseAndBranchId(name, branchId)
+                            .ifPresent(existing -> {
+                                throw new BusinessException(BusinessErrorCodes.MENU_CATEGORY_ALREADY_EXISTS);
+                            });
+
+                    return MenuItemCategory.builder()
+                            .name(name)
+                            .branch(branch)
+                            .build();
+                })
+                .toList();
+
+        List<MenuItemCategory> saved = menuItemCategoryRepository.saveAll(toSave);
+        return menuItemCategoryMapper.toDtoList(saved);
+    }
+
+    @Override
+    public MenuItemCategoryResponseDto menuItemCategoryFindById(UUID menuItemCategoryId) {
+        MenuItemCategory category = menuItemCategoryRepository.findById(menuItemCategoryId)
+                .orElseThrow(() -> new EntityNotFoundException("Menu category not found: " + menuItemCategoryId));
+
+        return menuItemCategoryMapper.toDto(category);
+    }
+
+    @Override
+    public MenuItemCategoryResponseDto menuItemCategoryUpdate(UUID branchId, UUID id, MenuItemCategoryCreateDto dto) {
         MenuItemCategory category = menuItemCategoryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Category not found"));
 
@@ -72,7 +104,7 @@ public class MenuItemCategoryServiceImpl implements MenuItemCategoryService {
     }
 
     @Override
-    public void delete(UUID branchId, UUID id) {
+    public void menuItemCategoryDelete(UUID branchId, UUID id) {
         MenuItemCategory category = menuItemCategoryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Category not found"));
 

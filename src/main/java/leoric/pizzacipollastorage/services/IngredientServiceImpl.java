@@ -1,6 +1,7 @@
 package leoric.pizzacipollastorage.services;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientAlias.IngredientAliasOverviewDto;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientCreateDto;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientResponseDto;
@@ -25,7 +26,6 @@ import leoric.pizzacipollastorage.repositories.MenuItemRepository;
 import leoric.pizzacipollastorage.services.interfaces.IngredientAliasService;
 import leoric.pizzacipollastorage.services.interfaces.IngredientService;
 import leoric.pizzacipollastorage.vat.models.ProductCategory;
-import leoric.pizzacipollastorage.vat.models.VatRate;
 import leoric.pizzacipollastorage.vat.repositories.ProductCategoryRepository;
 import leoric.pizzacipollastorage.vat.repositories.VatRateRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,9 +33,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,7 +53,7 @@ public class IngredientServiceImpl implements IngredientService {
     private final IngredientAliasService ingredientAliasService;
 
     @Override
-    public IngredientResponseDto updateIngredient(UUID branchId, UUID id, IngredientCreateDto dto) {
+    public IngredientResponseDto ingredientUpdate(UUID branchId, UUID id, IngredientCreateDto dto) {
         Ingredient existing = ingredientRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Ingredient not found: " + id));
 
@@ -62,20 +61,18 @@ public class IngredientServiceImpl implements IngredientService {
             throw new BusinessException(BusinessErrorCodes.NOT_AUTHORIZED_FOR_BRANCH);
         }
 
-        String name = dto.getName().trim();
+        String name = dto.name().trim();
 
         if (!existing.getName().equalsIgnoreCase(name) &&
             ingredientRepository.existsByNameIgnoreCaseAndBranchId(name, branchId)) {
             throw new BusinessException(BusinessErrorCodes.DUPLICATE_INGREDIENT_NAME);
         }
 
-        String categoryName = dto.getProductCategory() == null || dto.getProductCategory().isBlank()
-                ? "UNKNOWN"
-                : dto.getProductCategory().trim().toUpperCase();
+        UUID categoryId = dto.productCategoryId();
 
-        ProductCategory category = productCategoryRepository
-                .findByNameIgnoreCaseAndBranchId(categoryName, branchId)
-                .orElseThrow(() -> new EntityNotFoundException("Category not found: " + categoryName));
+        ProductCategory category = productCategoryRepository.findById(categoryId)
+                .filter(cat -> cat.getBranch().getId().equals(branchId))
+                .orElseThrow(() -> new EntityNotFoundException("Category not found or not accessible: " + categoryId));
 
         ingredientMapper.update(existing, dto);
         existing.setProductCategory(category);
@@ -85,7 +82,7 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public void deleteById(UUID branchId, UUID id) {
+    public void ingredientDeleteById(UUID branchId, UUID id) {
         Ingredient ingredient = ingredientRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Ingredient with id " + id + " not found"));
 
@@ -102,8 +99,8 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public IngredientResponseDto createIngredient(UUID branchId, IngredientCreateDto dto) {
-        String name = dto.getName().trim();
+    public IngredientResponseDto ingredientCreate(UUID branchId, IngredientCreateDto dto) {
+        String name = dto.name().trim();
 
         if (ingredientRepository.existsByNameIgnoreCaseAndBranchId(name, branchId)) {
             throw new BusinessException(BusinessErrorCodes.DUPLICATE_INGREDIENT_NAME);
@@ -112,23 +109,14 @@ public class IngredientServiceImpl implements IngredientService {
         Branch branch = branchRepository.findById(branchId)
                 .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
 
-        UUID defaultVatRateId = UUID.fromString("00000000-0000-0000-0000-000000000001");
-        VatRate defaultVatRate = vatRateRepository.findById(defaultVatRateId)
-                .orElseThrow(() -> new IllegalStateException("Default VAT rate not found"));
+        UUID categoryId = dto.productCategoryId();
+        if (categoryId == null) {
+            throw new IllegalArgumentException("Product category ID is required");
+        }
 
-        String categoryName = dto.getProductCategory() == null || dto.getProductCategory().isBlank()
-                ? "UNKNOWN"
-                : dto.getProductCategory().trim().toUpperCase();
-
-        ProductCategory category = productCategoryRepository
-                .findByNameIgnoreCaseAndBranchId(categoryName, branchId)
-                .orElseGet(() -> productCategoryRepository.save(
-                        ProductCategory.builder()
-                                .name(categoryName)
-                                .vatRate(defaultVatRate)
-                                .branch(branch)
-                                .build()
-                ));
+        ProductCategory category = productCategoryRepository.findById(categoryId)
+                .filter(pc -> pc.getBranch().getId().equals(branchId))
+                .orElseThrow(() -> new EntityNotFoundException("Product category not found or does not belong to the branch"));
 
         Ingredient ingredient = ingredientMapper.toEntity(dto);
         ingredient.setBranch(branch);
@@ -139,7 +127,13 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public List<IngredientResponseDto> getAllIngredients(UUID branchId) {
+    public IngredientResponseDto ingredientGetById(UUID ingredientId) {
+        return ingredientMapper.toDto(ingredientRepository.findById(ingredientId)
+                .orElseThrow(() -> new EntityNotFoundException("Ingredient not found")));
+    }
+
+    @Override
+    public List<IngredientResponseDto> ingredientGetAll(UUID branchId) {
         List<Ingredient> ingredients = ingredientRepository.findAllByBranchId(branchId);
         return ingredientMapper.toDtoList(ingredients);
     }
@@ -190,24 +184,62 @@ public class IngredientServiceImpl implements IngredientService {
         return order;
     }
 
+    @Override
+    @Transactional
+    public List<IngredientResponseDto> ingredientCreateBulk(UUID branchId, List<IngredientCreateDto> dtos) {
+        Branch branch = branchRepository.findById(branchId)
+                .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
+
+        Set<UUID> categoryIds = dtos.stream()
+                .map(IngredientCreateDto::productCategoryId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+
+        Map<UUID, ProductCategory> categoriesById = productCategoryRepository.findAllById(categoryIds).stream()
+                .filter(cat -> cat.getBranch().getId().equals(branchId))
+                .collect(Collectors.toMap(ProductCategory::getId, Function.identity()));
+
+        List<Ingredient> ingredientsToSave = new ArrayList<>();
+
+        for (IngredientCreateDto dto : dtos) {
+            String name = dto.name().trim();
+
+            if (ingredientRepository.existsByNameIgnoreCaseAndBranchId(name, branchId)) {
+                continue;
+            }
+
+            UUID categoryId = dto.productCategoryId();
+            if (categoryId == null || !categoriesById.containsKey(categoryId)) {
+                continue;
+            }
+
+            Ingredient ingredient = ingredientMapper.toEntity(dto);
+            ingredient.setBranch(branch);
+            ingredient.setProductCategory(categoriesById.get(categoryId));
+            ingredientsToSave.add(ingredient);
+        }
+
+        List<Ingredient> saved = ingredientRepository.saveAll(ingredientsToSave);
+        return saved.stream()
+                .map(ingredientMapper::toDto)
+                .toList();
+    }
+
     private float calculateSuggestedQuantity(Ingredient ingredient) {
         Optional<InventorySnapshot> latestSnapshotOpt =
                 inventorySnapshotRepository.findTopByIngredientOrderByTimestampDesc(ingredient);
 
         float measured = latestSnapshotOpt.map(InventorySnapshot::getMeasuredQuantity).orElse(0f);
 
-        // 1. Pokud máme definovanou "plnou" zásobu – dopočítáme rozdíl
         if (ingredient.getPreferredFullStockLevel() != null) {
             float deficit = ingredient.getPreferredFullStockLevel() - measured;
-            return Math.max(deficit, 0f); // nechceme záporné objednávky
+            return Math.max(deficit, 0f);
         }
 
-        // 2. Jinak – nouzové řešení: objednej 2× minimum
         if (ingredient.getMinimumStockLevel() != null) {
             return ingredient.getMinimumStockLevel() * 2;
         }
 
-        // 3. Poslední možnost: default fallback
         return 1f;
     }
 

@@ -10,9 +10,9 @@ import java.util.UUID;
 
 @Service
 public interface IngredientLoanService {
-    IngredientLoanResponseDto patchLoan(UUID id, IngredientLoanPatchDto dto);
-    IngredientLoanResponseDto createLoan(IngredientLoanCreateDto dto);
-
-    IngredientLoanResponseDto markLoanAsReturned(UUID loanId);
-    List<IngredientLoanResponseDto> getAllLoans();
+//    IngredientLoanResponseDto patchLoan(UUID id, IngredientLoanPatchDto dto);
+//    IngredientLoanResponseDto createLoan(IngredientLoanCreateDto dto);
+//
+//    IngredientLoanResponseDto markLoanAsReturned(UUID loanId);
+//    List<IngredientLoanResponseDto> getAllLoans();
 }

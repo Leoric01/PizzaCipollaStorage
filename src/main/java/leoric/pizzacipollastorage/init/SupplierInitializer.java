@@ -1,6 +1,5 @@
 package leoric.pizzacipollastorage.init;
 
-import jakarta.annotation.PostConstruct;
 import leoric.pizzacipollastorage.purchase.models.Supplier;
 import leoric.pizzacipollastorage.purchase.repositories.SupplierRepository;
 import leoric.pizzacipollastorage.utils.CustomUtilityString;
@@ -13,13 +12,13 @@ public class SupplierInitializer {
 
     private final SupplierRepository supplierRepository;
 
-    @PostConstruct
-    public void insertDefaultSuppliers() {
-        createIfNotExists("Nowaco s.r.o.", "kontakt@nowaco.cz");
-        createIfNotExists("Cortelazzi s.r.o.", "kontakt@cortellazi.cz");
-        createIfNotExists("Zelenina s.r.o.", "info@zelenina.cz");
-        createIfNotExists("Makro", "info@makro.cz");
-    }
+//    @PostConstruct
+//    public void insertDefaultSuppliers() {
+//        createIfNotExists("Nowaco s.r.o.", "kontakt@nowaco.cz");
+//        createIfNotExists("Cortelazzi s.r.o.", "kontakt@cortellazi.cz");
+//        createIfNotExists("Zelenina s.r.o.", "info@zelenina.cz");
+//        createIfNotExists("Makro", "info@makro.cz");
+//    }
 
     private void createIfNotExists(String name, String contactInfo) {
         String normalized = CustomUtilityString.normalize(name);

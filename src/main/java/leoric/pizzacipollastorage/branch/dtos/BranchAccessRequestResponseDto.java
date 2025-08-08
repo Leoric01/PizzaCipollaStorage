@@ -11,9 +11,11 @@ import java.util.UUID;
 public class BranchAccessRequestResponseDto {
     private UUID id;
     private UUID branchId;
+    private String branchName;
     private UUID userId;
+    private String fullname;
     private String status;
     private LocalDateTime requestDate;
     private LocalDateTime approvalDate;
-    private UUID approvedBy;
+    private String approvedBy;
 }

@@ -45,12 +45,20 @@ public class VatRateServiceImpl implements VatRateService {
         VatRate vatRate = vatRateRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Vat rate with ID " + id + " not found"));
 
-        vatRateRepository.delete(vatRate);
-
         VatRateDeleteResponseDto dto = new VatRateDeleteResponseDto();
         dto.setId(vatRate.getId());
         dto.setName(vatRate.getName());
         dto.setRate(vatRate.getRate());
+
+        vatRateRepository.delete(vatRate);
+
         return dto;
+    }
+
+    @Override
+    public VatRateShortDto getVatRateById(UUID id) {
+        VatRate vatRate = vatRateRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Vat rate with ID " + id + " not found"));
+        return vatRateMapper.toShortDto(vatRate);
     }
 }

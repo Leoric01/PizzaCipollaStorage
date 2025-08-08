@@ -1,33 +1,59 @@
 package leoric.pizzacipollastorage.inventory.controllers;
 
+import leoric.pizzacipollastorage.auth.models.User;
+import leoric.pizzacipollastorage.branch.services.interfaces.BranchServiceAccess;
 import leoric.pizzacipollastorage.inventory.dtos.Inventory.InventorySnapshotCreateDto;
 import leoric.pizzacipollastorage.inventory.dtos.Inventory.InventorySnapshotResponseDto;
 import leoric.pizzacipollastorage.inventory.services.InventoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/inventory")
 @RequiredArgsConstructor
 public class InventoryController {
+
     private final InventoryService inventoryService;
+    private final BranchServiceAccess branchServiceAccess;
 
-    @PostMapping("/snapshot")
-    public ResponseEntity<InventorySnapshotResponseDto> createSnapshot(@RequestBody InventorySnapshotCreateDto dto) {
-        return ResponseEntity.ok(inventoryService.createSnapshot(dto));
+    @PostMapping("/{branchId}/snapshot")
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
+    public ResponseEntity<InventorySnapshotResponseDto> inventoryCreateSnapshot(
+            @PathVariable UUID branchId,
+            @RequestBody InventorySnapshotCreateDto dto,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        branchServiceAccess.assertHasAccess(branchId, currentUser);
+
+        return ResponseEntity.ok(inventoryService.createSnapshot(branchId, dto));
     }
 
-    @GetMapping("/current-status")
-    public ResponseEntity<List<InventorySnapshotResponseDto>> getCurrentInventoryStatus() {
-        return ResponseEntity.ok(inventoryService.getCurrentInventoryStatus());
+    @PostMapping("/{branchId}/snapshot/bulk")
+//    @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
+    public ResponseEntity<List<InventorySnapshotResponseDto>> inventoryCreateSnapshotBulk(
+            @PathVariable UUID branchId,
+            @RequestBody List<InventorySnapshotCreateDto> dtos,
+            @AuthenticationPrincipal User currentUser
+    ) {
+//        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, "MANAGER");
+
+        return ResponseEntity.ok(inventoryService.createSnapshotBulk(branchId, dtos));
     }
 
-    @PostMapping("/snapshot/bulk")
-    public ResponseEntity<List<InventorySnapshotResponseDto>> createSnapshotBulk(
-            @RequestBody List<InventorySnapshotCreateDto> dtos) {
-        return ResponseEntity.ok(inventoryService.createSnapshotBulk(dtos));
+    @GetMapping("/{branchId}/current-status")
+    public ResponseEntity<List<InventorySnapshotResponseDto>> inventoryStatusGetCurrent(
+            @PathVariable UUID branchId,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        branchServiceAccess.assertHasAccess(branchId, currentUser);
+
+        return ResponseEntity.ok(inventoryService.getCurrentInventoryStatus(branchId));
     }
 }

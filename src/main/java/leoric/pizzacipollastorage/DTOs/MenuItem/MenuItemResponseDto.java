@@ -1,6 +1,6 @@
 package leoric.pizzacipollastorage.DTOs.MenuItem;
 
-import leoric.pizzacipollastorage.DTOs.DishSize.DishSizeResponseDto;
+import leoric.pizzacipollastorage.models.enums.DishSize;
 import lombok.Data;
 
 import java.util.List;
@@ -11,7 +11,7 @@ public class MenuItemResponseDto {
     private UUID id;
     private String name;
     private String description;
-    private DishSizeResponseDto dishSize;
+    private DishSize dishSize;
     private MenuItemCategoryResponseDto menuItemCategory;
     private List<RecipeIngredientVeryShortDtoWithId> ingredients;
 }

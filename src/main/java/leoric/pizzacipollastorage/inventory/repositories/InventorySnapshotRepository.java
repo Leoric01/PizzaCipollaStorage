@@ -1,5 +1,6 @@
 package leoric.pizzacipollastorage.inventory.repositories;
 
+import leoric.pizzacipollastorage.branch.models.Branch;
 import leoric.pizzacipollastorage.inventory.models.InventorySnapshot;
 import leoric.pizzacipollastorage.models.Ingredient;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,6 @@ public interface InventorySnapshotRepository extends JpaRepository<InventorySnap
     Optional<InventorySnapshot> findTopByIngredientOrderByTimestampDesc(Ingredient ingredient);
 
     Optional<InventorySnapshot> findTopByIngredientIdOrderByTimestampDesc(UUID id);
+    Optional<InventorySnapshot> findTopByIngredientAndBranchOrderByTimestampDesc(Ingredient ingredient, Branch branch);
+
 }

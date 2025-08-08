@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -63,6 +64,9 @@ public class User implements UserDetails, Principal {
     )
     private List<Branch> branches;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserBranchRole> userBranchRoles = new ArrayList<>();
+
     @Override
     public String getName() {
         return this.email;
@@ -108,5 +112,46 @@ public class User implements UserDetails, Principal {
 
     public String getFullname() {
         return this.firstName + " " + this.lastName;
+    }
+
+    public boolean hasRole(String role) {
+        return this.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equalsIgnoreCase(role));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return id != null && id.equals(user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+               "id=" + id +
+               ", fullName='" + getFullname() + '\'' +
+               ", email='" + email + '\'' +
+               ", roles=" + roles.stream()
+                       .map(Role::getName)
+                       .toList() +
+               ", branchesCount=" + (branches != null ? branches.size() : 0) +
+               '}';
+    }
+
+    public boolean hasGlobalRole(String roleName) {
+        return roles.stream().anyMatch(r -> r.getName().equalsIgnoreCase(roleName));
+    }
+
+    public boolean hasRoleOnBranch(String roleName, UUID branchId) {
+        return userBranchRoles.stream()
+                .anyMatch(ubr -> ubr.getBranch().getId().equals(branchId) &&
+                                 ubr.getRole().getName().equalsIgnoreCase(roleName));
     }
 }

@@ -4,10 +4,13 @@ import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityNotFoundException;
 import leoric.pizzacipollastorage.handler.exceptions.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -33,6 +36,18 @@ public class GlobalExceptionHandler {
                 );
     }
 
+    @ExceptionHandler(IngredientNotInBranchException.class)
+    public ResponseEntity<ExceptionResponse> handleIngredientNotInBranch(IngredientNotInBranchException ex) {
+        return ResponseEntity
+                .status(FORBIDDEN)
+                .body(ExceptionResponse.builder()
+                        .businessErrorCode(BusinessErrorCodes.INGREDIENT_NOT_IN_BRANCH.getCode())
+                        .businessErrorDescription(BusinessErrorCodes.INGREDIENT_NOT_IN_BRANCH.getDescription())
+                        .error(ex.getMessage())
+                        .build());
+    }
+
+
     @ExceptionHandler(EmailAlreadyInUseException.class)
     public ResponseEntity<ExceptionResponse> handleEmailAlreadyInUseException(EmailAlreadyInUseException ex) {
         log.warn("Email already in use: {}", ex.getMessage());
@@ -55,6 +70,28 @@ public class GlobalExceptionHandler {
                         .businessErrorCode(BusinessErrorCodes.BRANCH_CREATION_FORBIDDEN.getCode())
                         .businessErrorDescription(BusinessErrorCodes.BRANCH_CREATION_FORBIDDEN.getDescription())
                         .error(ex.getMessage())
+                        .build());
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ExceptionResponse> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex) {
+        return ResponseEntity
+                .status(HttpStatus.METHOD_NOT_ALLOWED)
+                .body(ExceptionResponse.builder()
+                        .businessErrorCode(HttpStatus.METHOD_NOT_ALLOWED.value())
+                        .businessErrorDescription("HTTP method not supported for this endpoint")
+                        .error("Method " + ex.getMethod() + " is not supported for this endpoint")
+                        .build());
+    }
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleNoHandlerFoundException(NoHandlerFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ExceptionResponse.builder()
+                        .businessErrorCode(BusinessErrorCodes.ENTITY_NOT_FOUND.getCode())
+                        .businessErrorDescription("Requested endpoint was not found")
+                        .error("No handler found for " + ex.getHttpMethod() + " " + ex.getRequestURL())
                         .build());
     }
 
@@ -180,6 +217,34 @@ public class GlobalExceptionHandler {
                 .status(INTERNAL_SERVER_ERROR)
                 .body(
                         ExceptionResponse.builder()
+                                .error(exp.getMessage())
+                                .build()
+                );
+    }
+
+    @ExceptionHandler(NotAuthorizedForBranchException.class)
+    public ResponseEntity<ExceptionResponse> handleException(NotAuthorizedForBranchException exp) {
+        BusinessErrorCodes code = BusinessErrorCodes.NOT_AUTHORIZED_FOR_BRANCH;
+        return ResponseEntity
+                .status(code.getHttpStatus())
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorCode(code.getCode())
+                                .businessErrorDescription(code.getDescription())
+                                .error(exp.getMessage())
+                                .build()
+                );
+    }
+
+    @ExceptionHandler(DuplicateCategoryNameException.class)
+    public ResponseEntity<ExceptionResponse> handleException(DuplicateCategoryNameException exp) {
+        BusinessErrorCodes code = BusinessErrorCodes.PRODUCT_CATEGORY_ALREADY_EXISTS;
+        return ResponseEntity
+                .status(code.getHttpStatus())
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorCode(code.getCode())
+                                .businessErrorDescription(code.getDescription())
                                 .error(exp.getMessage())
                                 .build()
                 );

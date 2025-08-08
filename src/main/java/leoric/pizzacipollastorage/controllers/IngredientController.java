@@ -1,48 +1,88 @@
 package leoric.pizzacipollastorage.controllers;
 
+import jakarta.validation.Valid;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientCreateDto;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientResponseDto;
+import leoric.pizzacipollastorage.auth.models.User;
+import leoric.pizzacipollastorage.branch.services.interfaces.BranchServiceAccess;
 import leoric.pizzacipollastorage.services.interfaces.IngredientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/ingredients/{branchId}")
+@RequestMapping("/api/ingredient")
 @RequiredArgsConstructor
 public class IngredientController {
     private final IngredientService ingredientService;
+    private final BranchServiceAccess branchServiceAccess;
 
-    @PostMapping
-    public ResponseEntity<IngredientResponseDto> createIngredient(
+    @GetMapping("/{branchId}/all")
+    public ResponseEntity<List<IngredientResponseDto>> ingredientGetAll(
             @PathVariable UUID branchId,
-            @RequestBody IngredientCreateDto dto
+            @AuthenticationPrincipal User currentUser
     ) {
-        return ResponseEntity.ok(ingredientService.createIngredient(branchId, dto));
+        branchServiceAccess.assertHasAccess(branchId, currentUser);
+
+        return ResponseEntity.ok(ingredientService.ingredientGetAll(branchId));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<IngredientResponseDto> updateIngredientById(
+    @GetMapping("/{ingredientId}")
+    public ResponseEntity<IngredientResponseDto> ingredientGetById(@PathVariable UUID ingredientId) {
+        return ResponseEntity.ok(ingredientService.ingredientGetById(ingredientId));
+    }
+
+    @PostMapping("/{branchId}")
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
+    public ResponseEntity<IngredientResponseDto> ingredientCreate(
             @PathVariable UUID branchId,
-            @PathVariable UUID id,
-            @RequestBody IngredientCreateDto dto
+            @RequestBody @Valid IngredientCreateDto dto,
+            @AuthenticationPrincipal User currentUser
     ) {
-        return ResponseEntity.ok(ingredientService.updateIngredient(branchId, id, dto));
+        branchServiceAccess.assertHasAccess(branchId, currentUser);
+
+        return ResponseEntity.ok(ingredientService.ingredientCreate(branchId, dto));
     }
 
-    @GetMapping
-    public ResponseEntity<List<IngredientResponseDto>> getAllIngredients(
-            @PathVariable UUID branchId
+    @PostMapping("/{branchId}/bulk")
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
+    public ResponseEntity<List<IngredientResponseDto>> ingredientCreateBulk(
+            @PathVariable UUID branchId,
+            @RequestBody @Valid List<IngredientCreateDto> dtos,
+            @AuthenticationPrincipal User currentUser
     ) {
-        return ResponseEntity.ok(ingredientService.getAllIngredients(branchId));
+        branchServiceAccess.assertHasAccess(branchId, currentUser);
+
+        return ResponseEntity.ok(ingredientService.ingredientCreateBulk(branchId, dtos));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteIngredientById(@PathVariable UUID branchId, @PathVariable UUID id) {
-        ingredientService.deleteById(branchId, id);
+    @PutMapping("/{branchId}/{ingredientId}")
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
+    public ResponseEntity<IngredientResponseDto> ingredientUpdateById(
+            @PathVariable UUID branchId,
+            @PathVariable UUID ingredientId,
+            @RequestBody @Valid IngredientCreateDto dto,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        branchServiceAccess.assertHasAccess(branchId, currentUser);
+
+        return ResponseEntity.ok(ingredientService.ingredientUpdate(branchId, ingredientId, dto));
+    }
+
+    @DeleteMapping("/{branchId}/{ingredientId}")
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
+    public ResponseEntity<Void> ingredientDeleteById(@PathVariable UUID branchId,
+                                                     @PathVariable UUID ingredientId,
+                                                     @AuthenticationPrincipal User currentUser
+    ) {
+        branchServiceAccess.assertHasAccess(branchId, currentUser);
+
+        ingredientService.ingredientDeleteById(branchId, ingredientId);
         return ResponseEntity.noContent().build();
     }
 

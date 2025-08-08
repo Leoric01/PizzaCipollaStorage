@@ -1,6 +1,7 @@
 package leoric.pizzacipollastorage.inventory.models;
 
 import jakarta.persistence.*;
+import leoric.pizzacipollastorage.branch.models.Branch;
 import leoric.pizzacipollastorage.models.Ingredient;
 import leoric.pizzacipollastorage.models.enums.IngredientState;
 import leoric.pizzacipollastorage.models.enums.SnapshotType;
@@ -34,6 +35,9 @@ public class InventorySnapshot {
     private Float expectedQuantity;
 
     private String note;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Branch branch;
 
     @Enumerated(EnumType.STRING)
     private SnapshotType type;

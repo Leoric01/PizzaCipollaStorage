@@ -1,4 +1,4 @@
-package leoric.pizzacipollastorage.mapstruct;
+package leoric.pizzacipollastorage.branch;
 
 import leoric.pizzacipollastorage.branch.dtos.BranchAccessRequestResponseDto;
 import leoric.pizzacipollastorage.branch.models.BranchAccessRequest;
@@ -12,7 +12,9 @@ public interface BranchAccessRequestMapper {
 
     @Mapping(source = "branch.id", target = "branchId")
     @Mapping(source = "user.id", target = "userId")
-    @Mapping(source = "approvedBy.id", target = "approvedBy")
+    @Mapping(source = "branch.name", target = "branchName")
+    @Mapping(source = "user.fullname", target = "fullname")
+    @Mapping(source = "approvedBy.fullname", target = "approvedBy")
     @Mapping(source = "branchAccessRequestStatus", target = "status")
     BranchAccessRequestResponseDto toDto(BranchAccessRequest request);
 

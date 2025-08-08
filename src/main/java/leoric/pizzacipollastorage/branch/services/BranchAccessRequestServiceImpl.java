@@ -3,6 +3,7 @@ package leoric.pizzacipollastorage.branch.services;
 import jakarta.persistence.EntityNotFoundException;
 import leoric.pizzacipollastorage.auth.models.User;
 import leoric.pizzacipollastorage.auth.repositories.UserRepository;
+import leoric.pizzacipollastorage.branch.BranchAccessRequestMapper;
 import leoric.pizzacipollastorage.branch.dtos.BranchAccessRequestCreateDto;
 import leoric.pizzacipollastorage.branch.dtos.BranchAccessRequestResponseDto;
 import leoric.pizzacipollastorage.branch.models.Branch;
@@ -13,8 +14,8 @@ import leoric.pizzacipollastorage.branch.repositories.BranchRepository;
 import leoric.pizzacipollastorage.branch.services.interfaces.BranchAccessRequestService;
 import leoric.pizzacipollastorage.handler.BusinessErrorCodes;
 import leoric.pizzacipollastorage.handler.exceptions.BusinessException;
-import leoric.pizzacipollastorage.mapstruct.BranchAccessRequestMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,7 +62,7 @@ public class BranchAccessRequestServiceImpl implements BranchAccessRequestServic
 
     @Override
     @Transactional(readOnly = true)
-    public List<BranchAccessRequestResponseDto> getAllByBranch(UUID branchId, User currentUser) {
+    public List<BranchAccessRequestResponseDto> getAllAccessRequestsByBranch(UUID branchId, User currentUser) {
         Branch branch = branchRepository.findById(branchId)
                 .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
 
@@ -71,6 +72,51 @@ public class BranchAccessRequestServiceImpl implements BranchAccessRequestServic
 
         List<BranchAccessRequest> requests = accessRequestRepository.findAllByBranchOrderByRequestDateDesc(branch);
         return branchAccessRequestMapper.toDtoList(requests);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<BranchAccessRequestResponseDto> getAllAccessRequestsToMyBranches(User currentUser) {
+
+        List<Branch> myBranches = branchRepository.findAllByCreatedByManager(currentUser);
+
+        if (myBranches.isEmpty()) {
+            return List.of();
+        }
+
+        List<BranchAccessRequest> accessRequests =
+                accessRequestRepository.findAllByBranchInOrderByRequestDateDesc(myBranches);
+
+        return branchAccessRequestMapper.toDtoList(accessRequests);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<BranchAccessRequestResponseDto> getAllAccessRequestsMine(User currentUser) {
+        List<BranchAccessRequest> accessRequests =
+                accessRequestRepository.findAllByUserOrderByRequestDateDesc(currentUser);
+
+        return branchAccessRequestMapper.toDtoList(accessRequests);
+    }
+
+    @Override
+    @Transactional
+    public BranchAccessRequestResponseDto cancelAccessRequest(UUID id, User currentUser) {
+        BranchAccessRequest request = accessRequestRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Access request not found"));
+
+        if (!request.getUser().getId().equals(currentUser.getId())) {
+            throw new AccessDeniedException("You cannot cancel a request you don't own.");
+        }
+
+        if (request.getBranchAccessRequestStatus() != BranchAccessRequestStatus.PENDING) {
+            throw new IllegalStateException("Only pending requests can be cancelled.");
+        }
+
+        request.setBranchAccessRequestStatus(BranchAccessRequestStatus.CANCELLED);
+        BranchAccessRequest saved = accessRequestRepository.save(request);
+
+        return branchAccessRequestMapper.toDto(saved);
     }
 
     @Override
@@ -123,5 +169,4 @@ public class BranchAccessRequestServiceImpl implements BranchAccessRequestServic
 
         return branchAccessRequestMapper.toDto(request);
     }
-
 }

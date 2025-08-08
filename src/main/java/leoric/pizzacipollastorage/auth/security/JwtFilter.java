@@ -31,22 +31,36 @@ public class JwtFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        if (request.getServletPath().startsWith("/auth") || request.getServletPath().startsWith("/swagger") || request.getServletPath().startsWith("/v3/api") || request.getServletPath().startsWith("/health")) {
+        String path = request.getServletPath();
+
+        // Nepoužij JWT filtr na veřejné endpointy
+        if (path.startsWith("/auth") || path.startsWith("/swagger") || path.startsWith("/v3/api") || path.startsWith("/health")) {
             filterChain.doFilter(request, response);
             return;
         }
+
+        // Pre-flight OPTIONS požadavky — povol hned
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            addCorsHeaders(response);
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
+
         final String authHeader = request.getHeader(AUTHORIZATION);
         final String jwt;
         final String userEmail;
+
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            addCorsHeaders(response);
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid authorization header");
-            filterChain.doFilter(request, response);
             return;
         }
+
         jwt = authHeader.substring(7);
         userEmail = jwtService.extractUsername(jwt);
+
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
@@ -58,10 +72,19 @@ public class JwtFilter extends OncePerRequestFilter {
                 );
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             } else {
+                addCorsHeaders(response);
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
                 return;
             }
         }
+
         filterChain.doFilter(request, response);
+    }
+
+    private void addCorsHeaders(HttpServletResponse response) {
+        response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Accept");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, PATCH");
     }
 }

@@ -20,19 +20,25 @@ public class VatRateController {
     private final VatRateService vatRateService;
 
     @PostMapping
-    public ResponseEntity<VatRate> createVatRate(@RequestBody VatRateCreateDto dto) {
+    public ResponseEntity<VatRate> vatRateCreate(@RequestBody VatRateCreateDto dto) {
         VatRate created = vatRateService.createVatRate(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @GetMapping
-    public ResponseEntity<List<VatRateShortDto>> getAll() {
+    public ResponseEntity<List<VatRateShortDto>> vatRateGetAll() {
         return ResponseEntity.ok(vatRateService.getAll());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<VatRateDeleteResponseDto> deleteVatRate(@PathVariable UUID id) {
+    public ResponseEntity<VatRateDeleteResponseDto> vatRateDeleteById(@PathVariable UUID id) {
         VatRateDeleteResponseDto deleted = vatRateService.deleteVatRateById(id);
         return ResponseEntity.ok(deleted);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<VatRateShortDto> vatRateGetById(@PathVariable UUID id) {
+        VatRateShortDto fetched = vatRateService.getVatRateById(id);
+        return ResponseEntity.ok(fetched);
     }
 }
