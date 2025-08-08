@@ -1,7 +1,8 @@
 # FE
 zmenit aktivaci - uz to chce i mail
 proklik emailu nevyplni kod
-
+supplier
+stockentry
 
 # BE
 udelat access role

@@ -9,6 +9,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.List;
+import java.util.UUID;
 
 @Mapper(componentModel = "spring")
 public interface BranchMapper {
@@ -18,4 +19,8 @@ public interface BranchMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void update(@MappingTarget Branch entity, BranchCreateDto dto);
+
+    default UUID map(Branch branch) {
+        return branch.getId();
+    }
 }
