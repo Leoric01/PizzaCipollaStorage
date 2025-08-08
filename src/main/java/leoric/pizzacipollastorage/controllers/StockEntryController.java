@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -29,6 +30,17 @@ public class StockEntryController {
             @AuthenticationPrincipal User currentUser
     ) {
         branchServiceAccess.assertHasAccess(branchId, currentUser);
-        return ResponseEntity.ok(stockEntryService.createStockEntry(branchId, dto));
+        return ResponseEntity.ok(stockEntryService.stockEntryCreate(branchId, dto));
+    }
+
+    @PostMapping("/{branchId}/bulk")
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
+    public ResponseEntity<List<StockEntryResponseDto>> stockEntryBulkCreate(
+            @PathVariable UUID branchId,
+            @RequestBody List<StockEntryCreateDto> dtos,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        return ResponseEntity.ok(stockEntryService.createStockEntries(branchId, dtos));
     }
 }

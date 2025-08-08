@@ -25,7 +25,7 @@ public class SupplierController {
 
     @PostMapping("/{branchId}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
-    public ResponseEntity<SupplierResponseDto> createSupplier(
+    public ResponseEntity<SupplierResponseDto> supplierCreate(
             @PathVariable UUID branchId,
             @RequestBody SupplierCreateDto dto,
             @AuthenticationPrincipal User currentUser
@@ -36,7 +36,7 @@ public class SupplierController {
 
     @PostMapping("/{branchId}/bulk")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
-    public ResponseEntity<List<SupplierResponseDto>> createSupplierBulk(
+    public ResponseEntity<List<SupplierResponseDto>> supplierCreateBulk(
             @PathVariable UUID branchId,
             @RequestBody List<SupplierCreateDto> dtos,
             @AuthenticationPrincipal User currentUser
@@ -46,7 +46,7 @@ public class SupplierController {
     }
 
     @GetMapping("/{branchId}")
-    public ResponseEntity<List<SupplierResponseDto>> getAllSuppliers(
+    public ResponseEntity<List<SupplierResponseDto>> supplierGetAll(
             @PathVariable UUID branchId,
             @AuthenticationPrincipal User currentUser
     ) {

@@ -5,10 +5,11 @@ import leoric.pizzacipollastorage.DTOs.MenuItemSale.MenuItemSaleResponseDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public interface MenuItemSaleService {
-    MenuItemSaleResponseDto createSale(MenuItemSaleCreateDto dto);
+    MenuItemSaleResponseDto createSale(UUID branchId, MenuItemSaleCreateDto dto);
 
-    List<MenuItemSaleResponseDto> createSaleBulk(List<MenuItemSaleCreateDto> dtos);
+    List<MenuItemSaleResponseDto> createSaleBulk(UUID branchId, List<MenuItemSaleCreateDto> dtos);
 }

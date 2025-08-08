@@ -1,6 +1,7 @@
 package leoric.pizzacipollastorage.models;
 
 import jakarta.persistence.*;
+import leoric.pizzacipollastorage.branch.models.Branch;
 import leoric.pizzacipollastorage.models.enums.DishSize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,4 +34,8 @@ public class MenuItemSale {
     private int quantitySold;
     private LocalDateTime saleDate;
     private String cookName;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "branch_id", nullable = false)
+    private Branch branch;
 }

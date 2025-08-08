@@ -1,11 +1,9 @@
 # FE
-zmenit aktivaci - uz to chce i mail
-proklik emailu nevyplni kod - chcanka
-supplier
-stockentry
-udelat dockerfile a docker img
+menuitemsale
+prejmenovany kontrakty supplier
 
 # BE
 udelat access role
 obrazky jidel/surovin
 doplnit supplier controler do postmana
+doplnit sale controler do postmana

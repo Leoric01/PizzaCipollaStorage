@@ -19,4 +19,5 @@ public interface MenuItemRepository extends JpaRepository<MenuItem, UUID> {
 
     List<MenuItem> findAllByBranchId(UUID branchId);
 
+    Optional<MenuItem> findByIdAndBranchId(UUID id, UUID branchId);
 }
