@@ -12,6 +12,7 @@ import java.util.UUID;
 public interface IngredientRepository extends JpaRepository<Ingredient, UUID> {
     boolean existsByNameIgnoreCaseAndBranchId(String name, UUID branchId);
 
+    Optional<Ingredient> findByNameIgnoreCaseAndBranchId(String name, UUID branchId);
     List<Ingredient> findAllByBranchId(UUID branchId);
     Optional<Ingredient> findByNameIgnoreCase(String name);
 }

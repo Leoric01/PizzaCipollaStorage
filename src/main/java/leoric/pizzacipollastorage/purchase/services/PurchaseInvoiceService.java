@@ -9,9 +9,17 @@ import java.util.UUID;
 
 @Service
 public interface PurchaseInvoiceService {
-//    PurchaseInvoiceResponseDto createInvoice(PurchaseInvoiceCreateDto dto);
-//
-//    PurchaseInvoiceResponseDto getById(UUID id);
-//
-//    List<PurchaseInvoiceResponseDto> getLatestInvoices(int limit);
+    PurchaseInvoiceResponseDto createInvoice(UUID branchId, PurchaseInvoiceCreateDto dto);
+
+    PurchaseInvoiceResponseDto getById(UUID branchId, UUID id);
+
+    void stockFromInvoice(UUID branchId, UUID invoiceId);
+
+    List<PurchaseInvoiceResponseDto> getAll(UUID branchId);
+
+    List<PurchaseInvoiceResponseDto> getLatestInvoices(UUID branchId, int limit);
+
+    PurchaseInvoiceResponseDto update(UUID branchId, UUID invoiceId, PurchaseInvoiceCreateDto dto);
+
+    void delete(UUID branchId, UUID invoiceId);
 }

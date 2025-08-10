@@ -2,6 +2,8 @@ package leoric.pizzacipollastorage.purchase.services;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import leoric.pizzacipollastorage.branch.models.Branch;
+import leoric.pizzacipollastorage.branch.repositories.BranchRepository;
 import leoric.pizzacipollastorage.inventory.services.InventoryService;
 import leoric.pizzacipollastorage.models.Ingredient;
 import leoric.pizzacipollastorage.models.StockEntry;
@@ -30,82 +32,155 @@ import java.util.UUID;
 public class PurchaseInvoiceServiceImpl implements PurchaseInvoiceService {
 
     private final InventoryService inventoryService;
-
     private final SupplierRepository supplierRepository;
     private final PurchaseInvoiceRepository purchaseInvoiceRepository;
     private final PurchaseInvoiceItemRepository purchaseInvoiceItemRepository;
     private final StockEntryRepository stockEntryRepository;
     private final IngredientRepository ingredientRepository;
-
+    private final BranchRepository branchRepository;
     private final PurchaseInvoiceMapper purchaseInvoiceMapper;
 
-//    @Override
-//    @Transactional
-//    public PurchaseInvoiceResponseDto createInvoice(PurchaseInvoiceCreateDto dto) {
-//        Supplier supplier = supplierRepository.findByNameIgnoreCase(dto.getSupplierName())
-//                .orElseThrow(() -> new EntityNotFoundException("Dodavatel '" + dto.getSupplierName() + "' nebyl nalezen."));
-//
-//        PurchaseInvoice invoice = PurchaseInvoice.builder()
-//                .invoiceNumber(dto.getInvoiceNumber())
-//                .supplier(supplier)
-//                .issuedDate(dto.getIssuedDate())
-//                .receivedDate(dto.getReceivedDate())
-//                .note(dto.getNote())
-//                .build();
-//
-//        purchaseInvoiceRepository.save(invoice);
-//
-//        List<PurchaseInvoiceItem> savedItems = new ArrayList<>();
-//
-//        for (PurchaseInvoiceItemCreateDto itemDto : dto.getItems()) {
-//            Ingredient ingredient = ingredientRepository.findByNameIgnoreCase(itemDto.getIngredientName())
-//                    .orElseThrow(() -> new EntityNotFoundException("Ingredience '" + itemDto.getIngredientName() + "' nebyla nalezena."));
-//
-//            VatRate vatRate = ingredient.getProductCategory().getVatRate();
-//
-//            PurchaseInvoiceItem item = PurchaseInvoiceItem.builder()
-//                    .purchaseInvoice(invoice)
-//                    .ingredient(ingredient)
-//                    .quantity(itemDto.getQuantity())
-//                    .unitPriceWithoutTax(itemDto.getUnitPriceWithoutTax())
-//                    .vatRate(vatRate)
-//                    .build();
-//
-//            purchaseInvoiceItemRepository.save(item);
-//            savedItems.add(item);
-//
-//            StockEntry entry = StockEntry.builder()
-//                    .ingredient(ingredient)
-//                    .supplier(supplier)
-//                    .quantityReceived(itemDto.getQuantity())
-//                    .pricePerUnitWithoutTax(itemDto.getUnitPriceWithoutTax())
-//                    .receivedDate(dto.getReceivedDate())
-//                    .purchaseInvoiceItem(item)
-//                    .build();
-//
-//            stockEntryRepository.save(entry);
-//            inventoryService.addToInventory(ingredient.getId(), itemDto.getQuantity());
-//        }
-//        invoice.setItems(savedItems);
-//
-//        return purchaseInvoiceMapper.toDto(invoice);
-//    }
-//
-//    @Override
-//    public PurchaseInvoiceResponseDto getById(UUID id) {
-//        PurchaseInvoice invoice = purchaseInvoiceRepository.findById(id)
-//                .orElseThrow(() -> new EntityNotFoundException("Purchase invoice not found"));
-//
-//        return purchaseInvoiceMapper.toDto(invoice);
-//    }
-//
-//    @Override
-//    public List<PurchaseInvoiceResponseDto> getLatestInvoices(int limit) {
-//        List<PurchaseInvoice> invoices = purchaseInvoiceRepository
-//                .findTop10ByOrderByIssuedDateDesc();
-//
-//        return invoices.stream()
-//                .map(purchaseInvoiceMapper::toDto)
-//                .toList();
-//    }
+    @Override
+    @Transactional
+    public PurchaseInvoiceResponseDto createInvoice(UUID branchId, PurchaseInvoiceCreateDto dto) {
+        Branch branch = branchRepository.findById(branchId)
+                .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
+
+        Supplier supplier = supplierRepository.findByNameIgnoreCaseAndBranchId(dto.getSupplierName(), branchId)
+                .orElseThrow(() -> new EntityNotFoundException("Dodavatel '" + dto.getSupplierName() + "' nebyl nalezen."));
+
+        PurchaseInvoice invoice = PurchaseInvoice.builder()
+                .invoiceNumber(dto.getInvoiceNumber())
+                .supplier(supplier)
+                .issuedDate(dto.getIssuedDate())
+                .receivedDate(dto.getReceivedDate())
+                .note(dto.getNote())
+                .branch(branch)
+                .build();
+
+        purchaseInvoiceRepository.save(invoice);
+
+        List<PurchaseInvoiceItem> savedItems = new ArrayList<>();
+        for (PurchaseInvoiceItemCreateDto itemDto : dto.getItems()) {
+            Ingredient ingredient = ingredientRepository.findByNameIgnoreCaseAndBranchId(itemDto.getIngredientName(), branchId)
+                    .orElseThrow(() -> new EntityNotFoundException("Ingredience '" + itemDto.getIngredientName() + "' nebyla nalezena."));
+
+            VatRate vatRate = ingredient.getProductCategory().getVatRate();
+
+            PurchaseInvoiceItem item = PurchaseInvoiceItem.builder()
+                    .purchaseInvoice(invoice)
+                    .ingredient(ingredient)
+                    .quantity(itemDto.getQuantity())
+                    .unitPriceWithoutTax(itemDto.getUnitPriceWithoutTax())
+                    .vatRate(vatRate)
+                    .build();
+
+            purchaseInvoiceItemRepository.save(item);
+            savedItems.add(item);
+        }
+
+        invoice.setItems(savedItems);
+        return purchaseInvoiceMapper.toDto(invoice);
+    }
+
+    @Override
+    @Transactional
+    public PurchaseInvoiceResponseDto update(UUID branchId, UUID invoiceId, PurchaseInvoiceCreateDto dto) {
+        PurchaseInvoice invoice = purchaseInvoiceRepository.findByIdAndBranchId(invoiceId, branchId)
+                .orElseThrow(() -> new EntityNotFoundException("Purchase invoice not found"));
+
+        Supplier supplier = supplierRepository.findByNameIgnoreCaseAndBranchId(dto.getSupplierName(), branchId)
+                .orElseThrow(() -> new EntityNotFoundException("Dodavatel '" + dto.getSupplierName() + "' nebyl nalezen."));
+
+        invoice.setInvoiceNumber(dto.getInvoiceNumber());
+        invoice.setSupplier(supplier);
+        invoice.setIssuedDate(dto.getIssuedDate());
+        invoice.setReceivedDate(dto.getReceivedDate());
+        invoice.setNote(dto.getNote());
+
+        // Smazat StockEntry pro staré položky
+        for (PurchaseInvoiceItem oldItem : invoice.getItems()) {
+            stockEntryRepository.deleteAllByPurchaseInvoiceItemId(oldItem.getId());
+        }
+        // Smazat staré položky
+        purchaseInvoiceItemRepository.deleteAll(invoice.getItems());
+
+        // Uložit nové položky
+        List<PurchaseInvoiceItem> updatedItems = new ArrayList<>();
+        for (PurchaseInvoiceItemCreateDto itemDto : dto.getItems()) {
+            Ingredient ingredient = ingredientRepository.findByNameIgnoreCaseAndBranchId(itemDto.getIngredientName(), branchId)
+                    .orElseThrow(() -> new EntityNotFoundException("Ingredience '" + itemDto.getIngredientName() + "' nebyla nalezena."));
+
+            VatRate vatRate = ingredient.getProductCategory().getVatRate();
+
+            PurchaseInvoiceItem item = PurchaseInvoiceItem.builder()
+                    .purchaseInvoice(invoice)
+                    .ingredient(ingredient)
+                    .quantity(itemDto.getQuantity())
+                    .unitPriceWithoutTax(itemDto.getUnitPriceWithoutTax())
+                    .vatRate(vatRate)
+                    .build();
+
+            purchaseInvoiceItemRepository.save(item);
+            updatedItems.add(item);
+        }
+
+        invoice.setItems(updatedItems);
+        return purchaseInvoiceMapper.toDto(invoice);
+    }
+
+    @Override
+    @Transactional
+    public void delete(UUID branchId, UUID invoiceId) {
+        PurchaseInvoice invoice = purchaseInvoiceRepository.findByIdAndBranchId(invoiceId, branchId)
+                .orElseThrow(() -> new EntityNotFoundException("Purchase invoice not found"));
+
+        // Smazat StockEntry pro všechny položky
+        for (PurchaseInvoiceItem item : invoice.getItems()) {
+            stockEntryRepository.deleteAllByPurchaseInvoiceItemId(item.getId());
+        }
+        // Smazat položky a fakturu
+        purchaseInvoiceItemRepository.deleteAll(invoice.getItems());
+        purchaseInvoiceRepository.delete(invoice);
+    }
+
+    @Override
+    @Transactional
+    public void stockFromInvoice(UUID branchId, UUID invoiceId) {
+        PurchaseInvoice invoice = purchaseInvoiceRepository.findByIdAndBranchId(invoiceId, branchId)
+                .orElseThrow(() -> new EntityNotFoundException("Purchase invoice not found"));
+
+        for (PurchaseInvoiceItem item : invoice.getItems()) {
+            StockEntry entry = StockEntry.builder()
+                    .ingredient(item.getIngredient())
+                    .supplier(invoice.getSupplier())
+                    .quantityReceived(item.getQuantity())
+                    .pricePerUnitWithoutTax(item.getUnitPriceWithoutTax())
+                    .receivedDate(invoice.getReceivedDate())
+                    .purchaseInvoiceItem(item)
+                    .build();
+
+            stockEntryRepository.save(entry);
+            inventoryService.addToInventory(branchId, item.getIngredient().getId(), item.getQuantity());
+        }
+    }
+
+    @Override
+    public PurchaseInvoiceResponseDto getById(UUID branchId, UUID id) {
+        PurchaseInvoice invoice = purchaseInvoiceRepository.findByIdAndBranchId(id, branchId)
+                .orElseThrow(() -> new EntityNotFoundException("Purchase invoice not found"));
+
+        return purchaseInvoiceMapper.toDto(invoice);
+    }
+
+    @Override
+    public List<PurchaseInvoiceResponseDto> getAll(UUID branchId) {
+        List<PurchaseInvoice> invoices = purchaseInvoiceRepository.findAllByBranchIdOrderByIssuedDateDesc(branchId);
+        return invoices.stream().map(purchaseInvoiceMapper::toDto).toList();
+    }
+
+    @Override
+    public List<PurchaseInvoiceResponseDto> getLatestInvoices(UUID branchId, int limit) {
+        return List.of();
+    }
 }

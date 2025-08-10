@@ -37,7 +37,9 @@ public class StockEntry {
     private PurchaseInvoiceItem purchaseInvoiceItem;
 
     private float quantityReceived;
+
     private float pricePerUnitWithoutTax;
+
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate receivedDate;
 }

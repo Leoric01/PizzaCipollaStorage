@@ -2,6 +2,7 @@ package leoric.pizzacipollastorage.purchase.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import leoric.pizzacipollastorage.branch.models.Branch;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,6 +35,10 @@ public class PurchaseInvoice {
     private LocalDate receivedDate;
     private String note;
 
-    @OneToMany(mappedBy = "purchaseInvoice")
+    @OneToMany(mappedBy = "purchaseInvoice", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PurchaseInvoiceItem> items;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "branch_id", nullable = false)
+    private Branch branch;
 }

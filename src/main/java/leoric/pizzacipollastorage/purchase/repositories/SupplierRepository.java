@@ -12,6 +12,8 @@ import java.util.UUID;
 public interface SupplierRepository extends JpaRepository<Supplier, UUID> {
     Optional<Supplier> findByNameIgnoreCase(String name);
 
+    Optional<Supplier> findByNameIgnoreCaseAndBranchId(String name, UUID branchId);
+
     List<Supplier> findAllByBranchId(UUID branchId);
 
     Optional<Supplier> findByIdAndBranchId(UUID supplierId, UUID branchId);
