@@ -1,6 +1,8 @@
 package leoric.pizzacipollastorage.repositories;
 
 import leoric.pizzacipollastorage.models.Ingredient;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +17,8 @@ public interface IngredientRepository extends JpaRepository<Ingredient, UUID> {
     Optional<Ingredient> findByNameIgnoreCaseAndBranchId(String name, UUID branchId);
     List<Ingredient> findAllByBranchId(UUID branchId);
     Optional<Ingredient> findByNameIgnoreCase(String name);
+
+    Page<Ingredient> findByBranchId(UUID branchId, Pageable pageable);
+
+    Page<Ingredient> findByBranchIdAndNameContainingIgnoreCase(UUID branchId, String search, Pageable pageable);
 }

@@ -6,6 +6,8 @@ import leoric.pizzacipollastorage.auth.models.User;
 import leoric.pizzacipollastorage.branch.services.interfaces.BranchServiceAccess;
 import leoric.pizzacipollastorage.services.interfaces.MenuItemCategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -44,12 +46,14 @@ public class MenuItemCategoryController {
     }
 
     @GetMapping("/{branchId}")
-    public ResponseEntity<List<MenuItemCategoryResponseDto>> menuItemCategoryGetAll(
+    public ResponseEntity<Page<MenuItemCategoryResponseDto>> menuItemCategoryGetAll(
             @PathVariable UUID branchId,
-            @AuthenticationPrincipal User currentUser
+            @AuthenticationPrincipal User currentUser,
+            @RequestParam(required = false) String search,
+            Pageable pageable
     ) {
         branchServiceAccess.assertHasAccess(branchId, currentUser);
-        return ResponseEntity.ok(menuItemCategoryService.menuItemCategoryFindAll(branchId));
+        return ResponseEntity.ok(menuItemCategoryService.menuItemCategoryGetAll(branchId, search, pageable));
     }
 
     @GetMapping("/{branchId}/{menuItemCategoryId}")

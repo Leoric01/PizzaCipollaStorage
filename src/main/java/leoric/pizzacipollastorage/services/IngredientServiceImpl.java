@@ -1,7 +1,6 @@
 package leoric.pizzacipollastorage.services;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientAlias.IngredientAliasOverviewDto;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientCreateDto;
 import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientResponseDto;
@@ -30,7 +29,10 @@ import leoric.pizzacipollastorage.vat.repositories.ProductCategoryRepository;
 import leoric.pizzacipollastorage.vat.repositories.VatRateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -133,11 +135,16 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public List<IngredientResponseDto> ingredientGetAll(UUID branchId) {
-        List<Ingredient> ingredients = ingredientRepository.findAllByBranchId(branchId);
-        return ingredientMapper.toDtoList(ingredients);
+    @Transactional(readOnly = true)
+    public Page<IngredientResponseDto> ingredientGetAll(UUID branchId, String search, Pageable pageable) {
+        Page<Ingredient> page;
+        if (search != null && !search.isBlank()) {
+            page = ingredientRepository.findByBranchIdAndNameContainingIgnoreCase(branchId, search, pageable);
+        } else {
+            page = ingredientRepository.findByBranchId(branchId, pageable);
+        }
+        return page.map(ingredientMapper::toDto);
     }
-
     @Override
     public InventoryStatus checkInventoryStatus(Ingredient ingredient) {
         Optional<InventorySnapshot> latestSnapshotOpt =

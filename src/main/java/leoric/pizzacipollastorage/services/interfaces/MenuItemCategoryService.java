@@ -2,8 +2,8 @@ package leoric.pizzacipollastorage.services.interfaces;
 
 import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemCategoryCreateDto;
 import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemCategoryResponseDto;
-import leoric.pizzacipollastorage.DTOs.MenuItem.RecipeIngredientShortDto;
-import leoric.pizzacipollastorage.DTOs.MenuItem.RecipeIngredientVeryShortDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @Service
 public interface MenuItemCategoryService {
-    List<MenuItemCategoryResponseDto> menuItemCategoryFindAll(UUID branchId);
+    Page<MenuItemCategoryResponseDto> menuItemCategoryGetAll(UUID branchId, String search, Pageable pageable);
 
     MenuItemCategoryResponseDto menuItemCategoryAdd(UUID branchId, MenuItemCategoryCreateDto dto);
 

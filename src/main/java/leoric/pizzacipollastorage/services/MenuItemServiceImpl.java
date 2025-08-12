@@ -21,6 +21,8 @@ import leoric.pizzacipollastorage.repositories.RecipeIngredientRepository;
 import leoric.pizzacipollastorage.services.interfaces.IngredientAliasService;
 import leoric.pizzacipollastorage.services.interfaces.MenuItemService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -151,11 +153,24 @@ public class MenuItemServiceImpl implements MenuItemService {
         return menuItemMapper.toDtoList(saved);
     }
 
+    //    @Override
+//    @Transactional(readOnly = true)
+//    public List<MenuItemResponseDto> menuItemGetAll(UUID branchId) {
+//        List<MenuItem> items = menuItemRepository.findAllByBranchId(branchId);
+//        return menuItemMapper.toDtoList(items);
+//    }
     @Override
     @Transactional(readOnly = true)
-    public List<MenuItemResponseDto> menuItemGetAll(UUID branchId) {
-        List<MenuItem> items = menuItemRepository.findAllByBranchId(branchId);
-        return menuItemMapper.toDtoList(items);
+    public Page<MenuItemResponseDto> menuItemGetAll(UUID branchId, String search, Pageable pageable) {
+        Page<MenuItem> page;
+
+        if (search != null && !search.isBlank()) {
+            page = menuItemRepository.findByBranchIdAndNameContainingIgnoreCase(branchId, search, pageable);
+        } else {
+            page = menuItemRepository.findByBranchId(branchId, pageable);
+        }
+
+        return page.map(menuItemMapper::toDto);
     }
 
     @Override

@@ -59,7 +59,7 @@ services:
     restart: unless-stopped
 
   frontend:
-    image: leorickk/zradlo-fe:latest
+    image: mattonecz/zradlo-fe:latest
     container_name: zradlo-fe
     ports:
       - 3000:3000

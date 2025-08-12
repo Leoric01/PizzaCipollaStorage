@@ -12,7 +12,10 @@ import leoric.pizzacipollastorage.models.MenuItemCategory;
 import leoric.pizzacipollastorage.repositories.MenuItemCategoryRepository;
 import leoric.pizzacipollastorage.services.interfaces.MenuItemCategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -26,10 +29,15 @@ public class MenuItemCategoryServiceImpl implements MenuItemCategoryService {
     private final MenuItemCategoryMapper menuItemCategoryMapper;
 
     @Override
-    public List<MenuItemCategoryResponseDto> menuItemCategoryFindAll(UUID branchId) {
-        return menuItemCategoryMapper.toDtoList(
-                menuItemCategoryRepository.findAllByBranchId(branchId)
-        );
+    @Transactional(readOnly = true)
+    public Page<MenuItemCategoryResponseDto> menuItemCategoryGetAll(UUID branchId, String search, Pageable pageable) {
+        Page<MenuItemCategory> page;
+        if (search != null && !search.isBlank()) {
+            page = menuItemCategoryRepository.findByBranchIdAndNameContainingIgnoreCase(branchId, search, pageable);
+        } else {
+            page = menuItemCategoryRepository.findByBranchId(branchId, pageable);
+        }
+        return page.map(menuItemCategoryMapper::toDto);
     }
 
     @Override

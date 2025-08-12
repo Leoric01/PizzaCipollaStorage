@@ -1,6 +1,8 @@
 package leoric.pizzacipollastorage.services.interfaces;
 
 import leoric.pizzacipollastorage.DTOs.MenuItem.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,7 +15,7 @@ public interface MenuItemService {
 
     List<MenuItemResponseDto> createMenuItemsBulk(UUID branchId, List<MenuItemFullCreateDto> dtos);
 
-    List<MenuItemResponseDto> menuItemGetAll(UUID branchId);
+    Page<MenuItemResponseDto> menuItemGetAll(UUID branchId, String search, Pageable pageable);
 
     MenuItemResponseDto menuItemGetById(UUID branchId, UUID menuItemId);
 

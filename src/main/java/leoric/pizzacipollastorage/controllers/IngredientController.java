@@ -7,6 +7,8 @@ import leoric.pizzacipollastorage.auth.models.User;
 import leoric.pizzacipollastorage.branch.services.interfaces.BranchServiceAccess;
 import leoric.pizzacipollastorage.services.interfaces.IngredientService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,13 +25,14 @@ public class IngredientController {
     private final BranchServiceAccess branchServiceAccess;
 
     @GetMapping("/{branchId}/all")
-    public ResponseEntity<List<IngredientResponseDto>> ingredientGetAll(
+    public ResponseEntity<Page<IngredientResponseDto>> ingredientGetAll(
             @PathVariable UUID branchId,
-            @AuthenticationPrincipal User currentUser
+            @AuthenticationPrincipal User currentUser,
+            @RequestParam(required = false) String search,
+            Pageable pageable
     ) {
         branchServiceAccess.assertHasAccess(branchId, currentUser);
-
-        return ResponseEntity.ok(ingredientService.ingredientGetAll(branchId));
+        return ResponseEntity.ok(ingredientService.ingredientGetAll(branchId, search, pageable));
     }
 
     @GetMapping("/{ingredientId}")

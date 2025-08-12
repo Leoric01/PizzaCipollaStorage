@@ -1,6 +1,8 @@
 package leoric.pizzacipollastorage.repositories;
 
 import leoric.pizzacipollastorage.models.MenuItem;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,4 +22,8 @@ public interface MenuItemRepository extends JpaRepository<MenuItem, UUID> {
     List<MenuItem> findAllByBranchId(UUID branchId);
 
     Optional<MenuItem> findByIdAndBranchId(UUID id, UUID branchId);
+
+    Page<MenuItem> findByBranchId(UUID branchId, Pageable pageable);
+
+    Page<MenuItem> findByBranchIdAndNameContainingIgnoreCase(UUID branchId, String name, Pageable pageable);
 }

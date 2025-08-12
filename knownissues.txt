@@ -4,6 +4,10 @@ prejmenovany kontrakty supplier
 
 # BE
 udelat access role
+branch - zobrazeni uzivatelu k branch
 obrazky jidel/surovin
-doplnit supplier controler do postmana
 doplnit sale controler do postmana
+doplnit purchaseInvoice do postmana
+muzu pozadat o pristup k vlastni - proc
+v my branches se vypisou moje pobocky vickrat pokud jsem ji vytvoril a pak dal access request a approvnul to
+pagination

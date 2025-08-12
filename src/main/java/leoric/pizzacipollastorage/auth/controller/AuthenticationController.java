@@ -50,6 +50,6 @@ public class AuthenticationController {
     // TODO DELETE THIS IN PROD ↓↓↓
     @PostMapping("/god")
     public ResponseEntity<List<UserResponse>> usersEnableAll() {
-        return ResponseEntity.ok(authenticationService.listAll());
+        return ResponseEntity.ok(authenticationService.enableAll());
     }
 }

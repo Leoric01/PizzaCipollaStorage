@@ -6,6 +6,8 @@ import leoric.pizzacipollastorage.DTOs.Ingredient.IngredientResponseDto;
 import leoric.pizzacipollastorage.models.Ingredient;
 import leoric.pizzacipollastorage.models.enums.InventoryStatus;
 import leoric.pizzacipollastorage.purchase.models.PurchaseOrder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +20,7 @@ public interface IngredientService {
 
     IngredientResponseDto ingredientUpdate(UUID branchId, UUID id, IngredientCreateDto dto);
 
-    List<IngredientResponseDto> ingredientGetAll(UUID branchId);
+    Page<IngredientResponseDto> ingredientGetAll(UUID branchId, String search, Pageable pageable);
 
     void ingredientDeleteById(UUID branchId, UUID id);
 
