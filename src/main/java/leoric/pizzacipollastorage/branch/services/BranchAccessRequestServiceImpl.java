@@ -15,6 +15,8 @@ import leoric.pizzacipollastorage.branch.services.interfaces.BranchAccessRequest
 import leoric.pizzacipollastorage.handler.BusinessErrorCodes;
 import leoric.pizzacipollastorage.handler.exceptions.BusinessException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,8 +40,12 @@ public class BranchAccessRequestServiceImpl implements BranchAccessRequestServic
     public BranchAccessRequestResponseDto createRequest(BranchAccessRequestCreateDto dto, User currentUser) {
         Branch branch = branchRepository.findById(dto.getBranchId())
                 .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
-
-        if (currentUser.getBranches().contains(branch)) {
+        System.out.println("Branch: " + branch.getName());
+        List<Branch> branches = currentUser.getBranches();
+        for (Branch b : branches) {
+            System.out.println(b.toString());
+        }
+        if (branch.getUsers().contains(currentUser)) {
             throw new BusinessException(BusinessErrorCodes.BRANCH_ALREADY_ACCESSIBLE);
         }
 
@@ -62,32 +68,49 @@ public class BranchAccessRequestServiceImpl implements BranchAccessRequestServic
 
     @Override
     @Transactional(readOnly = true)
-    public List<BranchAccessRequestResponseDto> getAllAccessRequestsByBranch(UUID branchId, User currentUser) {
+    public Page<BranchAccessRequestResponseDto> getAllAccessRequestsByBranch(
+            UUID branchId,
+            User currentUser,
+            String search,
+            Pageable pageable
+    ) {
         Branch branch = branchRepository.findById(branchId)
                 .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
 
+        // kontrola, že manager je skutečně majitel pobočky
         if (!branch.getCreatedByManager().getId().equals(currentUser.getId())) {
             throw new BusinessException(BusinessErrorCodes.NOT_AUTHORIZED_FOR_BRANCH);
         }
 
-        List<BranchAccessRequest> requests = accessRequestRepository.findAllByBranchOrderByRequestDateDesc(branch);
-        return branchAccessRequestMapper.toDtoList(requests);
+        Page<BranchAccessRequest> page;
+        if (search != null && !search.isBlank()) {
+            page = accessRequestRepository.findByBranchAndUserFullnameContainingIgnoreCaseOrderByRequestDateDesc(branch, search, pageable);
+        } else {
+            page = accessRequestRepository.findByBranchOrderByRequestDateDesc(branch, pageable);
+        }
+
+        return page.map(branchAccessRequestMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<BranchAccessRequestResponseDto> getAllAccessRequestsToMyBranches(User currentUser) {
+    public Page<BranchAccessRequestResponseDto> getAllAccessRequestsToMyBranches(User currentUser, String search, Pageable pageable) {
 
         List<Branch> myBranches = branchRepository.findAllByCreatedByManager(currentUser);
-
         if (myBranches.isEmpty()) {
-            return List.of();
+            return Page.empty(pageable);
         }
 
-        List<BranchAccessRequest> accessRequests =
-                accessRequestRepository.findAllByBranchInOrderByRequestDateDesc(myBranches);
+        Page<BranchAccessRequest> page;
+        if (search != null && !search.isBlank()) {
+            page = accessRequestRepository
+                    .findByBranchInAndUserFullnameContainingIgnoreCaseOrderByRequestDateDesc(myBranches, search, pageable);
+        } else {
+            page = accessRequestRepository
+                    .findByBranchInOrderByRequestDateDesc(myBranches, pageable);
+        }
 
-        return branchAccessRequestMapper.toDtoList(accessRequests);
+        return page.map(branchAccessRequestMapper::toDto);
     }
 
     @Override

@@ -7,6 +7,8 @@ import leoric.pizzacipollastorage.services.interfaces.MenuItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,17 @@ public class MenuItemController {
 
     private final MenuItemService menuItemService;
     private final BranchServiceAccess branchServiceAccess;
+
+    @GetMapping
+    public ResponseEntity<Page<MenuItemResponseDto>> menuItemGetAll(
+            @PathVariable UUID branchId,
+            @AuthenticationPrincipal User currentUser,
+            @RequestParam(required = false) String search,
+            @PageableDefault(size = 15, sort = "name", direction = Sort.Direction.ASC) Pageable pageable
+    ) {
+        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        return ResponseEntity.ok(menuItemService.menuItemGetAll(branchId, search, pageable));
+    }
 
     @PostMapping
     public ResponseEntity<MenuItemResponseDto> menuItemCreate(
@@ -40,17 +53,6 @@ public class MenuItemController {
     ) {
         branchServiceAccess.assertHasAccess(branchId, currentUser);
         return ResponseEntity.ok(menuItemService.createMenuItemsBulk(branchId, dtos));
-    }
-
-    @GetMapping
-    public ResponseEntity<Page<MenuItemResponseDto>> menuItemGetAll(
-            @PathVariable UUID branchId,
-            @AuthenticationPrincipal User currentUser,
-            @RequestParam(required = false) String search,
-            Pageable pageable // automaticky bere ?page=0&size=10&sort=name,asc
-    ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
-        return ResponseEntity.ok(menuItemService.menuItemGetAll(branchId, search, pageable));
     }
 
     @GetMapping("/{menuItemId}")

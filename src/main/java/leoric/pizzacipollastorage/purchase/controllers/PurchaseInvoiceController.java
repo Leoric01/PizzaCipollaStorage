@@ -47,7 +47,7 @@ public class PurchaseInvoiceController {
     }
 
     @GetMapping("/{branchId}")
-    public ResponseEntity<List<PurchaseInvoiceResponseDto>> purchaseInvoceGetAll(
+    public ResponseEntity<List<PurchaseInvoiceResponseDto>> purchaseInvoiceGetAll(
             @PathVariable UUID branchId,
             @AuthenticationPrincipal User currentUser
     ) {

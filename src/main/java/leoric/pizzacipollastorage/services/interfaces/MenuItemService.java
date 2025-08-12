@@ -10,12 +10,12 @@ import java.util.UUID;
 
 @Service
 public interface MenuItemService {
+    Page<MenuItemResponseDto> menuItemGetAll(UUID branchId, String search, Pageable pageable);
 
     MenuItemResponseDto createMenuItemWithOptionalIngredients(UUID branchId, MenuItemFullCreateDto dto);
 
     List<MenuItemResponseDto> createMenuItemsBulk(UUID branchId, List<MenuItemFullCreateDto> dtos);
 
-    Page<MenuItemResponseDto> menuItemGetAll(UUID branchId, String search, Pageable pageable);
 
     MenuItemResponseDto menuItemGetById(UUID branchId, UUID menuItemId);
 

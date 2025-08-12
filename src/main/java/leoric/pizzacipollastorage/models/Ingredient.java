@@ -27,8 +27,8 @@ public class Ingredient {
 
     private String name;
     private String unit;
-    private float lossCleaningFactor;
-    private float lossUsageFactor;
+    private Float lossCleaningFactor;
+    private Float lossUsageFactor;
 
     private Float preferredFullStockLevel;
     private Float warningStockLevel;

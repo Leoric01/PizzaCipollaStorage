@@ -10,6 +10,7 @@ import java.util.List;
 public class PurchaseInvoiceCreateDto {
     private String invoiceNumber;
     private String supplierName;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate issuedDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate receivedDate;

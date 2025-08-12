@@ -29,18 +29,18 @@ public class Branch {
     private String address;
     private String contactInfo;
 
-    @ManyToMany(mappedBy = "branches")
+    @ManyToMany(mappedBy = "branches", fetch = FetchType.EAGER)
     private List<User> users = new ArrayList<>();
 
     @ManyToOne(optional = false)
     private User createdByManager;
 
-    @OneToMany(mappedBy = "fromBranch")
+    @OneToMany(mappedBy = "fromBranch", fetch = FetchType.EAGER)
     private List<IngredientLoan> loansGiven = new ArrayList<>();
 
-    @OneToMany(mappedBy = "toBranch")
+    @OneToMany(mappedBy = "toBranch", fetch = FetchType.EAGER)
     private List<IngredientLoan> loansReceived = new ArrayList<>();
 
-    @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<UserBranchRole> userBranchRoles = new ArrayList<>();
 }

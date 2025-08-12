@@ -8,6 +8,10 @@ import leoric.pizzacipollastorage.branch.dtos.BranchResponseDto;
 import leoric.pizzacipollastorage.branch.services.interfaces.BranchAccessRequestService;
 import leoric.pizzacipollastorage.branch.services.interfaces.BranchService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,8 +45,11 @@ public class BranchController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BranchResponseDto>> branchGetAll() {
-        return ResponseEntity.ok(branchService.getAllBranches());
+    public ResponseEntity<Page<BranchResponseDto>> branchGetAll(
+            @RequestParam(required = false) String search,
+            @PageableDefault(size = 10, sort = "name", direction = Sort.Direction.ASC) Pageable pageable
+    ) {
+        return ResponseEntity.ok(branchService.getAllBranches(search, pageable));
     }
 
     @GetMapping("/by-name/{name}")
@@ -52,19 +59,25 @@ public class BranchController {
 
     @GetMapping("/access-requests/{branchId}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
-    public ResponseEntity<List<BranchAccessRequestResponseDto>> branchGetAllAccessRequestsByBranchId(
+    public ResponseEntity<Page<BranchAccessRequestResponseDto>> branchGetAllAccessRequestsByBranchId(
             @PathVariable UUID branchId,
-            @AuthenticationPrincipal User currentUser
+            @AuthenticationPrincipal User currentUser,
+            @RequestParam(required = false) String search,
+            @PageableDefault(size = 15, sort = "name", direction = Sort.Direction.ASC) Pageable pageable
     ) {
-        return ResponseEntity.ok(branchAccessRequestService.getAllAccessRequestsByBranch(branchId, currentUser));
+        return ResponseEntity.ok(
+                branchAccessRequestService.getAllAccessRequestsByBranch(branchId, currentUser, search, pageable)
+        );
     }
 
     @GetMapping("/access-requests")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
-    public ResponseEntity<List<BranchAccessRequestResponseDto>> branchGetAllAccessRequestsToAllMineBranches(
-            @AuthenticationPrincipal User currentUser
+    public ResponseEntity<Page<BranchAccessRequestResponseDto>> branchGetAllAccessRequestsToAllMineBranches(
+            @AuthenticationPrincipal User currentUser,
+            @RequestParam(required = false) String search,
+            @PageableDefault(size = 15, sort = "name", direction = Sort.Direction.ASC) Pageable pageable
     ) {
-        return ResponseEntity.ok(branchAccessRequestService.getAllAccessRequestsToMyBranches(currentUser));
+        return ResponseEntity.ok(branchAccessRequestService.getAllAccessRequestsToMyBranches(currentUser, search, pageable));
     }
 
     @GetMapping("/access-requests/mine")

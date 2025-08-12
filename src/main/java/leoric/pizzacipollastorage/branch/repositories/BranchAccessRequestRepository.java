@@ -4,6 +4,8 @@ import leoric.pizzacipollastorage.auth.models.User;
 import leoric.pizzacipollastorage.branch.models.Branch;
 import leoric.pizzacipollastorage.branch.models.BranchAccessRequest;
 import leoric.pizzacipollastorage.branch.models.constants.BranchAccessRequestStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -21,4 +23,11 @@ public interface BranchAccessRequestRepository extends JpaRepository<BranchAcces
 
     List<BranchAccessRequest> findAllByUserOrderByRequestDateDesc(User user);
 
+    Page<BranchAccessRequest> findByBranchInAndUserFullnameContainingIgnoreCaseOrderByRequestDateDesc(List<Branch> myBranches, String search, Pageable pageable);
+
+    Page<BranchAccessRequest> findByBranchInOrderByRequestDateDesc(List<Branch> myBranches, Pageable pageable);
+
+    Page<BranchAccessRequest> findByBranchAndUserFullnameContainingIgnoreCaseOrderByRequestDateDesc(Branch branch, String search, Pageable pageable);
+
+    Page<BranchAccessRequest> findByBranchOrderByRequestDateDesc(Branch branch, Pageable pageable);
 }

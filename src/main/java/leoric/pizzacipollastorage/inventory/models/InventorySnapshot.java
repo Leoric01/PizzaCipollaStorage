@@ -31,7 +31,7 @@ public class InventorySnapshot {
 
     private LocalDateTime timestamp;
 
-    private float measuredQuantity;
+    private Float measuredQuantity;
     private Float expectedQuantity;
 
     private String note;

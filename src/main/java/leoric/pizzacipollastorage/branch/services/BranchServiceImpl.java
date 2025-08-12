@@ -12,6 +12,8 @@ import leoric.pizzacipollastorage.branch.services.interfaces.BranchService;
 import leoric.pizzacipollastorage.handler.exceptions.NotAuthorizedForBranchException;
 import leoric.pizzacipollastorage.utils.CustomUtilityString;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,8 +80,17 @@ public class BranchServiceImpl implements BranchService {
     }
 
     @Override
-    public List<BranchResponseDto> getAllBranches() {
-        return branchMapper.toDtoList(branchRepository.findAll());
+    @Transactional(readOnly = true)
+    public Page<BranchResponseDto> getAllBranches(String search, Pageable pageable) {
+        Page<Branch> page;
+
+        if (search != null && !search.isBlank()) {
+            page = branchRepository.findByNameContainingIgnoreCase(search, pageable);
+        } else {
+            page = branchRepository.findAll(pageable);
+        }
+
+        return page.map(branchMapper::toDto);
     }
 
     @Override

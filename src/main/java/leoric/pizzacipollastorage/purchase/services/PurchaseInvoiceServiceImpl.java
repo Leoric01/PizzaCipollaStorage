@@ -4,9 +4,13 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import leoric.pizzacipollastorage.branch.models.Branch;
 import leoric.pizzacipollastorage.branch.repositories.BranchRepository;
+import leoric.pizzacipollastorage.inventory.models.InventorySnapshot;
+import leoric.pizzacipollastorage.inventory.repositories.InventorySnapshotRepository;
 import leoric.pizzacipollastorage.inventory.services.InventoryService;
 import leoric.pizzacipollastorage.models.Ingredient;
 import leoric.pizzacipollastorage.models.StockEntry;
+import leoric.pizzacipollastorage.models.enums.IngredientState;
+import leoric.pizzacipollastorage.models.enums.SnapshotType;
 import leoric.pizzacipollastorage.purchase.PurchaseInvoiceMapper;
 import leoric.pizzacipollastorage.purchase.dtos.PurchaseInvoice.PurchaseInvoiceCreateDto;
 import leoric.pizzacipollastorage.purchase.dtos.PurchaseInvoice.PurchaseInvoiceItemCreateDto;
@@ -23,8 +27,10 @@ import leoric.pizzacipollastorage.vat.models.VatRate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -32,6 +38,7 @@ import java.util.UUID;
 public class PurchaseInvoiceServiceImpl implements PurchaseInvoiceService {
 
     private final InventoryService inventoryService;
+    private final InventorySnapshotRepository inventorySnapshotRepository;
     private final SupplierRepository supplierRepository;
     private final PurchaseInvoiceRepository purchaseInvoiceRepository;
     private final PurchaseInvoiceItemRepository purchaseInvoiceItemRepository;
@@ -77,6 +84,38 @@ public class PurchaseInvoiceServiceImpl implements PurchaseInvoiceService {
 
             purchaseInvoiceItemRepository.save(item);
             savedItems.add(item);
+
+            Optional<InventorySnapshot> lastSnapshotOpt = inventorySnapshotRepository
+                    .findTopByIngredientAndBranchOrderByTimestampDesc(ingredient, branch);
+
+            Float newExpectedQuantity;
+            Float newMeasuredQuantity;
+
+            if (lastSnapshotOpt.isPresent()) {
+                InventorySnapshot lastSnapshot = lastSnapshotOpt.get();
+                newExpectedQuantity = lastSnapshot.getExpectedQuantity() != null
+                        ? lastSnapshot.getExpectedQuantity() + itemDto.getQuantity()
+                        : itemDto.getQuantity();
+                newMeasuredQuantity = lastSnapshot.getMeasuredQuantity() != null
+                        ? lastSnapshot.getMeasuredQuantity() + itemDto.getQuantity()
+                        : itemDto.getQuantity();
+            } else {
+                newExpectedQuantity = itemDto.getQuantity();
+                newMeasuredQuantity = itemDto.getQuantity();
+            }
+
+            InventorySnapshot snapshot = InventorySnapshot.builder()
+                    .ingredient(ingredient)
+                    .timestamp(LocalDateTime.now())
+                    .measuredQuantity(newMeasuredQuantity)
+                    .expectedQuantity(newExpectedQuantity)
+                    .note("Příjem na sklad z faktury " + dto.getInvoiceNumber())
+                    .branch(branch)
+                    .type(SnapshotType.STOCK_IN)
+                    .form(IngredientState.RAW)
+                    .build();
+
+            inventorySnapshotRepository.save(snapshot);
         }
 
         invoice.setItems(savedItems);

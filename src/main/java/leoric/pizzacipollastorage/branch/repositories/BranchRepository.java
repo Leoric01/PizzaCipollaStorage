@@ -2,6 +2,8 @@ package leoric.pizzacipollastorage.branch.repositories;
 
 import leoric.pizzacipollastorage.auth.models.User;
 import leoric.pizzacipollastorage.branch.models.Branch;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,4 +19,5 @@ public interface BranchRepository extends JpaRepository<Branch, UUID> {
 
     boolean existsByIdAndUsersContaining(UUID id, User user);
 
+    Page<Branch> findByNameContainingIgnoreCase(String search, Pageable pageable);
 }
