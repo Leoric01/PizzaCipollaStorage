@@ -115,11 +115,18 @@ public class BranchAccessRequestServiceImpl implements BranchAccessRequestServic
 
     @Override
     @Transactional(readOnly = true)
-    public List<BranchAccessRequestResponseDto> getAllAccessRequestsMine(User currentUser) {
-        List<BranchAccessRequest> accessRequests =
-                accessRequestRepository.findAllByUserOrderByRequestDateDesc(currentUser);
+    public Page<BranchAccessRequestResponseDto> getAllAccessRequestsMine(User currentUser, String search, Pageable pageable) {
+        Page<BranchAccessRequest> page;
 
-        return branchAccessRequestMapper.toDtoList(accessRequests);
+        if (search != null && !search.isBlank()) {
+            page = accessRequestRepository
+                    .findByUserAndBranchNameContainingIgnoreCaseOrderByRequestDateDesc(currentUser, search, pageable);
+        } else {
+            page = accessRequestRepository
+                    .findByUserOrderByRequestDateDesc(currentUser, pageable);
+        }
+
+        return page.map(branchAccessRequestMapper::toDto);
     }
 
     @Override

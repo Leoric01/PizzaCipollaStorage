@@ -30,4 +30,8 @@ public interface BranchAccessRequestRepository extends JpaRepository<BranchAcces
     Page<BranchAccessRequest> findByBranchAndUserFullnameContainingIgnoreCaseOrderByRequestDateDesc(Branch branch, String search, Pageable pageable);
 
     Page<BranchAccessRequest> findByBranchOrderByRequestDateDesc(Branch branch, Pageable pageable);
+
+    Page<BranchAccessRequest> findByUserAndBranchNameContainingIgnoreCaseOrderByRequestDateDesc(User currentUser, String search, Pageable pageable);
+
+    Page<BranchAccessRequest> findByUserOrderByRequestDateDesc(User currentUser, Pageable pageable);
 }

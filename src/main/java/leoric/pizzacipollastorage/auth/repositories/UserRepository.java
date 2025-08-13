@@ -1,6 +1,8 @@
 package leoric.pizzacipollastorage.auth.repositories;
 
 import leoric.pizzacipollastorage.auth.models.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,4 +14,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByEmail(String userEmail);
 
     boolean existsByEmail(String email);
+
+    Page<User> findByUsernameContainingIgnoreCase(String search, Pageable pageable);
 }

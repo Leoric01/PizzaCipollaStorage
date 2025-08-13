@@ -13,6 +13,7 @@ import leoric.pizzacipollastorage.handler.exceptions.NotAuthorizedForBranchExcep
 import leoric.pizzacipollastorage.utils.CustomUtilityString;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -112,7 +114,23 @@ public class BranchServiceImpl implements BranchService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<BranchResponseDto> getBranchesForUser(User user) {
-        return branchMapper.toDtoList(user.getBranches());
+    public Page<BranchResponseDto> getBranchesForUser(User user, String search, Pageable pageable) {
+        List<Branch> branches = user.getBranches();
+
+        Stream<Branch> stream = branches.stream();
+
+        if (search != null && !search.isBlank()) {
+            String lowerSearch = search.toLowerCase();
+            stream = stream.filter(branch -> branch.getName() != null &&
+                    branch.getName().toLowerCase().contains(lowerSearch));
+        }
+
+        List<Branch> filtered = stream.toList();
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), filtered.size());
+        List<Branch> pageContent = start > end ? List.of() : filtered.subList(start, end);
+
+        return new PageImpl<>(branchMapper.toDtoList(pageContent), pageable, filtered.size());
     }
 }

@@ -5,6 +5,8 @@ import leoric.pizzacipollastorage.auth.dtos.AuthenticationRequest;
 import leoric.pizzacipollastorage.auth.dtos.AuthenticationResponse;
 import leoric.pizzacipollastorage.auth.dtos.RegistrationRequest;
 import leoric.pizzacipollastorage.auth.dtos.UserResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +19,7 @@ public interface AuthenticationService {
 
     void activateAccount(String token, String email) throws MessagingException;
 
-    List<UserResponse> listAll();
+    Page<UserResponse> listAll(String search, Pageable pageable);
 
     List<UserResponse> enableAll();
 }

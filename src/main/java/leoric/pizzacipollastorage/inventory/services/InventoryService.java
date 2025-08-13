@@ -2,6 +2,8 @@ package leoric.pizzacipollastorage.inventory.services;
 
 import leoric.pizzacipollastorage.inventory.dtos.Inventory.InventorySnapshotCreateDto;
 import leoric.pizzacipollastorage.inventory.dtos.Inventory.InventorySnapshotResponseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +18,6 @@ public interface InventoryService {
 
     List<InventorySnapshotResponseDto> createSnapshotBulk(UUID branchId, List<InventorySnapshotCreateDto> dtos);
 
-    List<InventorySnapshotResponseDto> getCurrentInventoryStatus(UUID branchId);
+    Page<InventorySnapshotResponseDto> getCurrentInventoryStatus(UUID branchId, String search, Pageable pageable);
 
 }

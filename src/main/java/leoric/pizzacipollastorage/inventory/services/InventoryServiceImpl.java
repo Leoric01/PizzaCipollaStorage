@@ -14,12 +14,16 @@ import leoric.pizzacipollastorage.models.enums.SnapshotType;
 import leoric.pizzacipollastorage.repositories.IngredientRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -29,7 +33,36 @@ public class InventoryServiceImpl implements InventoryService {
     private final InventorySnapshotRepository snapshotRepository;
     private final IngredientRepository ingredientRepository;
     private final InventorySnapshotMapper inventorySnapshotMapper;
+    private final InventoryStatusHelperService inventoryStatusHelperService;
     private final BranchRepository branchRepository;
+
+    @Override
+    public void addToInventory(UUID branchId, UUID ingredientId, float addedQuantity) {
+        Ingredient ingredient = ingredientRepository.findById(ingredientId)
+                .filter(i -> i.getBranch().getId().equals(branchId))
+                .orElseThrow(() -> new EntityNotFoundException("Ingredient not found in this branch"));
+
+        InventorySnapshotResponseDto current = inventoryStatusHelperService.getCurrentInventoryStatusMap(branchId).get(ingredientId);
+
+        float prevExpected = current.getExpectedQuantity() != null
+                ? current.getExpectedQuantity()
+                : current.getMeasuredQuantity();
+
+        float newExpected = prevExpected + addedQuantity;
+        float newMeasured = current.getMeasuredQuantity() + addedQuantity;
+
+        InventorySnapshot snapshot = InventorySnapshot.builder()
+                .ingredient(ingredient)
+                .branch(ingredient.getBranch())
+                .timestamp(LocalDateTime.now())
+                .expectedQuantity(newExpected)
+                .measuredQuantity(newMeasured)
+                .note("Stock received")
+                .type(SnapshotType.STOCK_IN)
+                .build();
+
+        snapshotRepository.save(snapshot);
+    }
 
     @Override
     public InventorySnapshotResponseDto createSnapshot(UUID branchId, InventorySnapshotCreateDto dto) {
@@ -82,70 +115,34 @@ public class InventoryServiceImpl implements InventoryService {
 
 
     @Override
-    public List<InventorySnapshotResponseDto> getCurrentInventoryStatus(UUID branchId) {
-        List<Ingredient> ingredients = ingredientRepository.findAllByBranchId(branchId);
-        List<InventorySnapshotResponseDto> result = new ArrayList<>();
+    @Transactional(readOnly = true)
+    public Page<InventorySnapshotResponseDto> getCurrentInventoryStatus(UUID branchId, String search, Pageable pageable) {
+        Page<Ingredient> ingredientPage;
 
-        for (Ingredient ingredient : ingredients) {
+        if (search != null && !search.isBlank()) {
+            ingredientPage = ingredientRepository.findByBranchIdAndNameContainingIgnoreCase(branchId, search, pageable);
+        } else {
+            ingredientPage = ingredientRepository.findByBranchId(branchId, pageable);
+        }
+
+        return ingredientPage.map(ingredient -> {
             Optional<InventorySnapshot> snapshotOpt =
                     snapshotRepository.findTopByIngredientAndBranchOrderByTimestampDesc(ingredient, ingredient.getBranch());
 
-            if (snapshotOpt.isPresent()) {
-                InventorySnapshot snapshot = snapshotOpt.get();
-                result.add(inventorySnapshotMapper.toDto(snapshot));
-            } else {
-                InventorySnapshot emptySnapshot = InventorySnapshot.builder()
-                        .ingredient(ingredient)
-                        .branch(ingredient.getBranch())
-                        .timestamp(LocalDateTime.now())
-                        .measuredQuantity(0f)
-                        .expectedQuantity(null)
-                        .note("No snapshot available")
-                        .type(SnapshotType.INVENTORY)
-                        .build();
+            InventorySnapshot snapshot = snapshotOpt.orElseGet(() ->
+                    InventorySnapshot.builder()
+                            .ingredient(ingredient)
+                            .branch(ingredient.getBranch())
+                            .timestamp(LocalDateTime.now())
+                            .measuredQuantity(0f)
+                            .expectedQuantity(null)
+                            .note("No snapshot available")
+                            .type(SnapshotType.INVENTORY)
+                            .build()
+            );
 
-                result.add(inventorySnapshotMapper.toDto(emptySnapshot));
-            }
-        }
-
-        return result;
-    }
-
-
-    @Override
-    public void addToInventory(UUID branchId, UUID ingredientId, float addedQuantity) {
-        Ingredient ingredient = ingredientRepository.findById(ingredientId)
-                .filter(i -> i.getBranch().getId().equals(branchId))
-                .orElseThrow(() -> new EntityNotFoundException("Ingredient not found in this branch"));
-
-        InventorySnapshotResponseDto current = getCurrentInventoryStatusMap(branchId).get(ingredientId);
-
-        float prevExpected = current.getExpectedQuantity() != null
-                ? current.getExpectedQuantity()
-                : current.getMeasuredQuantity();
-
-        float newExpected = prevExpected + addedQuantity;
-        float newMeasured = current.getMeasuredQuantity() + addedQuantity;
-
-        InventorySnapshot snapshot = InventorySnapshot.builder()
-                .ingredient(ingredient)
-                .branch(ingredient.getBranch())
-                .timestamp(LocalDateTime.now())
-                .expectedQuantity(newExpected)
-                .measuredQuantity(newMeasured)
-                .note("Stock received")
-                .type(SnapshotType.STOCK_IN)
-                .build();
-
-        snapshotRepository.save(snapshot);
-    }
-
-    private Map<UUID, InventorySnapshotResponseDto> getCurrentInventoryStatusMap(UUID branchId) {
-        return getCurrentInventoryStatus(branchId).stream()
-                .collect(Collectors.toMap(
-                        dto -> dto.getIngredient().getId(),
-                        Function.identity()
-                ));
+            return inventorySnapshotMapper.toDto(snapshot);
+        });
     }
 
     @Override

@@ -18,7 +18,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -81,11 +80,14 @@ public class BranchController {
     }
 
     @GetMapping("/access-requests/mine")
-    public ResponseEntity<List<BranchAccessRequestResponseDto>> branchGetAllAccessRequestsByUser(
-            @AuthenticationPrincipal User currentUser
+    public ResponseEntity<Page<BranchAccessRequestResponseDto>> branchGetAllAccessRequestsByUser(
+            @AuthenticationPrincipal User currentUser,
+            @RequestParam(required = false) String search,
+            @PageableDefault(size = 15, sort = "requestDate", direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        return ResponseEntity.ok(branchAccessRequestService.getAllAccessRequestsMine(currentUser));
+        return ResponseEntity.ok(branchAccessRequestService.getAllAccessRequestsMine(currentUser, search, pageable));
     }
+
 
     @PostMapping("/access-requests/{id}/approve")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
@@ -114,8 +116,12 @@ public class BranchController {
     }
 
     @GetMapping("/mine")
-    public ResponseEntity<List<BranchResponseDto>> branchGetMine(@AuthenticationPrincipal User currentUser) {
-        return ResponseEntity.ok(branchService.getBranchesForUser(currentUser));
+    public ResponseEntity<Page<BranchResponseDto>> branchGetMine(
+            @AuthenticationPrincipal User currentUser,
+            @RequestParam(required = false) String search,
+            @PageableDefault(size = 15, sort = "name", direction = Sort.Direction.ASC) Pageable pageable
+    ) {
+        return ResponseEntity.ok(branchService.getBranchesForUser(currentUser, search, pageable));
     }
 
     @GetMapping("/{id}")

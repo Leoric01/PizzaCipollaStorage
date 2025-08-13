@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -27,7 +26,7 @@ public interface BranchAccessRequestService {
 
     Page<BranchAccessRequestResponseDto> getAllAccessRequestsToMyBranches(User currentUser, String search, Pageable pageable);
 
-    List<BranchAccessRequestResponseDto> getAllAccessRequestsMine(User currentUser);
+    Page<BranchAccessRequestResponseDto> getAllAccessRequestsMine(User currentUser, String search, Pageable pageable);
 
     BranchAccessRequestResponseDto cancelAccessRequest(UUID id, User currentUser);
 }

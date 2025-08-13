@@ -16,6 +16,8 @@ import leoric.pizzacipollastorage.auth.security.JwtService;
 import leoric.pizzacipollastorage.handler.exceptions.EmailAlreadyInUseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -105,9 +107,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public List<UserResponse> listAll() {
-        List<User> users = userRepository.findAll();
-        return userMapper.usersToUserResponses(users);
+    @Transactional(readOnly = true)
+    public Page<UserResponse> listAll(String search, Pageable pageable) {
+        Page<User> page;
+
+        if (search != null && !search.isBlank()) {
+            page = userRepository.findByUsernameContainingIgnoreCase(search, pageable);
+        } else {
+            page = userRepository.findAll(pageable);
+        }
+
+        return page.map(userMapper::userToUserResponse);
     }
 
     @Override
