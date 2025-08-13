@@ -2,6 +2,8 @@ package leoric.pizzacipollastorage.purchase.services;
 
 import leoric.pizzacipollastorage.purchase.dtos.PurchaseInvoice.PurchaseInvoiceCreateDto;
 import leoric.pizzacipollastorage.purchase.dtos.PurchaseInvoice.PurchaseInvoiceResponseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +17,7 @@ public interface PurchaseInvoiceService {
 
     void stockFromInvoice(UUID branchId, UUID invoiceId);
 
-    List<PurchaseInvoiceResponseDto> getAll(UUID branchId);
+    Page<PurchaseInvoiceResponseDto> getAll(UUID branchId, Pageable pageable);
 
     List<PurchaseInvoiceResponseDto> getLatestInvoices(UUID branchId, int limit);
 

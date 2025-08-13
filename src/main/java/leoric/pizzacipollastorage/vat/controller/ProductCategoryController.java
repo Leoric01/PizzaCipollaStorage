@@ -8,6 +8,10 @@ import leoric.pizzacipollastorage.vat.dtos.ProductCategory.ProductCategoryCreate
 import leoric.pizzacipollastorage.vat.dtos.ProductCategory.ProductCategoryResponseDto;
 import leoric.pizzacipollastorage.vat.services.ProductCategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -56,14 +60,15 @@ public class ProductCategoryController {
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-    @GetMapping("/{branchId}")
-    public ResponseEntity<List<ProductCategoryResponseDto>> productCategoryGetAll(
+    @GetMapping("/{branchId}/all")
+    public ResponseEntity<Page<ProductCategoryResponseDto>> productCategoryGetAll(
             @PathVariable UUID branchId,
-            @AuthenticationPrincipal User currentUser) {
-
+            @AuthenticationPrincipal User currentUser,
+            @RequestParam(required = false) String search,
+            @PageableDefault(size = 15, sort = "name", direction = Sort.Direction.ASC) Pageable pageable
+    ) {
         branchServiceAccess.assertHasAccess(branchId, currentUser);
-
-        return ResponseEntity.ok(productCategoryService.getAllCategories(branchId, currentUser));
+        return ResponseEntity.ok(productCategoryService.getAllCategories(branchId, search, pageable));
     }
 
     @GetMapping("/{branchId}/{productCategoryId}")

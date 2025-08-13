@@ -63,8 +63,6 @@ public class MenuItemCategoryController {
             @PathVariable UUID menuItemCategoryId,
             @PathVariable UUID branchId,
             @AuthenticationPrincipal User currentUser
-
-
     ) {
         branchServiceAccess.assertHasAccess(branchId, currentUser);
         return ResponseEntity.ok(menuItemCategoryService.menuItemCategoryFindById(menuItemCategoryId));

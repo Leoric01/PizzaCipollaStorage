@@ -17,3 +17,5 @@ branch/access-request/mine - pagination
 branch/mine - pagination
 authentication all users - pagination
 inventory get current - pagination
+purchaseInvoice - pagination
+productCategory - pagination

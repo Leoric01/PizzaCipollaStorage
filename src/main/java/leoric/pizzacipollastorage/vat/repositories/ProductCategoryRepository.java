@@ -1,6 +1,8 @@
 package leoric.pizzacipollastorage.vat.repositories;
 
 import leoric.pizzacipollastorage.vat.models.ProductCategory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,4 +18,7 @@ public interface ProductCategoryRepository extends JpaRepository<ProductCategory
 
     List<ProductCategory> findAllByNameInIgnoreCaseAndBranchId(List<String> names, UUID branchId);
 
+    Page<ProductCategory> findByBranchIdAndNameContainingIgnoreCase(UUID branchId, String search, Pageable pageable);
+
+    Page<ProductCategory> findByBranchId(UUID branchId, Pageable pageable);
 }

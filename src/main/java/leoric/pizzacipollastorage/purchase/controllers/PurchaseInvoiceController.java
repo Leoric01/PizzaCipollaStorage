@@ -7,12 +7,15 @@ import leoric.pizzacipollastorage.purchase.dtos.PurchaseInvoice.PurchaseInvoiceC
 import leoric.pizzacipollastorage.purchase.dtos.PurchaseInvoice.PurchaseInvoiceResponseDto;
 import leoric.pizzacipollastorage.purchase.services.PurchaseInvoiceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -46,13 +49,14 @@ public class PurchaseInvoiceController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{branchId}")
-    public ResponseEntity<List<PurchaseInvoiceResponseDto>> purchaseInvoiceGetAll(
+    @GetMapping("/{branchId}/all")
+    public ResponseEntity<Page<PurchaseInvoiceResponseDto>> purchaseInvoiceGetAll(
             @PathVariable UUID branchId,
-            @AuthenticationPrincipal User currentUser
+            @AuthenticationPrincipal User currentUser,
+            @PageableDefault(size = 15, sort = "issuedDate", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         branchServiceAccess.assertHasAccess(branchId, currentUser);
-        return ResponseEntity.ok(purchaseInvoiceService.getAll(branchId));
+        return ResponseEntity.ok(purchaseInvoiceService.getAll(branchId, pageable));
     }
 
     @GetMapping("/{branchId}/{invoiceId}")

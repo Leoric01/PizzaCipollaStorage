@@ -18,6 +18,8 @@ import leoric.pizzacipollastorage.vat.repositories.ProductCategoryRepository;
 import leoric.pizzacipollastorage.vat.repositories.VatRateRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
@@ -143,12 +145,14 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
     @Override
-    public List<ProductCategoryResponseDto> getAllCategories(UUID branchId, User currentUser) {
-        Branch branch = branchServiceAccess.verifyAccess(branchId, currentUser);
-
-        return productCategoryRepository.findAllByBranchId(branch.getId()).stream()
-                .map(this::mapToResponse)
-                .toList();
+    public Page<ProductCategoryResponseDto> getAllCategories(UUID branchId, String search, Pageable pageable) {
+        Page<ProductCategory> page;
+        if (search != null && !search.isBlank()) {
+            page = productCategoryRepository.findByBranchIdAndNameContainingIgnoreCase(branchId, search, pageable);
+        } else {
+            page = productCategoryRepository.findByBranchId(branchId, pageable);
+        }
+        return page.map(this::mapToResponse);
     }
 
     @Override

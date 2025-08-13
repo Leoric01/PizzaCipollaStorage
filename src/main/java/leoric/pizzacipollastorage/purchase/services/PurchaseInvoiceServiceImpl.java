@@ -1,7 +1,6 @@
 package leoric.pizzacipollastorage.purchase.services;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import leoric.pizzacipollastorage.branch.models.Branch;
 import leoric.pizzacipollastorage.branch.repositories.BranchRepository;
 import leoric.pizzacipollastorage.inventory.models.InventorySnapshot;
@@ -25,7 +24,10 @@ import leoric.pizzacipollastorage.repositories.IngredientRepository;
 import leoric.pizzacipollastorage.repositories.StockEntryRepository;
 import leoric.pizzacipollastorage.vat.models.VatRate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -213,9 +215,10 @@ public class PurchaseInvoiceServiceImpl implements PurchaseInvoiceService {
     }
 
     @Override
-    public List<PurchaseInvoiceResponseDto> getAll(UUID branchId) {
-        List<PurchaseInvoice> invoices = purchaseInvoiceRepository.findAllByBranchIdOrderByIssuedDateDesc(branchId);
-        return invoices.stream().map(purchaseInvoiceMapper::toDto).toList();
+    @Transactional(readOnly = true)
+    public Page<PurchaseInvoiceResponseDto> getAll(UUID branchId, Pageable pageable) {
+        Page<PurchaseInvoice> page = purchaseInvoiceRepository.findAllByBranchId(branchId, pageable);
+        return page.map(purchaseInvoiceMapper::toDto);
     }
 
     @Override

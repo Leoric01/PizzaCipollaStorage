@@ -1,6 +1,8 @@
 package leoric.pizzacipollastorage.purchase.repositories;
 
 import leoric.pizzacipollastorage.purchase.models.PurchaseInvoice;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,4 +19,5 @@ public interface PurchaseInvoiceRepository extends JpaRepository<PurchaseInvoice
     Optional<PurchaseInvoice> findByIdAndBranchId(UUID id, UUID branchId);
 
 
+    Page<PurchaseInvoice> findAllByBranchId(UUID branchId, Pageable pageable);
 }
