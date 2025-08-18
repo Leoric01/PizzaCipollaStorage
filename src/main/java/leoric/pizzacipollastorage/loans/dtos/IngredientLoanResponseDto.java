@@ -17,10 +17,17 @@ import java.util.UUID;
 @AllArgsConstructor
 public class IngredientLoanResponseDto {
     private UUID id;
-    private String fromBranchName;
-    private String toBranchName;
+
     private LoanType loanType;
     private LoanStatus status;
+
     private LocalDate createdAt;
-    private List<IngredientLoanItemDto> items;
+    private LocalDate returnedAt;
+
+    private String note;
+
+    private String counterpartyName;
+    private String counterpartyContact;
+
+    private List<IngredientLoanItemResponseDto> items;
 }

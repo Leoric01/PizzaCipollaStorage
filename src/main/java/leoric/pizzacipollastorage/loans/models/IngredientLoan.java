@@ -20,29 +20,32 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class IngredientLoan {
+
     @Id
     @UuidGenerator(style = UuidGenerator.Style.AUTO)
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "branch_id", nullable = false)
+    private Branch branch;
+
     @Enumerated(EnumType.STRING)
     private LoanType loanType;
 
-    @ManyToOne
-    @JoinColumn(name = "from_branch_id")
-    private Branch fromBranch;
-
-    @ManyToOne
-    @JoinColumn(name = "to_branch_id")
-    private Branch toBranch;
-
     private LocalDate createdAt;
+
+    private LocalDate returnedAt;
 
     private String note;
 
     @Enumerated(EnumType.STRING)
     private LoanStatus status;
 
-    @OneToMany(mappedBy = "ingredientLoan", cascade = CascadeType.ALL)
+    private String counterpartyName;
+
+    private String counterpartyContact;
+
+    @OneToMany(mappedBy = "ingredientLoan", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<IngredientLoanItem> items;
 }

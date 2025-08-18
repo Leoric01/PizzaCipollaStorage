@@ -31,7 +31,8 @@ public enum BusinessErrorCodes {
     ENDPOINT_NOT_FOUND(999, NOT_FOUND, "Requested endpoint does not exist"),
     INGREDIENT_NOT_IN_BRANCH(318, FORBIDDEN, "Ingredient is not available in your branch"),
 
-    EMAIL_ALREADY_IN_USE(305, CONFLICT, "Email is already in use");
+    EMAIL_ALREADY_IN_USE(305, CONFLICT, "Email is already in use"),
+    LOAN_ALREADY_RETURNED(319, CONFLICT, "This loan is already marked as returned");
 
     private final int code;
     private final String description;

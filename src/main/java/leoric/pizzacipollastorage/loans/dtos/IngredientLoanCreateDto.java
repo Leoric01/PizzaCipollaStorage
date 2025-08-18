@@ -1,5 +1,8 @@
 package leoric.pizzacipollastorage.loans.dtos;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import leoric.pizzacipollastorage.models.enums.LoanType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,8 +17,13 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class IngredientLoanCreateDto {
-    private UUID fromBranchId;
-    private UUID toBranchId;
+
+    @NotNull(message = "BranchId is required")
+    private UUID branchId;
+
+    @NotNull(message = "LoanType is required")
     private LoanType loanType;
-    private List<IngredientLoanItemDto> items;
+
+    @NotEmpty(message = "At least one item is required")
+    private List<@Valid IngredientLoanItemDto> items;
 }
