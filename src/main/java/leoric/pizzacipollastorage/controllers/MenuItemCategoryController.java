@@ -1,15 +1,15 @@
 package leoric.pizzacipollastorage.controllers;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemCategoryCreateDto;
 import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemCategoryResponseDto;
 import leoric.pizzacipollastorage.auth.models.User;
 import leoric.pizzacipollastorage.branch.services.interfaces.BranchServiceAccess;
 import leoric.pizzacipollastorage.services.interfaces.MenuItemCategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -52,7 +52,8 @@ public class MenuItemCategoryController {
             @PathVariable UUID branchId,
             @AuthenticationPrincipal User currentUser,
             @RequestParam(required = false) String search,
-            @PageableDefault(size = 15, sort = "name", direction = Sort.Direction.ASC) Pageable pageable
+            @ParameterObject
+            @Parameter(required = false) Pageable pageable
     ) {
         branchServiceAccess.assertHasAccess(branchId, currentUser);
         return ResponseEntity.ok(menuItemCategoryService.menuItemCategoryGetAll(branchId, search, pageable));

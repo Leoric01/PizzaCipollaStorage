@@ -1,5 +1,6 @@
 package leoric.pizzacipollastorage.vat.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import leoric.pizzacipollastorage.auth.models.User;
 import leoric.pizzacipollastorage.branch.services.interfaces.BranchServiceAccess;
@@ -8,10 +9,9 @@ import leoric.pizzacipollastorage.vat.dtos.ProductCategory.ProductCategoryCreate
 import leoric.pizzacipollastorage.vat.dtos.ProductCategory.ProductCategoryResponseDto;
 import leoric.pizzacipollastorage.vat.services.ProductCategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -65,7 +65,8 @@ public class ProductCategoryController {
             @PathVariable UUID branchId,
             @AuthenticationPrincipal User currentUser,
             @RequestParam(required = false) String search,
-            @PageableDefault(size = 15, sort = "name", direction = Sort.Direction.ASC) Pageable pageable
+            @ParameterObject
+            @Parameter(required = false) Pageable pageable
     ) {
         branchServiceAccess.assertHasAccess(branchId, currentUser);
         return ResponseEntity.ok(productCategoryService.getAllCategories(branchId, search, pageable));

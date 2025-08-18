@@ -1,5 +1,6 @@
 package leoric.pizzacipollastorage.auth.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
@@ -9,10 +10,9 @@ import leoric.pizzacipollastorage.auth.dtos.RegistrationRequest;
 import leoric.pizzacipollastorage.auth.dtos.UserResponse;
 import leoric.pizzacipollastorage.auth.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,7 +49,8 @@ public class AuthenticationController {
     @GetMapping("/list-all")
     public ResponseEntity<Page<UserResponse>> usersListAll(
             @RequestParam(required = false) String search,
-            @PageableDefault(size = 15, sort = "username", direction = Sort.Direction.ASC) Pageable pageable
+            @ParameterObject
+            @Parameter(required = false) Pageable pageable
     ) {
         return ResponseEntity.ok(authenticationService.listAll(search, pageable));
     }

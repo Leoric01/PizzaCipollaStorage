@@ -1,5 +1,6 @@
 package leoric.pizzacipollastorage.branch.controllers;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import leoric.pizzacipollastorage.auth.models.User;
 import leoric.pizzacipollastorage.branch.dtos.BranchAccessRequestCreateDto;
 import leoric.pizzacipollastorage.branch.dtos.BranchAccessRequestResponseDto;
@@ -8,10 +9,9 @@ import leoric.pizzacipollastorage.branch.dtos.BranchResponseDto;
 import leoric.pizzacipollastorage.branch.services.interfaces.BranchAccessRequestService;
 import leoric.pizzacipollastorage.branch.services.interfaces.BranchService;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,7 +46,8 @@ public class BranchController {
     @GetMapping
     public ResponseEntity<Page<BranchResponseDto>> branchGetAll(
             @RequestParam(required = false) String search,
-            @PageableDefault(size = 10, sort = "name", direction = Sort.Direction.ASC) Pageable pageable
+            @ParameterObject
+            @Parameter(required = false) Pageable pageable
     ) {
         return ResponseEntity.ok(branchService.getAllBranches(search, pageable));
     }
@@ -62,7 +63,8 @@ public class BranchController {
             @PathVariable UUID branchId,
             @AuthenticationPrincipal User currentUser,
             @RequestParam(required = false) String search,
-            @PageableDefault(size = 15, sort = "name", direction = Sort.Direction.ASC) Pageable pageable
+            @ParameterObject
+            @Parameter(required = false) Pageable pageable
     ) {
         return ResponseEntity.ok(
                 branchAccessRequestService.getAllAccessRequestsByBranch(branchId, currentUser, search, pageable)
@@ -74,7 +76,8 @@ public class BranchController {
     public ResponseEntity<Page<BranchAccessRequestResponseDto>> branchGetAllAccessRequestsToAllMineBranches(
             @AuthenticationPrincipal User currentUser,
             @RequestParam(required = false) String search,
-            @PageableDefault(size = 15, sort = "name", direction = Sort.Direction.ASC) Pageable pageable
+            @ParameterObject
+            @Parameter(required = false) Pageable pageable
     ) {
         return ResponseEntity.ok(branchAccessRequestService.getAllAccessRequestsToMyBranches(currentUser, search, pageable));
     }
@@ -83,7 +86,8 @@ public class BranchController {
     public ResponseEntity<Page<BranchAccessRequestResponseDto>> branchGetAllAccessRequestsByUser(
             @AuthenticationPrincipal User currentUser,
             @RequestParam(required = false) String search,
-            @PageableDefault(size = 15, sort = "requestDate", direction = Sort.Direction.DESC) Pageable pageable
+            @ParameterObject
+            @Parameter(required = false) Pageable pageable
     ) {
         return ResponseEntity.ok(branchAccessRequestService.getAllAccessRequestsMine(currentUser, search, pageable));
     }
@@ -119,7 +123,8 @@ public class BranchController {
     public ResponseEntity<Page<BranchResponseDto>> branchGetMine(
             @AuthenticationPrincipal User currentUser,
             @RequestParam(required = false) String search,
-            @PageableDefault(size = 15, sort = "name", direction = Sort.Direction.ASC) Pageable pageable
+            @ParameterObject
+            @Parameter(required = false) Pageable pageable
     ) {
         return ResponseEntity.ok(branchService.getBranchesForUser(currentUser, search, pageable));
     }
