@@ -5,9 +5,11 @@ import leoric.pizzacipollastorage.branch.models.Branch;
 import leoric.pizzacipollastorage.branch.repositories.BranchRepository;
 import leoric.pizzacipollastorage.handler.BusinessErrorCodes;
 import leoric.pizzacipollastorage.handler.exceptions.BusinessException;
+import leoric.pizzacipollastorage.handler.exceptions.NotAuthorizedForBranchException;
 import leoric.pizzacipollastorage.inventory.services.InventoryService;
 import leoric.pizzacipollastorage.loans.dtos.IngredientLoanCreateDto;
 import leoric.pizzacipollastorage.loans.dtos.IngredientLoanItemDto;
+import leoric.pizzacipollastorage.loans.dtos.IngredientLoanPatchDto;
 import leoric.pizzacipollastorage.loans.dtos.IngredientLoanResponseDto;
 import leoric.pizzacipollastorage.loans.models.IngredientLoan;
 import leoric.pizzacipollastorage.loans.models.IngredientLoanItem;
@@ -28,7 +30,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -58,7 +62,7 @@ public class IngredientLoanServiceImpl implements IngredientLoanService {
                 .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
 
         if (!branch.getId().equals(dto.getBranchId())) {
-            throw new BusinessException(BusinessErrorCodes.NOT_AUTHORIZED_FOR_BRANCH);
+            throw new NotAuthorizedForBranchException("Can not create loan to this branch");
         }
 
         IngredientLoan loan = new IngredientLoan();
@@ -103,12 +107,89 @@ public class IngredientLoanServiceImpl implements IngredientLoanService {
 
     @Override
     @Transactional
+    public IngredientLoanResponseDto patchLoan(UUID branchId, UUID id, IngredientLoanPatchDto dto) {
+        IngredientLoan loan = loanRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Loan not found"));
+
+        if (!loan.getBranch().getId().equals(branchId)) {
+            throw new NotAuthorizedForBranchException("Can not modify loan from this branch");
+        }
+
+        LoanStatus oldStatus = loan.getStatus();
+        LoanStatus newStatus = dto.getStatus();
+
+        if (newStatus != null && newStatus != oldStatus) {
+            loan.setStatus(newStatus);
+            log.info("Loan [{}] status changed: {} → {}", loan.getId(), oldStatus, newStatus);
+        }
+
+        if (dto.getNote() != null) {
+            loan.setNote(dto.getNote());
+        }
+
+        if (dto.getLoanType() != null) {
+            loan.setLoanType(dto.getLoanType());
+        }
+
+        // update items if provided
+        if (dto.getItems() != null && !dto.getItems().isEmpty()) {
+            Map<UUID, IngredientLoanItem> existingItems = loan.getItems().stream()
+                    .collect(Collectors.toMap(i -> i.getIngredient().getId(), i -> i));
+
+            for (IngredientLoanItemDto itemDto : dto.getItems()) {
+                Ingredient ingredient = ingredientRepository.findById(itemDto.getIngredientId())
+                        .orElseThrow(() -> new EntityNotFoundException("Ingredient not found: " + itemDto.getIngredientId()));
+
+                if (!ingredient.getBranch().getId().equals(branchId)) {
+                    throw new BusinessException(BusinessErrorCodes.INGREDIENT_NOT_IN_BRANCH);
+                }
+
+                if (itemDto.getQuantity() <= 0) {
+                    throw new BusinessException(BusinessErrorCodes.MISSING_INGREDIENT_QUANTITY);
+                }
+
+                IngredientLoanItem existingItem = existingItems.get(itemDto.getIngredientId());
+                if (existingItem != null) {
+                    float oldQty = existingItem.getQuantity();
+                    float newQty = itemDto.getQuantity();
+                    float delta = newQty - oldQty;
+
+                    existingItem.setQuantity(newQty);
+
+                    if (loan.getLoanType() == LoanType.OUT) {
+                        inventoryService.addToInventory(branchId, ingredient.getId(), -delta);
+                    } else if (loan.getLoanType() == LoanType.IN) {
+                        inventoryService.addToInventory(branchId, ingredient.getId(), delta);
+                    }
+
+                } else {
+                    IngredientLoanItem newItem = new IngredientLoanItem();
+                    newItem.setIngredient(ingredient);
+                    newItem.setQuantity(itemDto.getQuantity());
+                    newItem.setIngredientLoan(loan);
+                    loan.getItems().add(newItem);
+
+                    if (loan.getLoanType() == LoanType.OUT) {
+                        inventoryService.addToInventory(branchId, ingredient.getId(), -itemDto.getQuantity());
+                    } else if (loan.getLoanType() == LoanType.IN) {
+                        inventoryService.addToInventory(branchId, ingredient.getId(), itemDto.getQuantity());
+                    }
+                }
+            }
+        }
+
+        return ingredientLoanMapper.toDto(loanRepository.save(loan));
+    }
+
+
+    @Override
+    @Transactional
     public IngredientLoanResponseDto markLoanAsReturned(UUID branchId, UUID loanId) {
         IngredientLoan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new EntityNotFoundException("Loan not found"));
 
         if (!loan.getBranch().getId().equals(branchId)) {
-            throw new BusinessException(BusinessErrorCodes.NOT_AUTHORIZED_FOR_BRANCH);
+            throw new NotAuthorizedForBranchException("Loan does not belong to this branch");
         }
 
         if (loan.getStatus() == LoanStatus.RETURNED) {
@@ -141,19 +222,6 @@ public class IngredientLoanServiceImpl implements IngredientLoanService {
         IngredientLoan saved = loanRepository.save(loan);
         return ingredientLoanMapper.toDto(saved);
     }
-//    @Override
-//    public IngredientLoanResponseDto patchLoan(UUID id, IngredientLoanPatchDto dto) {
-//        IngredientLoan loan = loanRepository.findById(id)
-//                .orElseThrow(() -> new EntityNotFoundException("Loan not found"));
-//        LoanStatus oldStatus = loan.getStatus();
-//        LoanStatus newStatus = dto.getStatus();
-//        ingredientLoanMapper.update(loan, dto);
-//
-//        if (newStatus != null && newStatus != oldStatus) {
-//            log.info("Loan [{}] branchAccessRequestStatus changed: {} → {}", loan.getId(), oldStatus, newStatus);
-//        }
-//        return ingredientLoanMapper.toDto(loanRepository.save(loan));
-//    }
 
     @Override
     @Transactional(readOnly = true)
@@ -167,5 +235,85 @@ public class IngredientLoanServiceImpl implements IngredientLoanService {
         }
 
         return page.map(ingredientLoanMapper::toDto);
+    }
+
+    @Override
+    @Transactional
+    public IngredientLoanResponseDto markLoanAsCancelled(UUID branchId, UUID loanId) {
+        IngredientLoan loan = loanRepository.findById(loanId)
+                .orElseThrow(() -> new EntityNotFoundException("Loan not found"));
+
+        if (!loan.getBranch().getId().equals(branchId)) {
+            throw new NotAuthorizedForBranchException("Loan does not belong to this branch");
+        }
+
+        if (loan.getStatus() == LoanStatus.CANCELLED) {
+            throw new BusinessException(BusinessErrorCodes.LOAN_ALREADY_CANCELLED);
+        }
+
+        if (loan.getStatus() == LoanStatus.RETURNED) {
+            throw new BusinessException(BusinessErrorCodes.LOAN_ALREADY_RETURNED);
+        }
+
+        for (IngredientLoanItem item : loan.getItems()) {
+            Ingredient ingredient = item.getIngredient();
+
+            if (!ingredient.getBranch().getId().equals(branchId)) {
+                throw new BusinessException(BusinessErrorCodes.INGREDIENT_NOT_IN_BRANCH);
+            }
+
+            float qty = item.getQuantity();
+
+            if (qty <= 0) {
+                throw new BusinessException(BusinessErrorCodes.MISSING_INGREDIENT_QUANTITY);
+            }
+
+            if (loan.getLoanType() == LoanType.OUT) {
+                inventoryService.addToInventory(branchId, ingredient.getId(), qty);
+            } else if (loan.getLoanType() == LoanType.IN) {
+                inventoryService.addToInventory(branchId, ingredient.getId(), -qty);
+            }
+        }
+
+        loan.setStatus(LoanStatus.CANCELLED);
+
+        IngredientLoan saved = loanRepository.save(loan);
+        return ingredientLoanMapper.toDto(saved);
+    }
+
+    @Override
+    @Transactional
+    public void deleteLoan(UUID branchId, UUID loanId) {
+        IngredientLoan loan = loanRepository.findById(loanId)
+                .orElseThrow(() -> new EntityNotFoundException("Loan not found"));
+
+        if (!loan.getBranch().getId().equals(branchId)) {
+            throw new NotAuthorizedForBranchException("Loan does not belong to this branch");
+        }
+
+        if (loan.getStatus() == LoanStatus.RETURNED) {
+            throw new BusinessException(BusinessErrorCodes.LOAN_ALREADY_RETURNED);
+        }
+
+        for (IngredientLoanItem item : loan.getItems()) {
+            Ingredient ingredient = item.getIngredient();
+
+            if (!ingredient.getBranch().getId().equals(branchId)) {
+                throw new BusinessException(BusinessErrorCodes.INGREDIENT_NOT_IN_BRANCH);
+            }
+
+            float qty = item.getQuantity();
+            if (qty <= 0) {
+                throw new BusinessException(BusinessErrorCodes.MISSING_INGREDIENT_QUANTITY);
+            }
+
+            if (loan.getLoanType() == LoanType.OUT) {
+                inventoryService.addToInventory(branchId, ingredient.getId(), qty);
+            } else if (loan.getLoanType() == LoanType.IN) {
+                inventoryService.addToInventory(branchId, ingredient.getId(), -qty);
+            }
+        }
+
+        loanRepository.delete(loan);
     }
 }

@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import leoric.pizzacipollastorage.auth.models.User;
 import leoric.pizzacipollastorage.branch.services.interfaces.BranchServiceAccess;
 import leoric.pizzacipollastorage.loans.dtos.IngredientLoanCreateDto;
+import leoric.pizzacipollastorage.loans.dtos.IngredientLoanPatchDto;
 import leoric.pizzacipollastorage.loans.dtos.IngredientLoanResponseDto;
 import leoric.pizzacipollastorage.services.interfaces.IngredientLoanService;
 import lombok.RequiredArgsConstructor;
@@ -71,27 +72,38 @@ public class IngredientLoanController {
         return ResponseEntity.ok(ingredientLoanService.getLoanById(branchId, id));
     }
 
-//    @PatchMapping("/{branchId}/{id}")
-//    @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
-//    public ResponseEntity<IngredientLoanResponseDto> loanPatch(
-//            @PathVariable UUID branchId,
-//            @PathVariable UUID id,
-//            @RequestBody @Valid IngredientLoanPatchDto dto,
-//            @AuthenticationPrincipal User currentUser
-//    ) {
-//        branchServiceAccess.assertHasAccess(branchId, currentUser);
-//        return ResponseEntity.ok(ingredientLoanService.patchLoan(branchId, id, dto));
-//    }
-//
-//    @DeleteMapping("/{branchId}/{id}")
-//    @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
-//    public ResponseEntity<Void> loanDelete(
-//            @PathVariable UUID branchId,
-//            @PathVariable UUID id,
-//            @AuthenticationPrincipal User currentUser
-//    ) {
-//        branchServiceAccess.assertHasAccess(branchId, currentUser);
-//        ingredientLoanService.deleteLoan(branchId, id);
-//        return ResponseEntity.noContent().build();
-//    }
+    @PatchMapping("/{branchId}/{id}/cancel")
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
+    public ResponseEntity<IngredientLoanResponseDto> ingredientLoanCancel(
+            @PathVariable UUID branchId,
+            @PathVariable UUID id,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        return ResponseEntity.ok(ingredientLoanService.markLoanAsCancelled(branchId, id));
+    }
+
+    @DeleteMapping("/{branchId}/{id}")
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
+    public ResponseEntity<Void> ingredientLoanDelete(
+            @PathVariable UUID branchId,
+            @PathVariable UUID id,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        ingredientLoanService.deleteLoan(branchId, id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{branchId}/{id}")
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
+    public ResponseEntity<IngredientLoanResponseDto> loanPatch(
+            @PathVariable UUID branchId,
+            @PathVariable UUID id,
+            @RequestBody @Valid IngredientLoanPatchDto dto,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        return ResponseEntity.ok(ingredientLoanService.patchLoan(branchId, id, dto));
+    }
 }

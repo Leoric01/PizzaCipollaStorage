@@ -32,7 +32,8 @@ public enum BusinessErrorCodes {
     INGREDIENT_NOT_IN_BRANCH(318, FORBIDDEN, "Ingredient is not available in your branch"),
 
     EMAIL_ALREADY_IN_USE(305, CONFLICT, "Email is already in use"),
-    LOAN_ALREADY_RETURNED(319, CONFLICT, "This loan is already marked as returned");
+    LOAN_ALREADY_RETURNED(319, CONFLICT, "This loan is already marked as returned"),
+    LOAN_ALREADY_CANCELLED(320, CONFLICT, "This loan is already cancelled");
 
     private final int code;
     private final String description;

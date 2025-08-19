@@ -4,9 +4,12 @@ import leoric.pizzacipollastorage.models.enums.LoanStatus;
 import leoric.pizzacipollastorage.models.enums.LoanType;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class IngredientLoanPatchDto {
     private LoanStatus status;
     private LoanType loanType;
     private String note;
+    private List<IngredientLoanItemDto> items;
 }
