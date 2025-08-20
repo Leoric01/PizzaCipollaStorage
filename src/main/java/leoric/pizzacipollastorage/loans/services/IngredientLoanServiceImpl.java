@@ -54,11 +54,7 @@ public class IngredientLoanServiceImpl implements IngredientLoanService {
             throw new BusinessException(BusinessErrorCodes.NOT_AUTHORIZED_FOR_BRANCH);
         }
 
-        System.out.println(loan);
-        IngredientLoanResponseDto mappedDto = ingredientLoanMapper.toDto(loan);
-        System.out.println("________________________________");
-        System.out.println(mappedDto);
-        return mappedDto;
+        return ingredientLoanMapper.toDto(loan);
     }
 
     @Override
