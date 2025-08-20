@@ -48,4 +48,22 @@ public class IngredientLoan {
 
     @OneToMany(mappedBy = "ingredientLoan", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<IngredientLoanItem> items;
+
+    @Override
+    public String toString() {
+        return "IngredientLoan{" +
+                "id=" + id +
+                ", branch=" + (branch != null ? branch.getId() : null) +
+                ", loanType=" + loanType +
+                ", createdAt=" + createdAt +
+                ", returnedAt=" + returnedAt +
+                ", note='" + note + '\'' +
+                ", status=" + status +
+                ", counterpartyName='" + counterpartyName + '\'' +
+                ", counterpartyContact='" + counterpartyContact + '\'' +
+                ", items=" + (items != null ? items.stream()
+                .map(IngredientLoanItem::toSimpleString)
+                .toList() : null) +
+                '}';
+    }
 }

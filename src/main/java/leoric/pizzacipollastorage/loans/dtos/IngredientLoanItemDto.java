@@ -17,7 +17,8 @@ public class IngredientLoanItemDto {
 
     @NotNull(message = "IngredientId is required")
     private UUID ingredientId;
-
+    private String ingredientName;
+    private String note;
     @DecimalMin(value = "0.1", inclusive = true, message = "Quantity must be greater than 0,1")
-    private float quantity;
+    private Float quantity;
 }

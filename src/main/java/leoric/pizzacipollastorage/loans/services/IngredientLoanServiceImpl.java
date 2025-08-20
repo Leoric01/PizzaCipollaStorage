@@ -19,7 +19,6 @@ import leoric.pizzacipollastorage.models.Ingredient;
 import leoric.pizzacipollastorage.models.enums.LoanStatus;
 import leoric.pizzacipollastorage.models.enums.LoanType;
 import leoric.pizzacipollastorage.repositories.IngredientRepository;
-import leoric.pizzacipollastorage.services.interfaces.IngredientLoanService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -48,11 +47,18 @@ public class IngredientLoanServiceImpl implements IngredientLoanService {
 
     @Override
     public IngredientLoanResponseDto getLoanById(UUID branchId, UUID id) {
-        IngredientLoan ingredientLoan = loanRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("IngredientLoan not found"));
-        if (!ingredientLoan.getBranch().getId().equals(branchId)) {
+        IngredientLoan loan = loanRepository.findByIdWithItemsAndIngredients(id)
+                .orElseThrow(() -> new EntityNotFoundException("IngredientLoan not found"));
+
+        if (!loan.getBranch().getId().equals(branchId)) {
             throw new BusinessException(BusinessErrorCodes.NOT_AUTHORIZED_FOR_BRANCH);
         }
-        return ingredientLoanMapper.toDto(ingredientLoan);
+
+        System.out.println(loan);
+        IngredientLoanResponseDto mappedDto = ingredientLoanMapper.toDto(loan);
+        System.out.println("________________________________");
+        System.out.println(mappedDto);
+        return mappedDto;
     }
 
     @Override
@@ -60,10 +66,6 @@ public class IngredientLoanServiceImpl implements IngredientLoanService {
     public IngredientLoanResponseDto createLoan(UUID branchId, IngredientLoanCreateDto dto) {
         Branch branch = branchRepository.findById(branchId)
                 .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
-
-        if (!branch.getId().equals(dto.getBranchId())) {
-            throw new NotAuthorizedForBranchException("Can not create loan to this branch");
-        }
 
         IngredientLoan loan = new IngredientLoan();
         loan.setBranch(branch);

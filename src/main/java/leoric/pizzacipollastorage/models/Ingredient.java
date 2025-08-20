@@ -53,4 +53,11 @@ public class Ingredient {
     @ManyToOne(optional = false)
     @JoinColumn(name = "branch_id", nullable = false)
     private Branch branch;
+
+    public String toSimpleString() {
+        return "Ingredient{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

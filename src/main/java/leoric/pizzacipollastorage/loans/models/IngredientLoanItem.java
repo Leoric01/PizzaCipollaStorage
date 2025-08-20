@@ -21,14 +21,24 @@ public class IngredientLoanItem {
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ingredient_loan_id")
     private IngredientLoan ingredientLoan;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
 
-    private float quantity;
+    private Float quantity;
     private String note;
+
+    public String toSimpleString() {
+        return "IngredientLoanItem{" +
+                "id=" + id +
+                ", ingredientId=" + (ingredient != null ? ingredient.getId() : null) +
+                ", ingredientName=" + (ingredient != null ? ingredient.getName() : null) +
+                ", quantity=" + quantity +
+                ", note='" + note + '\'' +
+                '}';
+    }
 }

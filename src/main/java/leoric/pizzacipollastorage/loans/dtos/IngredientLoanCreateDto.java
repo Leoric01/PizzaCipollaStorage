@@ -18,9 +18,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class IngredientLoanCreateDto {
 
-    @NotNull(message = "BranchId is required")
-    private UUID branchId;
-
     @NotNull(message = "LoanType is required")
     private LoanType loanType;
 

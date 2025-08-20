@@ -7,7 +7,7 @@ import leoric.pizzacipollastorage.branch.services.interfaces.BranchServiceAccess
 import leoric.pizzacipollastorage.loans.dtos.IngredientLoanCreateDto;
 import leoric.pizzacipollastorage.loans.dtos.IngredientLoanPatchDto;
 import leoric.pizzacipollastorage.loans.dtos.IngredientLoanResponseDto;
-import leoric.pizzacipollastorage.services.interfaces.IngredientLoanService;
+import leoric.pizzacipollastorage.loans.services.IngredientLoanService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;

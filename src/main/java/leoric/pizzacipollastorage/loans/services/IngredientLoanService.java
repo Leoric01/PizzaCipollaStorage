@@ -1,4 +1,4 @@
-package leoric.pizzacipollastorage.services.interfaces;
+package leoric.pizzacipollastorage.loans.services;
 
 import leoric.pizzacipollastorage.loans.dtos.IngredientLoanCreateDto;
 import leoric.pizzacipollastorage.loans.dtos.IngredientLoanPatchDto;
