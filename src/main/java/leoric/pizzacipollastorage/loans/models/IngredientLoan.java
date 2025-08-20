@@ -46,6 +46,6 @@ public class IngredientLoan {
 
     private String counterpartyContact;
 
-    @OneToMany(mappedBy = "ingredientLoan", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "ingredientLoan", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<IngredientLoanItem> items;
 }

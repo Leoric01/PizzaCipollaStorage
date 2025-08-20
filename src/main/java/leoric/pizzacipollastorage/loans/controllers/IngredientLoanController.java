@@ -1,5 +1,6 @@
 package leoric.pizzacipollastorage.loans.controllers;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import leoric.pizzacipollastorage.auth.models.User;
 import leoric.pizzacipollastorage.branch.services.interfaces.BranchServiceAccess;
@@ -56,6 +57,7 @@ public class IngredientLoanController {
             @PathVariable UUID branchId,
             @AuthenticationPrincipal User currentUser,
             @RequestParam(required = false) String search,
+            @Parameter(required = false)
             @ParameterObject Pageable pageable
     ) {
         branchServiceAccess.assertHasAccess(branchId, currentUser);
@@ -97,7 +99,7 @@ public class IngredientLoanController {
 
     @PatchMapping("/{branchId}/{id}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
-    public ResponseEntity<IngredientLoanResponseDto> loanPatch(
+    public ResponseEntity<IngredientLoanResponseDto> ingredientLoanPatch(
             @PathVariable UUID branchId,
             @PathVariable UUID id,
             @RequestBody @Valid IngredientLoanPatchDto dto,

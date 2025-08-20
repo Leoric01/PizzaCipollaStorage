@@ -24,6 +24,11 @@ public class IngredientLoanCreateDto {
     @NotNull(message = "LoanType is required")
     private LoanType loanType;
 
+    private String note;
+
+    private String counterpartyName;
+    private String counterpartyContact;
+
     @NotEmpty(message = "At least one item is required")
     private List<@Valid IngredientLoanItemDto> items;
 }

@@ -71,6 +71,10 @@ public class IngredientLoanServiceImpl implements IngredientLoanService {
         loan.setStatus(LoanStatus.ACTIVE);
         loan.setCreatedAt(LocalDate.now());
 
+        loan.setNote(dto.getNote());
+        loan.setCounterpartyName(dto.getCounterpartyName());
+        loan.setCounterpartyContact(dto.getCounterpartyContact());
+
         List<IngredientLoanItem> items = new ArrayList<>();
 
         for (IngredientLoanItemDto itemDto : dto.getItems()) {
@@ -127,6 +131,14 @@ public class IngredientLoanServiceImpl implements IngredientLoanService {
             loan.setNote(dto.getNote());
         }
 
+        if (dto.getCounterpartyName() != null) {
+            loan.setCounterpartyName(dto.getCounterpartyName());
+        }
+
+        if (dto.getCounterpartyContact() != null) {
+            loan.setCounterpartyContact(dto.getCounterpartyContact());
+        }
+
         if (dto.getLoanType() != null) {
             loan.setLoanType(dto.getLoanType());
         }
@@ -180,7 +192,6 @@ public class IngredientLoanServiceImpl implements IngredientLoanService {
 
         return ingredientLoanMapper.toDto(loanRepository.save(loan));
     }
-
 
     @Override
     @Transactional
@@ -292,7 +303,8 @@ public class IngredientLoanServiceImpl implements IngredientLoanService {
         }
 
         if (loan.getStatus() == LoanStatus.RETURNED) {
-            throw new BusinessException(BusinessErrorCodes.LOAN_ALREADY_RETURNED);
+            loanRepository.delete(loan);
+            return;
         }
 
         for (IngredientLoanItem item : loan.getItems()) {
