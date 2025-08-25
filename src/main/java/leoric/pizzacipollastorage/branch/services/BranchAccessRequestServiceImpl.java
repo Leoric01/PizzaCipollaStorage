@@ -38,7 +38,7 @@ public class BranchAccessRequestServiceImpl implements BranchAccessRequestServic
     @Override
     @Transactional
     public BranchAccessRequestResponseDto createRequest(BranchAccessRequestCreateDto dto, User currentUser) {
-        Branch branch = branchRepository.findById(dto.getBranchId())
+        Branch branch = branchRepository.findById(dto.branchId())
                 .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
         System.out.println("Branch: " + branch.getName());
         List<Branch> branches = currentUser.getBranches();

@@ -328,7 +328,7 @@ public class MenuItemServiceImpl implements MenuItemService {
             throw new NotAuthorizedForBranchException("You don't have access to this RecipeIngredient in this branch.");
         }
 
-        UUID newIngredientId = dto.getIngredient().getId();
+        UUID newIngredientId = dto.getIngredient().id();
         if (!recipeIngredient.getIngredient().getId().equals(newIngredientId)) {
             Ingredient newIngredient = ingredientRepository.findById(newIngredientId)
                     .orElseThrow(() -> new EntityNotFoundException("Ingredient not found: " + newIngredientId));

@@ -45,10 +45,10 @@ public interface PurchaseOrderMapper {
 
     default IngredientShortDto map(Ingredient ingredient) {
         if (ingredient == null) return null;
-        return IngredientShortDto.builder()
-                .id(ingredient.getId())
-                .name(ingredient.getName())
-                .unit(ingredient.getUnit())
-                .build();
+        return new IngredientShortDto(
+                ingredient.getId(),
+                ingredient.getName(),
+                ingredient.getUnit()
+        );
     }
 }

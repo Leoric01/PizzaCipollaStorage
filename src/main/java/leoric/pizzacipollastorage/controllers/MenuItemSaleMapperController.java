@@ -46,7 +46,7 @@ public class MenuItemSaleMapperController {
     }
 
     @GetMapping("/{branchId}/by-third-party-name")
-    public ResponseEntity<List<MenuItemResponseDto>> getMenuItemsByThirdPartyName(
+    public ResponseEntity<List<MenuItemResponseDto>> menuItemsByThirdPartyNameGet(
             @PathVariable UUID branchId,
             @AuthenticationPrincipal User currentUser,
             @RequestParam String thirdPartyName
@@ -57,7 +57,7 @@ public class MenuItemSaleMapperController {
         );
     }
     @PostMapping("/{branchId}/{menuItemId}/third-party-names")
-    public ResponseEntity<Void> addThirdPartyName(
+    public ResponseEntity<Void> thirdPartyNameAdd(
             @PathVariable UUID branchId,
             @PathVariable UUID menuItemId,
             @AuthenticationPrincipal User currentUser,
@@ -69,7 +69,7 @@ public class MenuItemSaleMapperController {
     }
 
     @PatchMapping("/{branchId}/{menuItemId}/third-party-names")
-    public ResponseEntity<Void> updateThirdPartyName(
+    public ResponseEntity<Void> thirdPartyNameUpdate(
             @PathVariable UUID branchId,
             @PathVariable UUID menuItemId,
             @AuthenticationPrincipal User currentUser,
@@ -81,7 +81,7 @@ public class MenuItemSaleMapperController {
     }
 
     @DeleteMapping("/{branchId}/{menuItemId}/third-party-names")
-    public ResponseEntity<Void> deleteThirdPartyName(
+    public ResponseEntity<Void> thirdPartyNameDelete(
             @PathVariable UUID branchId,
             @PathVariable UUID menuItemId,
             @AuthenticationPrincipal User currentUser,

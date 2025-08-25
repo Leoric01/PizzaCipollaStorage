@@ -48,7 +48,7 @@ public class InventoryStatusHelperService {
                 })
                 .stream()
                 .collect(Collectors.toMap(
-                        dto -> dto.getIngredient().getId(),
+                        dto -> dto.getIngredient().id(),
                         Function.identity()
                 ));
     }

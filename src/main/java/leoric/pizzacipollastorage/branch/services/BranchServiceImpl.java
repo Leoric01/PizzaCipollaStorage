@@ -34,23 +34,39 @@ public class BranchServiceImpl implements BranchService {
     @Override
     @Transactional
     public BranchResponseDto createBranch(BranchCreateDto dto, User currentUser) {
+        if (currentUser.getBranches() == null) {
+            currentUser.setBranches(new ArrayList<>());
+        }
+
         boolean branchExists = currentUser.getBranches().stream()
-                .anyMatch(b -> b.getName().equalsIgnoreCase(dto.name()));
+                .anyMatch(b -> b.getName() != null && b.getName().equalsIgnoreCase(dto.name()));
 
         if (branchExists) {
             throw new IllegalArgumentException("Už máte pobočku se jménem '" + dto.name() + "'");
         }
+
         Branch branch = branchMapper.toEntity(dto);
+        if (branch == null) {
+            throw new IllegalStateException("Mapper returned null branch");
+        }
+
         if (branch.getUsers() == null) {
             branch.setUsers(new ArrayList<>());
         }
+
         branch.setCreatedByManager(currentUser);
         branch.getUsers().add(currentUser);
         currentUser.getBranches().add(branch);
 
         branchRepository.save(branch);
         userRepository.save(currentUser);
-        return branchMapper.toDto(branch);
+
+        BranchResponseDto dtoResponse = branchMapper.toDto(branch);
+        if (dtoResponse == null) {
+            throw new IllegalStateException("Mapper returned null DTO");
+        }
+
+        return dtoResponse;
     }
 
     @Override
