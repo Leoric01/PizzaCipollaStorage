@@ -46,4 +46,6 @@ public interface MenuItemService {
     void updateThirdPartyName(UUID menuItemId, UUID branchId, String oldName, String newName);
 
     void deleteThirdPartyName(UUID menuItemId, UUID branchId, String name);
+
+    List<MenuItemResponseDto> getMenuItemsByThirdPartyName(UUID branchId, String thirdPartyName);
 }

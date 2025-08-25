@@ -156,12 +156,6 @@ public class MenuItemServiceImpl implements MenuItemService {
         return menuItemMapper.toDtoList(saved);
     }
 
-    //    @Override
-//    @Transactional(readOnly = true)
-//    public List<MenuItemResponseDto> menuItemGetAll(UUID branchId) {
-//        List<MenuItem> items = menuItemRepository.findAllByBranchId(branchId);
-//        return menuItemMapper.toDtoList(items);
-//    }
     @Override
     @Transactional(readOnly = true)
     public Page<MenuItemResponseDto> menuItemGetAll(UUID branchId, String search, Pageable pageable) {
@@ -401,5 +395,19 @@ public class MenuItemServiceImpl implements MenuItemService {
         } else {
             throw new EntityNotFoundException("Third party name not found: " + name);
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<MenuItemResponseDto> getMenuItemsByThirdPartyName(UUID branchId, String thirdPartyName) {
+        List<MenuItem> menuItems = menuItemRepository.findAllByBranchIdAndThirdPartyName(branchId, thirdPartyName);
+
+        if (menuItems.isEmpty()) {
+            throw new EntityNotFoundException(
+                    "No MenuItem found for third party name: " + thirdPartyName
+            );
+        }
+
+        return menuItemMapper.toDtoList(menuItems);
     }
 }

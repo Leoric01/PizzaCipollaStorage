@@ -2,10 +2,7 @@ package leoric.pizzacipollastorage.controllers;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
-import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemMapNameResponseDto;
-import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemNameWithSizesDto;
-import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemThirdPartyNameCreateDto;
-import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemThirdPartyNameUpdateDto;
+import leoric.pizzacipollastorage.DTOs.MenuItem.*;
 import leoric.pizzacipollastorage.auth.models.User;
 import leoric.pizzacipollastorage.branch.services.interfaces.BranchServiceAccess;
 import leoric.pizzacipollastorage.services.interfaces.MenuItemService;
@@ -48,6 +45,17 @@ public class MenuItemSaleMapperController {
         return ResponseEntity.ok(menuItemService.getMenuItemNamesWithSizes(branchId));
     }
 
+    @GetMapping("/{branchId}/by-third-party-name")
+    public ResponseEntity<List<MenuItemResponseDto>> getMenuItemsByThirdPartyName(
+            @PathVariable UUID branchId,
+            @AuthenticationPrincipal User currentUser,
+            @RequestParam String thirdPartyName
+    ) {
+        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        return ResponseEntity.ok(
+                menuItemService.getMenuItemsByThirdPartyName(branchId, thirdPartyName)
+        );
+    }
     @PostMapping("/{branchId}/{menuItemId}/third-party-names")
     public ResponseEntity<Void> addThirdPartyName(
             @PathVariable UUID branchId,

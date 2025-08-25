@@ -26,4 +26,11 @@ public interface MenuItemRepository extends JpaRepository<MenuItem, UUID> {
     Page<MenuItem> findByBranchId(UUID branchId, Pageable pageable);
 
     Page<MenuItem> findByBranchIdAndNameContainingIgnoreCase(UUID branchId, String name, Pageable pageable);
+
+    @Query("SELECT m FROM MenuItem m JOIN m.thirdPartyNames tpn " +
+           "WHERE m.branch.id = :branchId AND tpn = :thirdPartyName")
+    List<MenuItem> findAllByBranchIdAndThirdPartyName(
+            @Param("branchId") UUID branchId,
+            @Param("thirdPartyName") String thirdPartyName
+    );
 }
