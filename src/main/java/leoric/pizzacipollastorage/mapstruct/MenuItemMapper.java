@@ -1,6 +1,7 @@
 package leoric.pizzacipollastorage.mapstruct;
 
 import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemCreateDto;
+import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemMapNameResponseDto;
 import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemResponseDto;
 import leoric.pizzacipollastorage.DTOs.MenuItem.RecipeIngredientVeryShortDtoWithId;
 import leoric.pizzacipollastorage.models.MenuItem;
@@ -26,4 +27,8 @@ public interface MenuItemMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void update(@MappingTarget MenuItem entity, MenuItemCreateDto dto);
+
+    MenuItemMapNameResponseDto toMapNameDto(MenuItem menuItem);
+
+    List<MenuItemMapNameResponseDto> toMapNameDtoList(List<MenuItem> menuItems);
 }

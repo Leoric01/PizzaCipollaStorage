@@ -42,4 +42,12 @@ public class MenuItem {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private DishSize dishSize;
+
+    @ElementCollection
+    @CollectionTable(
+            name = "menu_item_third_party_names",
+            joinColumns = @JoinColumn(name = "menu_item_id")
+    )
+    @Column(name = "third_party_name")
+    private List<String> thirdPartyNames = new ArrayList<>();
 }

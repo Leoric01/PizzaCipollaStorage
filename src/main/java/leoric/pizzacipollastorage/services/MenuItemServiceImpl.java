@@ -14,6 +14,7 @@ import leoric.pizzacipollastorage.models.Ingredient;
 import leoric.pizzacipollastorage.models.MenuItem;
 import leoric.pizzacipollastorage.models.MenuItemCategory;
 import leoric.pizzacipollastorage.models.RecipeIngredient;
+import leoric.pizzacipollastorage.models.enums.DishSize;
 import leoric.pizzacipollastorage.repositories.IngredientRepository;
 import leoric.pizzacipollastorage.repositories.MenuItemCategoryRepository;
 import leoric.pizzacipollastorage.repositories.MenuItemRepository;
@@ -28,7 +29,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -186,7 +189,6 @@ public class MenuItemServiceImpl implements MenuItemService {
         return menuItemMapper.toDto(item);
     }
 
-
     @Override
     @Transactional
     public MenuItemResponseDto menuItemUpdate(UUID branchId, UUID menuItemId, MenuItemFullCreateDto dto) {
@@ -263,6 +265,34 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
+    public Page<MenuItemMapNameResponseDto> menuItemGetAllMapNames(UUID branchId, String search, Pageable pageable) {
+        Page<MenuItem> page;
+
+        if (search != null && !search.isBlank()) {
+            page = menuItemRepository.findByBranchIdAndNameContainingIgnoreCase(branchId, search, pageable);
+        } else {
+            page = menuItemRepository.findByBranchId(branchId, pageable);
+        }
+
+        return page.map(menuItemMapper::toMapNameDto);
+    }
+
+    @Override
+    public List<MenuItemNameWithSizesDto> getMenuItemNamesWithSizes(UUID branchId) {
+        List<MenuItem> menuItems = menuItemRepository.findAllByBranchId(branchId);
+
+        Map<String, List<DishSize>> grouped = menuItems.stream()
+                .collect(Collectors.groupingBy(
+                        MenuItem::getName,
+                        Collectors.mapping(MenuItem::getDishSize, Collectors.toList())
+                ));
+
+        return grouped.entrySet().stream()
+                .map(e -> new MenuItemNameWithSizesDto(e.getKey(), e.getValue()))
+                .toList();
+    }
+
+    @Override
     @Transactional
     public List<RecipeIngredientShortDto> recipeIngredientAddToMenuItemBulk(UUID branchId, RecipeCreateBulkDto dto) {
         MenuItem menuItem = menuItemRepository.findByNameIgnoreCaseAndBranchId(dto.getMenuItem(), branchId)
@@ -317,7 +347,6 @@ public class MenuItemServiceImpl implements MenuItemService {
         return recipeIngredientMapper.toShortDto(saved);
     }
 
-
     @Override
     public RecipeIngredientShortDto recipeIngredientAddToMenuItem(UUID branchId, RecipeIngredientCreateDto dto) {
         MenuItem menuItem = menuItemRepository.findById(dto.getMenuItemId())
@@ -333,4 +362,44 @@ public class MenuItemServiceImpl implements MenuItemService {
         return recipeIngredientMapper.toShortDto(recipeIngredientRepository.save(recipeIngredient));
     }
 
+    @Override
+    @Transactional
+    public void addThirdPartyName(UUID menuItemId, UUID branchId, String name) {
+        MenuItem menuItem = menuItemRepository.findByIdAndBranchId(menuItemId, branchId)
+                .orElseThrow(() -> new EntityNotFoundException("MenuItem not found"));
+
+        if (!menuItem.getThirdPartyNames().contains(name)) {
+            menuItem.getThirdPartyNames().add(name);
+            menuItemRepository.save(menuItem);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void updateThirdPartyName(UUID menuItemId, UUID branchId, String oldName, String newName) {
+        MenuItem menuItem = menuItemRepository.findByIdAndBranchId(menuItemId, branchId)
+                .orElseThrow(() -> new EntityNotFoundException("MenuItem not found"));
+
+        List<String> names = menuItem.getThirdPartyNames();
+        int index = names.indexOf(oldName);
+        if (index != -1) {
+            names.set(index, newName);
+            menuItemRepository.save(menuItem);
+        } else {
+            throw new EntityNotFoundException("Third party name not found: " + oldName);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void deleteThirdPartyName(UUID menuItemId, UUID branchId, String name) {
+        MenuItem menuItem = menuItemRepository.findByIdAndBranchId(menuItemId, branchId)
+                .orElseThrow(() -> new EntityNotFoundException("MenuItem not found"));
+
+        if (menuItem.getThirdPartyNames().remove(name)) {
+            menuItemRepository.save(menuItem);
+        } else {
+            throw new EntityNotFoundException("Third party name not found: " + name);
+        }
+    }
 }

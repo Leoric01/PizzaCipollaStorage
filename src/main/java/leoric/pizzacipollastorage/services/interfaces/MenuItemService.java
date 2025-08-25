@@ -36,4 +36,14 @@ public interface MenuItemService {
     RecipeIngredientShortDto getRecipeIngredientById(UUID branchId, UUID recipeIngredientId);
 
     void deleteRecipeIngredientById(UUID branchId, UUID id);
+
+    Page<MenuItemMapNameResponseDto> menuItemGetAllMapNames(UUID branchId, String search, Pageable pageable);
+
+    List<MenuItemNameWithSizesDto> getMenuItemNamesWithSizes(UUID branchId);
+
+    void addThirdPartyName(UUID menuItemId, UUID branchId, String name);
+
+    void updateThirdPartyName(UUID menuItemId, UUID branchId, String oldName, String newName);
+
+    void deleteThirdPartyName(UUID menuItemId, UUID branchId, String name);
 }

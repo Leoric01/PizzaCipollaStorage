@@ -45,4 +45,5 @@ public class MenuItemSaleController {
         List<MenuItemSaleResponseDto> responses = menuItemSaleService.createSaleBulk(branchId, menuItemSaleCreateDtoList);
         return ResponseEntity.ok(responses);
     }
+
 }
