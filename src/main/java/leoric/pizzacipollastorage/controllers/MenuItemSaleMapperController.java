@@ -2,7 +2,11 @@ package leoric.pizzacipollastorage.controllers;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
-import leoric.pizzacipollastorage.DTOs.MenuItem.*;
+import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemResponseDto;
+import leoric.pizzacipollastorage.DTOs.MenuItemSale.MenuItemMapNameResponseDto;
+import leoric.pizzacipollastorage.DTOs.MenuItemSale.MenuItemNameWithSizesDto;
+import leoric.pizzacipollastorage.DTOs.MenuItemSale.MenuItemThirdPartyNameCreateDto;
+import leoric.pizzacipollastorage.DTOs.MenuItemSale.MenuItemThirdPartyNameUpdateDto;
 import leoric.pizzacipollastorage.auth.models.User;
 import leoric.pizzacipollastorage.branch.services.interfaces.BranchServiceAccess;
 import leoric.pizzacipollastorage.services.interfaces.MenuItemService;
@@ -26,7 +30,7 @@ public class MenuItemSaleMapperController {
     private final MenuItemService menuItemService;
 
     @GetMapping("/{branchId}/map-names")
-    public ResponseEntity<Page<MenuItemMapNameResponseDto>> menuItemGetAllMapNames(
+    public ResponseEntity<Page<MenuItemMapNameResponseDto>> menuItemGetAllThirdPartyNames(
             @PathVariable UUID branchId,
             @AuthenticationPrincipal User currentUser,
             @RequestParam(required = false) String search,
@@ -37,7 +41,7 @@ public class MenuItemSaleMapperController {
     }
 
     @GetMapping("/{branchId}/names-with-sizes")
-    public ResponseEntity<List<MenuItemNameWithSizesDto>> menuItemGetNamesWithSizes(
+    public ResponseEntity<List<MenuItemNameWithSizesDto>> menuItemGetThirdPartyNamesWithSizes(
             @PathVariable UUID branchId,
             @AuthenticationPrincipal User currentUser
     ) {
@@ -56,6 +60,7 @@ public class MenuItemSaleMapperController {
                 menuItemService.getMenuItemsByThirdPartyName(branchId, thirdPartyName)
         );
     }
+
     @PostMapping("/{branchId}/{menuItemId}/third-party-names")
     public ResponseEntity<Void> thirdPartyNameAdd(
             @PathVariable UUID branchId,

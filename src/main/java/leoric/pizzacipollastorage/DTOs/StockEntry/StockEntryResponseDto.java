@@ -13,8 +13,8 @@ public class StockEntryResponseDto {
     private UUID id;
     private IngredientShortDto ingredient;
     private SupplierShortDto supplier;
-    private float quantityReceived;
-    private float pricePerUnitWithoutTax;
+    private Float quantityReceived;
+    private Float pricePerUnitWithoutTax;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate receivedDate;
 }

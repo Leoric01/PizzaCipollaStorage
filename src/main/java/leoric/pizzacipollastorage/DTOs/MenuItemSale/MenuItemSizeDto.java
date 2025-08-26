@@ -1,4 +1,4 @@
-package leoric.pizzacipollastorage.DTOs.MenuItem;
+package leoric.pizzacipollastorage.DTOs.MenuItemSale;
 
 import leoric.pizzacipollastorage.models.enums.DishSize;
 import lombok.AllArgsConstructor;
@@ -6,16 +6,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MenuItemMapNameResponseDto {
-    private UUID id;
-    private String name;
-    private List<String> thirdPartyNames;
-    private DishSize dishSize;
+public class MenuItemSizeDto {
+    private UUID menuItemId;
+    private DishSize size;  // enum přímo
 }

@@ -9,6 +9,6 @@ import java.util.UUID;
 public class MenuItemSaleCreateDto {
     private UUID menuItemId;
     private DishSize dishSize;
-    private int quantitySold;
+    private Float quantitySold;
     private String cookName;
 }

@@ -1,8 +1,7 @@
 package leoric.pizzacipollastorage.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import leoric.pizzacipollastorage.branch.models.Branch;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.UUID;
@@ -22,4 +21,9 @@ public class Packaging {
     private boolean billSeparately; // Účtovat samostatně zákazníkovi?
 
     private float priceWithoutVat;  // pokud účtujeme
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "branch_id", nullable = false)
+    private Branch branch;
+
 }

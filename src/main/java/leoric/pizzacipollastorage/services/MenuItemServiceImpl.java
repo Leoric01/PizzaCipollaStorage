@@ -2,6 +2,9 @@ package leoric.pizzacipollastorage.services;
 
 import jakarta.persistence.EntityNotFoundException;
 import leoric.pizzacipollastorage.DTOs.MenuItem.*;
+import leoric.pizzacipollastorage.DTOs.MenuItemSale.MenuItemMapNameResponseDto;
+import leoric.pizzacipollastorage.DTOs.MenuItemSale.MenuItemNameWithSizesDto;
+import leoric.pizzacipollastorage.DTOs.MenuItemSale.MenuItemSizeDto;
 import leoric.pizzacipollastorage.branch.models.Branch;
 import leoric.pizzacipollastorage.branch.repositories.BranchRepository;
 import leoric.pizzacipollastorage.handler.BusinessErrorCodes;
@@ -14,7 +17,6 @@ import leoric.pizzacipollastorage.models.Ingredient;
 import leoric.pizzacipollastorage.models.MenuItem;
 import leoric.pizzacipollastorage.models.MenuItemCategory;
 import leoric.pizzacipollastorage.models.RecipeIngredient;
-import leoric.pizzacipollastorage.models.enums.DishSize;
 import leoric.pizzacipollastorage.repositories.IngredientRepository;
 import leoric.pizzacipollastorage.repositories.MenuItemCategoryRepository;
 import leoric.pizzacipollastorage.repositories.MenuItemRepository;
@@ -275,10 +277,14 @@ public class MenuItemServiceImpl implements MenuItemService {
     public List<MenuItemNameWithSizesDto> getMenuItemNamesWithSizes(UUID branchId) {
         List<MenuItem> menuItems = menuItemRepository.findAllByBranchId(branchId);
 
-        Map<String, List<DishSize>> grouped = menuItems.stream()
+        // seskupíme podle názvu, ale uvnitř mapujeme rovnou na MenuItemSizeDto
+        Map<String, List<MenuItemSizeDto>> grouped = menuItems.stream()
                 .collect(Collectors.groupingBy(
                         MenuItem::getName,
-                        Collectors.mapping(MenuItem::getDishSize, Collectors.toList())
+                        Collectors.mapping(
+                                mi -> new MenuItemSizeDto(mi.getId(), mi.getDishSize()),
+                                Collectors.toList()
+                        )
                 ));
 
         return grouped.entrySet().stream()

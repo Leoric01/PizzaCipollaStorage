@@ -1,4 +1,4 @@
-package leoric.pizzacipollastorage.DTOs.MenuItem;
+package leoric.pizzacipollastorage.DTOs.MenuItemSale;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

@@ -42,4 +42,5 @@ public class StockEntry {
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate receivedDate;
+
 }

@@ -10,8 +10,8 @@ import java.util.UUID;
 public class StockEntryCreateDto {
     private UUID ingredientId;
     private UUID supplierId;
-    private float quantityReceived;
-    private float pricePerUnitWithoutTax;
+    private Float quantityReceived;
+    private Float pricePerUnitWithoutTax;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate receivedDate;
 }

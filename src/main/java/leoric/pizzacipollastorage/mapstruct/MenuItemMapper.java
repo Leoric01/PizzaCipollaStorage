@@ -1,9 +1,9 @@
 package leoric.pizzacipollastorage.mapstruct;
 
 import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemCreateDto;
-import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemMapNameResponseDto;
 import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemResponseDto;
 import leoric.pizzacipollastorage.DTOs.MenuItem.RecipeIngredientVeryShortDtoWithId;
+import leoric.pizzacipollastorage.DTOs.MenuItemSale.MenuItemMapNameResponseDto;
 import leoric.pizzacipollastorage.models.MenuItem;
 import leoric.pizzacipollastorage.models.RecipeIngredient;
 import org.mapstruct.*;

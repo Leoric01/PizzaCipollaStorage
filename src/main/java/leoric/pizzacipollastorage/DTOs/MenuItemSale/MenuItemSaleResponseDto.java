@@ -17,7 +17,7 @@ public class MenuItemSaleResponseDto {
     private UUID id;
     private String menuItem;
     private DishSize dishSize;
-    private int quantitySold;
+    private Float quantitySold;
     private String cookName;
     private LocalDateTime saleDate;
 }

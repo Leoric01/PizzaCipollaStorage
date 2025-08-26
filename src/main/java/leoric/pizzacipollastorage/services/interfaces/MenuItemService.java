@@ -1,6 +1,8 @@
 package leoric.pizzacipollastorage.services.interfaces;
 
 import leoric.pizzacipollastorage.DTOs.MenuItem.*;
+import leoric.pizzacipollastorage.DTOs.MenuItemSale.MenuItemMapNameResponseDto;
+import leoric.pizzacipollastorage.DTOs.MenuItemSale.MenuItemNameWithSizesDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

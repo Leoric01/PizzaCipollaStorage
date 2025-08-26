@@ -31,7 +31,7 @@ public class MenuItemSale {
     @Column(nullable = false)
     private DishSize dishSize;
 
-    private int quantitySold;
+    private Float quantitySold;
     private LocalDateTime saleDate;
     private String cookName;
 
