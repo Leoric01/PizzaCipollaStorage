@@ -17,6 +17,7 @@ import leoric.pizzacipollastorage.models.Ingredient;
 import leoric.pizzacipollastorage.models.MenuItem;
 import leoric.pizzacipollastorage.models.MenuItemCategory;
 import leoric.pizzacipollastorage.models.RecipeIngredient;
+import leoric.pizzacipollastorage.models.enums.DishSize;
 import leoric.pizzacipollastorage.repositories.IngredientRepository;
 import leoric.pizzacipollastorage.repositories.MenuItemCategoryRepository;
 import leoric.pizzacipollastorage.repositories.MenuItemRepository;
@@ -49,6 +50,62 @@ public class MenuItemServiceImpl implements MenuItemService {
     private final IngredientAliasService ingredientAliasService;
 
     private final MenuItemMapper menuItemMapper;
+
+    @Override
+    @Transactional
+    public List<MenuItemResponseDto> duplicateMenuItemsDifferentDishSizes(
+            UUID branchId,
+            MenuItemDuplicateDifferentDishSizesRequestDto requestDto
+    ) {
+        Branch branch = branchRepository.findById(branchId)
+                .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
+
+        MenuItem original = menuItemRepository.findById(requestDto.menuItemId())
+                .orElseThrow(() -> new EntityNotFoundException("MenuItem not found: " + requestDto.menuItemId()));
+
+        if (!original.getBranch().getId().equals(branchId)) {
+            throw new BusinessException(BusinessErrorCodes.NOT_AUTHORIZED_FOR_BRANCH);
+        }
+
+        List<MenuItem> duplicates = new ArrayList<>();
+
+        for (DishSize size : requestDto.dishSizes()) {
+            if (size.equals(original.getDishSize())) {
+                continue;
+            }
+
+            MenuItem copy = new MenuItem();
+            copy.setName(original.getName());
+            copy.setDescription(original.getDescription());
+            copy.setDishSize(size);
+            copy.setBranch(branch);
+            copy.setCategory(original.getCategory());
+
+            List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+            for (RecipeIngredient originalRi : original.getRecipeIngredients()) {
+                RecipeIngredient ri = new RecipeIngredient();
+                ri.setMenuItem(copy);
+                ri.setIngredient(originalRi.getIngredient());
+
+                Float originalQuantity = originalRi.getQuantity();
+
+                Float quantityAsM = normalizeToMedium(originalQuantity, original.getDishSize());
+
+                Float adjustedQuantity = adjustQuantityBySize(quantityAsM, size);
+
+                ri.setQuantity(adjustedQuantity);
+                recipeIngredients.add(ri);
+            }
+
+            copy.setRecipeIngredients(recipeIngredients);
+            duplicates.add(copy);
+        }
+
+        List<MenuItem> saved = menuItemRepository.saveAll(duplicates);
+        return saved.stream()
+                .map(menuItemMapper::toDto)
+                .toList();
+    }
 
     @Override
     @Transactional
@@ -277,7 +334,6 @@ public class MenuItemServiceImpl implements MenuItemService {
     public List<MenuItemNameWithSizesDto> getMenuItemNamesWithSizes(UUID branchId) {
         List<MenuItem> menuItems = menuItemRepository.findAllByBranchId(branchId);
 
-        // seskupíme podle názvu, ale uvnitř mapujeme rovnou na MenuItemSizeDto
         Map<String, List<MenuItemSizeDto>> grouped = menuItems.stream()
                 .collect(Collectors.groupingBy(
                         MenuItem::getName,
@@ -415,5 +471,30 @@ public class MenuItemServiceImpl implements MenuItemService {
         }
 
         return menuItemMapper.toDtoList(menuItems);
+    }
+
+    private float getScaleFactor(DishSize size) {
+        return switch (size) {
+            case XXS -> 0.25f;
+            case XS -> 0.5f;
+            case S -> 0.75f;
+            case M -> 1.0f;
+            case L -> 1.25f;
+            case XL -> 1.5f;
+            case XXL -> 1.75f;
+            case XXXL -> 2.0f;
+        };
+    }
+
+    // Přepočítá quantity z originálu na „Medium ekvivalent“
+    private Float normalizeToMedium(Float quantity, DishSize originalSize) {
+        float factor = getScaleFactor(originalSize);
+        return quantity / factor; // převede třeba S množství na „M ekvivalent“
+    }
+
+    // Přepočítá z „Medium ekvivalentu“ na target size
+    private Float adjustQuantityBySize(Float baseAsM, DishSize targetSize) {
+        float factor = getScaleFactor(targetSize);
+        return baseAsM * factor;
     }
 }

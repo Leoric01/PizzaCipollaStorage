@@ -56,6 +56,16 @@ public class MenuItemController {
         return ResponseEntity.ok(menuItemService.createMenuItemsBulk(branchId, dtos));
     }
 
+    @PostMapping("/duplicate-bulk")
+    public ResponseEntity<List<MenuItemResponseDto>> menuItemDuplicateDifferentDishSizes(
+            @PathVariable UUID branchId,
+            @RequestBody MenuItemDuplicateDifferentDishSizesRequestDto requestDto,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        return ResponseEntity.ok(menuItemService.duplicateMenuItemsDifferentDishSizes(branchId, requestDto));
+    }
+
     @GetMapping("/{menuItemId}")
     public ResponseEntity<MenuItemResponseDto> menuItemGetById(
             @PathVariable UUID branchId,

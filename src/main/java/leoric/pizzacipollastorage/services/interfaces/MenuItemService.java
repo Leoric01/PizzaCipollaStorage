@@ -50,4 +50,6 @@ public interface MenuItemService {
     void deleteThirdPartyName(UUID menuItemId, UUID branchId, String name);
 
     List<MenuItemResponseDto> getMenuItemsByThirdPartyName(UUID branchId, String thirdPartyName);
+
+    List<MenuItemResponseDto> duplicateMenuItemsDifferentDishSizes(UUID branchId, MenuItemDuplicateDifferentDishSizesRequestDto requestDto);
 }
