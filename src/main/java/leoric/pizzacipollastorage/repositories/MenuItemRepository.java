@@ -33,4 +33,8 @@ public interface MenuItemRepository extends JpaRepository<MenuItem, UUID> {
             @Param("branchId") UUID branchId,
             @Param("thirdPartyName") String thirdPartyName
     );
+
+    @Query("SELECT m FROM MenuItem m JOIN m.thirdPartyNames t " +
+           "WHERE m.branch.id = :branchId AND t IN :names")
+    List<MenuItem> findByBranchIdAndThirdPartyNamesIn(UUID branchId, List<String> thirdPartyNames);
 }

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MenuItemSaleLastTimestampCreateDto {
+public class MenuItemSaleLastTimestampUpsertDto {
     @NotNull(message = "lastSaleTimestamp is mandatory attribute")
     private LocalDateTime lastSaleTimestamp;
 }

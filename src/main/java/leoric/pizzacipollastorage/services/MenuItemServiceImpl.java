@@ -30,10 +30,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -105,6 +102,21 @@ public class MenuItemServiceImpl implements MenuItemService {
         return saved.stream()
                 .map(menuItemMapper::toDto)
                 .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Map<String, UUID> mapThirdPartyNames(UUID branchId, List<String> thirdPartyNames) {
+        List<MenuItem> items = menuItemRepository.findByBranchIdAndThirdPartyNamesIn(branchId, thirdPartyNames);
+        Map<String, UUID> result = new HashMap<>();
+        for (MenuItem item : items) {
+            for (String tpName : item.getThirdPartyNames()) {
+                if (thirdPartyNames.contains(tpName)) {
+                    result.put(tpName, item.getId());
+                }
+            }
+        }
+        return result;
     }
 
     @Override

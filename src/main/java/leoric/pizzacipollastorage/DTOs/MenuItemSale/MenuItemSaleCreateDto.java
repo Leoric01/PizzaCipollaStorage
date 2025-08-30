@@ -10,5 +10,6 @@ public class MenuItemSaleCreateDto {
     private UUID menuItemId;
     private DishSize dishSize;
     private Float quantitySold;
-    private String cookName;
+    private String cookName; //  dat o lvl vejs
+    private String thirdPartyName;
 }

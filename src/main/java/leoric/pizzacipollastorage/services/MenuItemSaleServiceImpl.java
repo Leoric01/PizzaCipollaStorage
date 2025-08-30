@@ -41,14 +41,21 @@ public class MenuItemSaleServiceImpl implements MenuItemSaleService {
     public MenuItemSaleResponseDto createSale(UUID branchId, MenuItemSaleCreateDto dto) {
         Branch branch = branchRepository.findById(branchId)
                 .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
-        // Najdi menu položku v rámci pobočky
+
         MenuItem menuItem = menuItemRepository.findByIdAndBranchId(dto.getMenuItemId(), branchId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "MenuItem " + dto.getMenuItemId() + " not found for branch " + branchId));
 
         DishSize dishSize = dto.getDishSize();
 
-        // Ulož samotný prodej
+        // 🔑 Přidání aliasu (thirdPartyName), pokud byl poslán a ještě neexistuje
+        if (dto.getThirdPartyName() != null
+            && !dto.getThirdPartyName().isBlank()
+            && !menuItem.getThirdPartyNames().contains(dto.getThirdPartyName())) {
+            menuItem.getThirdPartyNames().add(dto.getThirdPartyName());
+            menuItemRepository.save(menuItem);
+        }
+
         MenuItemSale sale = MenuItemSale.builder()
                 .menuItem(menuItem)
                 .dishSize(dishSize)
@@ -59,9 +66,7 @@ public class MenuItemSaleServiceImpl implements MenuItemSaleService {
                 .build();
         menuitemSaleRepository.save(sale);
 
-        // Odečti suroviny z inventáře podle receptu
         List<RecipeIngredient> recipe = recipeIngredientRepository.findByMenuItemId(menuItem.getId());
-
         for (RecipeIngredient ri : recipe) {
             Ingredient ingredient = ri.getIngredient();
             float usedQuantity = ri.getQuantity() * dto.getQuantitySold();
@@ -73,7 +78,7 @@ public class MenuItemSaleServiceImpl implements MenuItemSaleService {
 
             Float lastExpected = lastSnapshot.getExpectedQuantity() != null
                     ? lastSnapshot.getExpectedQuantity()
-                    : lastSnapshot.getMeasuredQuantity(); // první snapshot ještě nemusí mít expected
+                    : lastSnapshot.getMeasuredQuantity();
 
             float newExpected = lastExpected - usedQuantity;
 
@@ -82,7 +87,7 @@ public class MenuItemSaleServiceImpl implements MenuItemSaleService {
                     .branch(branch)
                     .timestamp(LocalDateTime.now())
                     .expectedQuantity(newExpected)
-                    .measuredQuantity(lastSnapshot.getMeasuredQuantity()) // neměníme
+                    .measuredQuantity(lastSnapshot.getMeasuredQuantity())
                     .note("Expected deduction - sale ID: " + sale.getId())
                     .type(SnapshotType.SYSTEM)
                     .build();

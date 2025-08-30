@@ -20,6 +20,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -28,6 +29,19 @@ import java.util.UUID;
 public class MenuItemSaleMapperController {
     private final BranchServiceAccess branchServiceAccess;
     private final MenuItemService menuItemService;
+
+    // get req: arr nazvu ze speedla -> resp: objekt kde bude speedlo nazev: menuItemId
+
+    @PostMapping("/{branchId}/map-third-party-names")
+    public ResponseEntity<Map<String, UUID>> mapThirdPartyNames(
+            @PathVariable UUID branchId,
+            @AuthenticationPrincipal User currentUser,
+            @RequestBody List<String> thirdPartyNames
+    ) {
+        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        Map<String, UUID> mapping = menuItemService.mapThirdPartyNames(branchId, thirdPartyNames);
+        return ResponseEntity.ok(mapping);
+    }
 
     @GetMapping("/{branchId}/map-names")
     public ResponseEntity<Page<MenuItemMapNameResponseDto>> menuItemGetAllThirdPartyNames(

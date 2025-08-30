@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -52,4 +53,6 @@ public interface MenuItemService {
     List<MenuItemResponseDto> getMenuItemsByThirdPartyName(UUID branchId, String thirdPartyName);
 
     List<MenuItemResponseDto> duplicateMenuItemsDifferentDishSizes(UUID branchId, MenuItemDuplicateDifferentDishSizesRequestDto requestDto);
+
+    Map<String, UUID> mapThirdPartyNames(UUID branchId, List<String> thirdPartyNames);
 }
