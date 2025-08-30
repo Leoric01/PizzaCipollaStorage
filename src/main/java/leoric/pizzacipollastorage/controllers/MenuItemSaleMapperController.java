@@ -33,7 +33,7 @@ public class MenuItemSaleMapperController {
     // get req: arr nazvu ze speedla -> resp: objekt kde bude speedlo nazev: menuItemId
 
     @PostMapping("/{branchId}/map-third-party-names")
-    public ResponseEntity<Map<String, UUID>> mapThirdPartyNames(
+    public ResponseEntity<Map<String, UUID>> menuItemMapThirdPartyNames(
             @PathVariable UUID branchId,
             @AuthenticationPrincipal User currentUser,
             @RequestBody List<String> thirdPartyNames
