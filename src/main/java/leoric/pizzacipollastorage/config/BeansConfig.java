@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -19,7 +17,6 @@ import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 import java.util.UUID;
 
 import static org.springframework.http.HttpHeaders.*;
@@ -51,25 +48,25 @@ public class BeansConfig {
     public AuditorAware<UUID> auditorAware() {
         return new ApplicationAuditAware();
     }
-
-    @Bean
-    public JavaMailSender javaMailSender() {
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("localhost");
-        mailSender.setPort(1025);
-        mailSender.setUsername("Leoric");
-        mailSender.setPassword("");
-
-        Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.smtp.auth", "false");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.trust", "*");
-        props.put("mail.smtp.connectiontimeout", "5000");
-        props.put("mail.smtp.timeout", "3000");
-        props.put("mail.smtp.writetimeout", "5000");
-
-        return mailSender;
-    }
+//
+//    @Bean
+//    public JavaMailSender javaMailSender() {
+//        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+//        mailSender.setHost("localhost");
+//        mailSender.setPort(1025);
+//        mailSender.setUsername("Leoric");
+//        mailSender.setPassword("");
+//
+//        Properties props = mailSender.getJavaMailProperties();
+//        props.put("mail.smtp.auth", "false");
+//        props.put("mail.smtp.starttls.enable", "true");
+//        props.put("mail.smtp.trust", "*");
+//        props.put("mail.smtp.connectiontimeout", "5000");
+//        props.put("mail.smtp.timeout", "3000");
+//        props.put("mail.smtp.writetimeout", "5000");
+//
+//        return mailSender;
+//    }
 
     @Bean
     public CorsFilter corsFilter() {

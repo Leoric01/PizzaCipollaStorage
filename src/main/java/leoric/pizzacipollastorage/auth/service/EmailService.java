@@ -50,7 +50,7 @@ public class EmailService {
         Context context = new Context();
         context.setVariables(model);
 
-        mimeMessageHelper.setFrom("support@zradlo.com");
+        mimeMessageHelper.setFrom("gwatever74@gmail.com");
         mimeMessageHelper.setTo(to);
         mimeMessageHelper.setSubject(subject + ": " + activationCode);
 
