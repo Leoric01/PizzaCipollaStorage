@@ -11,12 +11,13 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.*;
 
 @RestController
 @RequestMapping("/api/inventory")
@@ -27,28 +28,22 @@ public class InventoryController {
     private final BranchServiceAccess branchServiceAccess;
 
     @PostMapping("/{branchId}/snapshot")
-    @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
     public ResponseEntity<InventorySnapshotResponseDto> inventoryCreateSnapshot(
             @PathVariable UUID branchId,
             @RequestBody InventorySnapshotCreateDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
-
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
         return ResponseEntity.ok(inventoryService.createSnapshot(branchId, dto));
     }
 
     @PostMapping("/{branchId}/snapshot/bulk")
-    @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
     public ResponseEntity<List<InventorySnapshotResponseDto>> inventoryCreateSnapshotBulk(
             @PathVariable UUID branchId,
             @RequestBody List<InventorySnapshotCreateDto> dtos,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
-        // TODO VYTVORIT TY ACCESS ROLE
-//        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, "MANAGER");
-
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
         return ResponseEntity.ok(inventoryService.createSnapshotBulk(branchId, dtos));
     }
 
@@ -61,7 +56,7 @@ public class InventoryController {
             @Parameter(required = false)
             Pageable pageable
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
         return ResponseEntity.ok(inventoryService.getCurrentInventoryStatus(branchId, search, pageable));
     }
 }

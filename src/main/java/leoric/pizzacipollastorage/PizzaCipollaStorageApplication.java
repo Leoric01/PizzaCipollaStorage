@@ -14,11 +14,11 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableAsync
 public class PizzaCipollaStorageApplication {
 
-	private final static String ADMIN = "ADMIN";
+	public final static String ADMIN = "ADMIN";
 	private final static String MANAGER = "MANAGER";
 	private final static String EMPLOYEE = "EMPLOYEE";
-	private final static String BRANCH_MANAGER = "BRANCH_MANAGER";
-	private final static String BRANCH_EMPLOYEE = "BRANCH_EMPLOYEE";
+	public final static String BRANCH_MANAGER = "BRANCH_MANAGER";
+	public final static String BRANCH_EMPLOYEE = "BRANCH_EMPLOYEE";
 
 	public static void main(String[] args) {
 		SpringApplication.run(PizzaCipollaStorageApplication.class, args);

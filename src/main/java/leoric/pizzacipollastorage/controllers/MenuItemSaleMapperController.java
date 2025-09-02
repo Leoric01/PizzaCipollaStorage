@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.*;
+
 @RestController
 @RequestMapping("/api/menuitems-sales/map")
 @RequiredArgsConstructor
@@ -31,47 +33,18 @@ public class MenuItemSaleMapperController {
     private final BranchServiceAccess branchServiceAccess;
     private final MenuItemService menuItemService;
 
+    // =========================
+    // POST – zápis (BRANCH_MANAGER + ADMIN)
+    // =========================
     @PostMapping("/{branchId}/map-third-party-names")
     public ResponseEntity<Map<String, UUID>> menuItemMapThirdPartyNames(
             @PathVariable UUID branchId,
             @AuthenticationPrincipal User currentUser,
             @RequestBody List<String> thirdPartyNames
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         Map<String, UUID> mapping = menuItemService.mapThirdPartyNames(branchId, thirdPartyNames);
         return ResponseEntity.ok(mapping);
-    }
-
-    @GetMapping("/{branchId}/map-names")
-    public ResponseEntity<Page<MenuItemMapNameResponseDto>> menuItemGetAllThirdPartyNames(
-            @PathVariable UUID branchId,
-            @AuthenticationPrincipal User currentUser,
-            @RequestParam(required = false) String search,
-            @ParameterObject @Parameter(required = false) Pageable pageable
-    ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
-        return ResponseEntity.ok(menuItemService.menuItemGetAllMapNames(branchId, search, pageable));
-    }
-
-    @GetMapping("/{branchId}/names-with-sizes")
-    public ResponseEntity<List<MenuItemNameWithSizesDto>> menuItemGetThirdPartyNamesWithSizes(
-            @PathVariable UUID branchId,
-            @AuthenticationPrincipal User currentUser
-    ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
-        return ResponseEntity.ok(menuItemService.getMenuItemNamesWithSizes(branchId));
-    }
-
-    @GetMapping("/{branchId}/by-third-party-name")
-    public ResponseEntity<List<MenuItemResponseDto>> menuItemsByThirdPartyNameGet(
-            @PathVariable UUID branchId,
-            @AuthenticationPrincipal User currentUser,
-            @RequestParam String thirdPartyName
-    ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
-        return ResponseEntity.ok(
-                menuItemService.getMenuItemsByThirdPartyName(branchId, thirdPartyName)
-        );
     }
 
     @PostMapping("/{branchId}/{menuItemId}/third-party-names")
@@ -81,7 +54,7 @@ public class MenuItemSaleMapperController {
             @AuthenticationPrincipal User currentUser,
             @Valid @RequestBody MenuItemThirdPartyNameCreateDto dto
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         menuItemService.addThirdPartyName(menuItemId, branchId, dto.getName());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -93,7 +66,7 @@ public class MenuItemSaleMapperController {
             @AuthenticationPrincipal User currentUser,
             @Valid @RequestBody MenuItemThirdPartyNameUpdateDto dto
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         menuItemService.updateThirdPartyName(menuItemId, branchId, dto.getOldName(), dto.getNewName());
         return ResponseEntity.ok().build();
     }
@@ -105,8 +78,41 @@ public class MenuItemSaleMapperController {
             @AuthenticationPrincipal User currentUser,
             @RequestParam String name
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         menuItemService.deleteThirdPartyName(menuItemId, branchId, name);
         return ResponseEntity.noContent().build();
+    }
+
+    // =========================
+    // GET – čtení (BRANCH_MANAGER + ADMIN + BRANCH_EMPLOYEE)
+    // =========================
+    @GetMapping("/{branchId}/map-names")
+    public ResponseEntity<Page<MenuItemMapNameResponseDto>> menuItemGetAllThirdPartyNames(
+            @PathVariable UUID branchId,
+            @AuthenticationPrincipal User currentUser,
+            @RequestParam(required = false) String search,
+            @ParameterObject @Parameter(required = false) Pageable pageable
+    ) {
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
+        return ResponseEntity.ok(menuItemService.menuItemGetAllMapNames(branchId, search, pageable));
+    }
+
+    @GetMapping("/{branchId}/names-with-sizes")
+    public ResponseEntity<List<MenuItemNameWithSizesDto>> menuItemGetThirdPartyNamesWithSizes(
+            @PathVariable UUID branchId,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
+        return ResponseEntity.ok(menuItemService.getMenuItemNamesWithSizes(branchId));
+    }
+
+    @GetMapping("/{branchId}/by-third-party-name")
+    public ResponseEntity<List<MenuItemResponseDto>> menuItemsByThirdPartyNameGet(
+            @PathVariable UUID branchId,
+            @AuthenticationPrincipal User currentUser,
+            @RequestParam String thirdPartyName
+    ) {
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
+        return ResponseEntity.ok(menuItemService.getMenuItemsByThirdPartyName(branchId, thirdPartyName));
     }
 }

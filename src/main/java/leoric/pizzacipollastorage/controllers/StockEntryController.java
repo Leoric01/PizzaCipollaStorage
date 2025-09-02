@@ -7,12 +7,13 @@ import leoric.pizzacipollastorage.branch.services.interfaces.BranchServiceAccess
 import leoric.pizzacipollastorage.services.interfaces.StockEntryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.*;
 
 @RestController
 @RequestMapping("/api/stock-entries")
@@ -23,24 +24,22 @@ public class StockEntryController {
     private final BranchServiceAccess branchServiceAccess;
 
     @PostMapping("/{branchId}")
-    @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
     public ResponseEntity<StockEntryResponseDto> stockEntryCreate(
             @PathVariable UUID branchId,
             @RequestBody StockEntryCreateDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
         return ResponseEntity.ok(stockEntryService.stockEntryCreate(branchId, dto));
     }
 
     @PostMapping("/{branchId}/bulk")
-    @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
     public ResponseEntity<List<StockEntryResponseDto>> stockEntryBulkCreate(
             @PathVariable UUID branchId,
             @RequestBody List<StockEntryCreateDto> dtos,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
         return ResponseEntity.ok(stockEntryService.createStockEntries(branchId, dtos));
     }
 }

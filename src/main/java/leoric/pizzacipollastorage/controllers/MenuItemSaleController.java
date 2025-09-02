@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.*;
+
 @RestController
 @RequestMapping("/api/menuitems-sales")
 @RequiredArgsConstructor
@@ -23,6 +25,7 @@ public class MenuItemSaleController {
     private final MenuItemSaleService menuItemSaleService;
     private final BranchServiceAccess branchServiceAccess;
 
+
     @PostMapping("/{branchId}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN', 'EMPLOYEE')")
     public ResponseEntity<MenuItemSaleResponseDto> saleCreate(
@@ -30,7 +33,7 @@ public class MenuItemSaleController {
             @RequestBody MenuItemSaleCreateDto menuItemSaleCreateDto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
         MenuItemSaleResponseDto response = menuItemSaleService.createSale(branchId, menuItemSaleCreateDto);
         return ResponseEntity.ok(response);
     }
@@ -42,9 +45,8 @@ public class MenuItemSaleController {
             @RequestBody MenuItemSaleBulkCreateDto menuItemSaleBulkCreateDto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
         List<MenuItemSaleResponseDto> responses = menuItemSaleService.createSaleBulk(branchId, menuItemSaleBulkCreateDto);
         return ResponseEntity.ok(responses);
     }
-
 }

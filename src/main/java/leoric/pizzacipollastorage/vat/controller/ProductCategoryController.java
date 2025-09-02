@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.*;
+
 @RestController
 @RequestMapping("/api/product-categories")
 @RequiredArgsConstructor
@@ -29,6 +31,9 @@ public class ProductCategoryController {
     private final ProductCategoryService productCategoryService;
     private final BranchServiceAccess branchServiceAccess;
 
+    // =========================
+    // Endpoints s @PreAuthorize (jen MANAGER + ADMIN)
+    // =========================
     @PostMapping("/{branchId}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
     public ResponseEntity<ProductCategoryResponseDto> productCategoryCreate(
@@ -36,7 +41,7 @@ public class ProductCategoryController {
             @RequestBody ProductCategoryCreateDto dto,
             @AuthenticationPrincipal User currentUser) {
 
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
 
         ProductCategoryResponseDto created = productCategoryService.addProductCategory(branchId, dto, currentUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
@@ -49,7 +54,7 @@ public class ProductCategoryController {
             @RequestBody @Valid ProductCategoryCreateBulkDto bulkDto,
             @AuthenticationPrincipal User currentUser) {
 
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
 
         List<ProductCategoryResponseDto> created = productCategoryService.bulkAddProductCategories(
                 branchId,
@@ -60,27 +65,6 @@ public class ProductCategoryController {
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-    @GetMapping("/{branchId}/all")
-    public ResponseEntity<Page<ProductCategoryResponseDto>> productCategoryGetAll(
-            @PathVariable UUID branchId,
-            @AuthenticationPrincipal User currentUser,
-            @RequestParam(required = false) String search,
-            @ParameterObject
-            @Parameter(required = false) Pageable pageable
-    ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
-        return ResponseEntity.ok(productCategoryService.getAllCategories(branchId, search, pageable));
-    }
-
-    @GetMapping("/{branchId}/{productCategoryId}")
-    public ResponseEntity<ProductCategoryResponseDto> productCategoryGetById(@PathVariable UUID productCategoryId,
-                                                                             @PathVariable UUID branchId,
-                                                                             @AuthenticationPrincipal User currentUser) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
-
-        return ResponseEntity.ok(productCategoryService.getProductCategoryById(productCategoryId));
-    }
-
     @PutMapping("/{branchId}/{productCategoryId}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
     public ResponseEntity<ProductCategoryResponseDto> productCategoryUpdateById(
@@ -89,8 +73,7 @@ public class ProductCategoryController {
             @RequestBody @Valid ProductCategoryCreateDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
-
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         return ResponseEntity.ok(productCategoryService.editProductCategory(productCategoryId, dto, currentUser));
     }
 
@@ -101,9 +84,33 @@ public class ProductCategoryController {
             @PathVariable UUID productCategoryId,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
-
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         productCategoryService.deleteProductCategory(productCategoryId, currentUser);
         return ResponseEntity.noContent().build();
+    }
+
+    // =========================
+    // Endpointy bez @PreAuthorize (BRANCH_MANAGER + ADMIN + BRANCH_EMPLOYEE)
+    // =========================
+    @GetMapping("/{branchId}/all")
+    public ResponseEntity<Page<ProductCategoryResponseDto>> productCategoryGetAll(
+            @PathVariable UUID branchId,
+            @AuthenticationPrincipal User currentUser,
+            @RequestParam(required = false) String search,
+            @ParameterObject
+            @Parameter(required = false) Pageable pageable
+    ) {
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
+        return ResponseEntity.ok(productCategoryService.getAllCategories(branchId, search, pageable));
+    }
+
+    @GetMapping("/{branchId}/{productCategoryId}")
+    public ResponseEntity<ProductCategoryResponseDto> productCategoryGetById(
+            @PathVariable UUID branchId,
+            @PathVariable UUID productCategoryId,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
+        return ResponseEntity.ok(productCategoryService.getProductCategoryById(productCategoryId));
     }
 }

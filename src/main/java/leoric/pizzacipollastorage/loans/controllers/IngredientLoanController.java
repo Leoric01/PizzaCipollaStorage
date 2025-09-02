@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.*;
+
 @RestController
 @RequestMapping("/api/loans")
 @RequiredArgsConstructor
@@ -30,6 +32,9 @@ public class IngredientLoanController {
     private final IngredientLoanService ingredientLoanService;
     private final BranchServiceAccess branchServiceAccess;
 
+    // =========================
+    // Endpoints s @PreAuthorize (jen MANAGER + ADMIN)
+    // =========================
     @PostMapping("/{branchId}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
     public ResponseEntity<IngredientLoanResponseDto> ingredientLoanCreate(
@@ -37,7 +42,7 @@ public class IngredientLoanController {
             @RequestBody @Valid IngredientLoanCreateDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         return ResponseEntity.status(HttpStatus.CREATED).body(ingredientLoanService.createLoan(branchId, dto));
     }
 
@@ -48,30 +53,8 @@ public class IngredientLoanController {
             @PathVariable UUID id,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         return ResponseEntity.ok(ingredientLoanService.markLoanAsReturned(branchId, id));
-    }
-
-    @GetMapping("/{branchId}/all")
-    public ResponseEntity<Page<IngredientLoanResponseDto>> ingredientLoanGetAll(
-            @PathVariable UUID branchId,
-            @AuthenticationPrincipal User currentUser,
-            @RequestParam(required = false) String search,
-            @Parameter(required = false)
-            @ParameterObject Pageable pageable
-    ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
-        return ResponseEntity.ok(ingredientLoanService.getAllLoans(branchId, search, pageable));
-    }
-
-    @GetMapping("/{branchId}/{id}")
-    public ResponseEntity<IngredientLoanResponseDto> ingredientLoanGetById(
-            @PathVariable UUID branchId,
-            @PathVariable UUID id,
-            @AuthenticationPrincipal User currentUser
-    ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
-        return ResponseEntity.ok(ingredientLoanService.getLoanById(branchId, id));
     }
 
     @PatchMapping("/{branchId}/{id}/cancel")
@@ -81,20 +64,8 @@ public class IngredientLoanController {
             @PathVariable UUID id,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         return ResponseEntity.ok(ingredientLoanService.markLoanAsCancelled(branchId, id));
-    }
-
-    @DeleteMapping("/{branchId}/{id}")
-    @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
-    public ResponseEntity<Void> ingredientLoanDelete(
-            @PathVariable UUID branchId,
-            @PathVariable UUID id,
-            @AuthenticationPrincipal User currentUser
-    ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
-        ingredientLoanService.deleteLoan(branchId, id);
-        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{branchId}/{id}")
@@ -105,7 +76,44 @@ public class IngredientLoanController {
             @RequestBody @Valid IngredientLoanPatchDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         return ResponseEntity.ok(ingredientLoanService.patchLoan(branchId, id, dto));
+    }
+
+    @DeleteMapping("/{branchId}/{id}")
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
+    public ResponseEntity<Void> ingredientLoanDelete(
+            @PathVariable UUID branchId,
+            @PathVariable UUID id,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        ingredientLoanService.deleteLoan(branchId, id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // =========================
+    // Endpointy bez @PreAuthorize (BRANCH_MANAGER + ADMIN + BRANCH_EMPLOYEE)
+    // =========================
+    @GetMapping("/{branchId}/all")
+    public ResponseEntity<Page<IngredientLoanResponseDto>> ingredientLoanGetAll(
+            @PathVariable UUID branchId,
+            @AuthenticationPrincipal User currentUser,
+            @RequestParam(required = false) String search,
+            @Parameter(required = false)
+            @ParameterObject Pageable pageable
+    ) {
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
+        return ResponseEntity.ok(ingredientLoanService.getAllLoans(branchId, search, pageable));
+    }
+
+    @GetMapping("/{branchId}/{id}")
+    public ResponseEntity<IngredientLoanResponseDto> ingredientLoanGetById(
+            @PathVariable UUID branchId,
+            @PathVariable UUID id,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
+        return ResponseEntity.ok(ingredientLoanService.getLoanById(branchId, id));
     }
 }

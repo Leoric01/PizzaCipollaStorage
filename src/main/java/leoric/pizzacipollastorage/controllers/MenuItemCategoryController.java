@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.*;
+
 @RestController
 @RequestMapping("/api/menu-item-category")
 @RequiredArgsConstructor
@@ -25,6 +28,9 @@ public class MenuItemCategoryController {
     private final MenuItemCategoryService menuItemCategoryService;
     private final BranchServiceAccess branchServiceAccess;
 
+    // =========================
+    // Endpoints s @PreAuthorize (jen MANAGER + ADMIN)
+    // =========================
     @PostMapping("/{branchId}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
     public ResponseEntity<MenuItemCategoryResponseDto> menuItemCategoryCreate(
@@ -32,7 +38,7 @@ public class MenuItemCategoryController {
             @RequestBody MenuItemCategoryCreateDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         return ResponseEntity.ok(menuItemCategoryService.menuItemCategoryAdd(branchId, dto));
     }
 
@@ -43,30 +49,8 @@ public class MenuItemCategoryController {
             @RequestBody List<MenuItemCategoryCreateDto> dtos,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         return ResponseEntity.ok(menuItemCategoryService.menuItemCategoryAddBulk(branchId, dtos));
-    }
-
-    @GetMapping("/{branchId}")
-    public ResponseEntity<Page<MenuItemCategoryResponseDto>> menuItemCategoryGetAll(
-            @PathVariable UUID branchId,
-            @AuthenticationPrincipal User currentUser,
-            @RequestParam(required = false) String search,
-            @ParameterObject
-            @Parameter(required = false) Pageable pageable
-    ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
-        return ResponseEntity.ok(menuItemCategoryService.menuItemCategoryGetAll(branchId, search, pageable));
-    }
-
-    @GetMapping("/{branchId}/{menuItemCategoryId}")
-    public ResponseEntity<MenuItemCategoryResponseDto> menuItemCategoryGetById(
-            @PathVariable UUID menuItemCategoryId,
-            @PathVariable UUID branchId,
-            @AuthenticationPrincipal User currentUser
-    ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
-        return ResponseEntity.ok(menuItemCategoryService.menuItemCategoryFindById(menuItemCategoryId));
     }
 
     @PutMapping("/{branchId}/{menuItemCategoryId}")
@@ -77,7 +61,7 @@ public class MenuItemCategoryController {
             @RequestBody MenuItemCategoryCreateDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         return ResponseEntity.ok(menuItemCategoryService.menuItemCategoryUpdate(branchId, menuItemCategoryId, dto));
     }
 
@@ -88,8 +72,41 @@ public class MenuItemCategoryController {
             @PathVariable UUID menuItemCategoryId,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         menuItemCategoryService.menuItemCategoryDelete(branchId, menuItemCategoryId);
         return ResponseEntity.noContent().build();
+    }
+
+    // =========================
+    // Endpointy bez @PreAuthorize (BRANCH_MANAGER + ADMIN + BRANCH_EMPLOYEE)
+    // =========================
+    @GetMapping("/{branchId}")
+    public ResponseEntity<Page<MenuItemCategoryResponseDto>> menuItemCategoryGetAll(
+            @PathVariable UUID branchId,
+            @AuthenticationPrincipal User currentUser,
+            @RequestParam(required = false) String search,
+            @ParameterObject
+            @Parameter(required = false) Pageable pageable
+    ) {
+        branchServiceAccess.assertHasRoleOnBranch(
+                branchId,
+                currentUser,
+                BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE
+        );
+        return ResponseEntity.ok(menuItemCategoryService.menuItemCategoryGetAll(branchId, search, pageable));
+    }
+
+    @GetMapping("/{branchId}/{menuItemCategoryId}")
+    public ResponseEntity<MenuItemCategoryResponseDto> menuItemCategoryGetById(
+            @PathVariable UUID branchId,
+            @PathVariable UUID menuItemCategoryId,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        branchServiceAccess.assertHasRoleOnBranch(
+                branchId,
+                currentUser,
+                BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE
+        );
+        return ResponseEntity.ok(menuItemCategoryService.menuItemCategoryFindById(menuItemCategoryId));
     }
 }

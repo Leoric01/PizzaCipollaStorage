@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.*;
+
 @RestController
 @RequestMapping("/api/ingredient")
 @RequiredArgsConstructor
@@ -26,6 +28,9 @@ public class IngredientController {
     private final IngredientService ingredientService;
     private final BranchServiceAccess branchServiceAccess;
 
+    // =========================
+    // Endpointy bez @PreAuthorize (BRANCH_MANAGER + ADMIN + BRANCH_EMPLOYEE)
+    // =========================
     @GetMapping("/{branchId}/all")
     public ResponseEntity<Page<IngredientResponseDto>> ingredientGetAll(
             @PathVariable UUID branchId,
@@ -34,15 +39,22 @@ public class IngredientController {
             @ParameterObject
             @Parameter(required = false) Pageable pageable
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
         return ResponseEntity.ok(ingredientService.ingredientGetAll(branchId, search, pageable));
     }
 
     @GetMapping("/{ingredientId}")
-    public ResponseEntity<IngredientResponseDto> ingredientGetById(@PathVariable UUID ingredientId) {
+    public ResponseEntity<IngredientResponseDto> ingredientGetById(@PathVariable UUID ingredientId,
+                                                                   @AuthenticationPrincipal User currentUser,
+                                                                   @RequestParam UUID branchId
+    ) {
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
         return ResponseEntity.ok(ingredientService.ingredientGetById(ingredientId));
     }
 
+    // =========================
+    // Endpointy s @PreAuthorize (jen MANAGER + ADMIN)
+    // =========================
     @PostMapping("/{branchId}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
     public ResponseEntity<IngredientResponseDto> ingredientCreate(
@@ -50,8 +62,7 @@ public class IngredientController {
             @RequestBody @Valid IngredientCreateDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
-
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         return ResponseEntity.ok(ingredientService.ingredientCreate(branchId, dto));
     }
 
@@ -62,8 +73,7 @@ public class IngredientController {
             @RequestBody @Valid List<IngredientCreateDto> dtos,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
-
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         return ResponseEntity.ok(ingredientService.ingredientCreateBulk(branchId, dtos));
     }
 
@@ -75,19 +85,18 @@ public class IngredientController {
             @RequestBody @Valid IngredientCreateDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
-
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         return ResponseEntity.ok(ingredientService.ingredientUpdate(branchId, ingredientId, dto));
     }
 
     @DeleteMapping("/{branchId}/{ingredientId}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
-    public ResponseEntity<Void> ingredientDeleteById(@PathVariable UUID branchId,
-                                                     @PathVariable UUID ingredientId,
-                                                     @AuthenticationPrincipal User currentUser
+    public ResponseEntity<Void> ingredientDeleteById(
+            @PathVariable UUID branchId,
+            @PathVariable UUID ingredientId,
+            @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
-
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         ingredientService.ingredientDeleteById(branchId, ingredientId);
         return ResponseEntity.noContent().build();
     }

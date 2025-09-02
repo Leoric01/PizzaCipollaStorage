@@ -8,6 +8,7 @@ import leoric.pizzacipollastorage.vat.services.VatRateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class VatRateController {
     private final VatRateService vatRateService;
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<VatRate> vatRateCreate(@RequestBody VatRateCreateDto dto) {
         VatRate created = vatRateService.createVatRate(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
@@ -31,6 +33,7 @@ public class VatRateController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<VatRateDeleteResponseDto> vatRateDeleteById(@PathVariable UUID id) {
         VatRateDeleteResponseDto deleted = vatRateService.deleteVatRateById(id);
         return ResponseEntity.ok(deleted);

@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.*;
+
 @RestController
 @RequestMapping("/api/purchase-invoices")
 @RequiredArgsConstructor
@@ -33,7 +35,7 @@ public class PurchaseInvoiceController {
             @RequestBody @Valid PurchaseInvoiceCreateDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         return ResponseEntity.ok(purchaseInvoiceService.createInvoice(branchId, dto));
     }
 
@@ -44,30 +46,9 @@ public class PurchaseInvoiceController {
             @PathVariable UUID invoiceId,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         purchaseInvoiceService.stockFromInvoice(branchId, invoiceId);
         return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/{branchId}/all")
-    public ResponseEntity<Page<PurchaseInvoiceResponseDto>> purchaseInvoiceGetAll(
-            @PathVariable UUID branchId,
-            @AuthenticationPrincipal User currentUser,
-            @ParameterObject
-            @Parameter(required = false) Pageable pageable
-    ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
-        return ResponseEntity.ok(purchaseInvoiceService.getAll(branchId, pageable));
-    }
-
-    @GetMapping("/{branchId}/{invoiceId}")
-    public ResponseEntity<PurchaseInvoiceResponseDto> purchaseInvoiceGetById(
-            @PathVariable UUID branchId,
-            @PathVariable UUID invoiceId,
-            @AuthenticationPrincipal User currentUser
-    ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
-        return ResponseEntity.ok(purchaseInvoiceService.getById(branchId, invoiceId));
     }
 
     @PutMapping("/{branchId}/{invoiceId}")
@@ -78,7 +59,7 @@ public class PurchaseInvoiceController {
             @RequestBody @Valid PurchaseInvoiceCreateDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         return ResponseEntity.ok(purchaseInvoiceService.update(branchId, invoiceId, dto));
     }
 
@@ -89,8 +70,37 @@ public class PurchaseInvoiceController {
             @PathVariable UUID invoiceId,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         purchaseInvoiceService.delete(branchId, invoiceId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{branchId}/all")
+    public ResponseEntity<Page<PurchaseInvoiceResponseDto>> purchaseInvoiceGetAll(
+            @PathVariable UUID branchId,
+            @AuthenticationPrincipal User currentUser,
+            @ParameterObject
+            @Parameter(required = false) Pageable pageable
+    ) {
+        branchServiceAccess.assertHasRoleOnBranch(
+                branchId,
+                currentUser,
+                BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE
+        );
+        return ResponseEntity.ok(purchaseInvoiceService.getAll(branchId, pageable));
+    }
+
+    @GetMapping("/{branchId}/{invoiceId}")
+    public ResponseEntity<PurchaseInvoiceResponseDto> purchaseInvoiceGetById(
+            @PathVariable UUID branchId,
+            @PathVariable UUID invoiceId,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        branchServiceAccess.assertHasRoleOnBranch(
+                branchId,
+                currentUser,
+                BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE
+        );
+        return ResponseEntity.ok(purchaseInvoiceService.getById(branchId, invoiceId));
     }
 }

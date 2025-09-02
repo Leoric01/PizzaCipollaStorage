@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.*;
+
 @RestController
 @RequestMapping("/api/menu-items/{branchId}")
 @RequiredArgsConstructor
@@ -24,6 +26,9 @@ public class MenuItemController {
     private final MenuItemService menuItemService;
     private final BranchServiceAccess branchServiceAccess;
 
+    // =========================
+    // GET endpoints (BRANCH_MANAGER + ADMIN + BRANCH_EMPLOYEE)
+    // =========================
     @GetMapping
     public ResponseEntity<Page<MenuItemResponseDto>> menuItemGetAll(
             @PathVariable UUID branchId,
@@ -32,17 +37,40 @@ public class MenuItemController {
             @ParameterObject
             @Parameter(required = false) Pageable pageable
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
         return ResponseEntity.ok(menuItemService.menuItemGetAll(branchId, search, pageable));
     }
 
+    @GetMapping("/{menuItemId}")
+    public ResponseEntity<MenuItemResponseDto> menuItemGetById(
+            @PathVariable UUID branchId,
+            @PathVariable UUID menuItemId,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
+        return ResponseEntity.ok(menuItemService.menuItemGetById(branchId, menuItemId));
+    }
+
+    @GetMapping("/name/{name}")
+    public ResponseEntity<MenuItemResponseDto> menuItemGetByName(
+            @PathVariable UUID branchId,
+            @PathVariable String name,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
+        return ResponseEntity.ok(menuItemService.menuItemGetByName(branchId, name));
+    }
+
+    // =========================
+    // POST/PUT/DELETE endpoints (jen BRANCH_MANAGER + ADMIN)
+    // =========================
     @PostMapping
     public ResponseEntity<MenuItemResponseDto> menuItemCreate(
             @PathVariable UUID branchId,
             @RequestBody MenuItemFullCreateDto menuItemFullCreateDto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         return ResponseEntity.ok(menuItemService.createMenuItemWithOptionalIngredients(branchId, menuItemFullCreateDto));
     }
 
@@ -52,7 +80,7 @@ public class MenuItemController {
             @RequestBody List<MenuItemFullCreateDto> dtos,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         return ResponseEntity.ok(menuItemService.createMenuItemsBulk(branchId, dtos));
     }
 
@@ -62,18 +90,8 @@ public class MenuItemController {
             @RequestBody MenuItemDuplicateDifferentDishSizesRequestDto requestDto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         return ResponseEntity.ok(menuItemService.duplicateMenuItemsDifferentDishSizes(branchId, requestDto));
-    }
-
-    @GetMapping("/{menuItemId}")
-    public ResponseEntity<MenuItemResponseDto> menuItemGetById(
-            @PathVariable UUID branchId,
-            @PathVariable UUID menuItemId,
-            @AuthenticationPrincipal User currentUser
-    ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
-        return ResponseEntity.ok(menuItemService.menuItemGetById(branchId, menuItemId));
     }
 
     @PutMapping("/{menuItemId}")
@@ -83,18 +101,8 @@ public class MenuItemController {
             @RequestBody MenuItemFullCreateDto menuItemFullCreateDto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         return ResponseEntity.ok(menuItemService.menuItemUpdate(branchId, menuItemId, menuItemFullCreateDto));
-    }
-
-    @GetMapping("/name/{name}")
-    public ResponseEntity<MenuItemResponseDto> menuItemGetByName(
-            @PathVariable UUID branchId,
-            @PathVariable String name,
-            @AuthenticationPrincipal User currentUser
-    ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
-        return ResponseEntity.ok(menuItemService.menuItemGetByName(branchId, name));
     }
 
     @DeleteMapping("/{menuItemId}")
@@ -103,20 +111,21 @@ public class MenuItemController {
             @PathVariable UUID menuItemId,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         menuItemService.menuItemDeleteById(branchId, menuItemId);
         return ResponseEntity.noContent().build();
     }
 
-    // ---------- RecipeIngredient endpoints ----------
-// TODO nahazaet do postamana a protestovat
+    // =========================
+    // RecipeIngredient endpoints (jen BRANCH_MANAGER + ADMIN)
+    // =========================
     @PostMapping("/recipes")
     public ResponseEntity<RecipeIngredientShortDto> recipeIngredientAdd(
             @PathVariable UUID branchId,
             @RequestBody RecipeIngredientCreateDto recipeIngredientCreateDto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         return ResponseEntity.ok(menuItemService.recipeIngredientAddToMenuItem(branchId, recipeIngredientCreateDto));
     }
 
@@ -126,7 +135,7 @@ public class MenuItemController {
             @RequestBody RecipeCreateBulkDto recipeCreateBulkDto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         return ResponseEntity.ok(menuItemService.recipeIngredientAddToMenuItemBulk(branchId, recipeCreateBulkDto));
     }
 
@@ -137,7 +146,7 @@ public class MenuItemController {
             @RequestBody RecipeIngredientVeryShortDto recipeIngredientVeryShortDto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         return ResponseEntity.ok(menuItemService.updateRecipeIngredient(branchId, recipeIngredientId, recipeIngredientVeryShortDto));
     }
 
@@ -147,7 +156,7 @@ public class MenuItemController {
             @PathVariable UUID recipeIngredientId,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
         return ResponseEntity.ok(menuItemService.getRecipeIngredientById(branchId, recipeIngredientId));
     }
 
@@ -157,7 +166,7 @@ public class MenuItemController {
             @PathVariable UUID recipeIngredientId,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         menuItemService.deleteRecipeIngredientById(branchId, recipeIngredientId);
         return ResponseEntity.noContent().build();
     }

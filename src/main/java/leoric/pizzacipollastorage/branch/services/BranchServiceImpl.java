@@ -60,12 +60,13 @@ public class BranchServiceImpl implements BranchService {
             branch.setUsers(new ArrayList<>());
         }
 
-        Role managerRole = roleRepository.findByName("BRANCH_MANAGER")
-                .orElseThrow(() -> new EntityNotFoundException("Role BRANCH_MANAGER not found"));
-
         branch.setCreatedByManager(currentUser);
         branch.getUsers().add(currentUser);
         currentUser.getBranches().add(branch);
+        branchRepository.save(branch);
+
+        Role managerRole = roleRepository.findByName("BRANCH_MANAGER")
+                .orElseThrow(() -> new EntityNotFoundException("Role BRANCH_MANAGER not found"));
 
         UserBranchRole ubr = UserBranchRole.builder()
                 .user(currentUser)
@@ -74,7 +75,6 @@ public class BranchServiceImpl implements BranchService {
                 .build();
         userBranchRoleRepository.save(ubr);
 
-        branchRepository.save(branch);
         userRepository.save(currentUser);
 
         BranchResponseDto dtoResponse = branchMapper.toDto(branch);

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.*;
+
 @RestController
 @RequestMapping("/api/sale-timestamp")
 @RequiredArgsConstructor
@@ -26,7 +28,7 @@ public class MenuItemSaleLastTimestampController {
             @PathVariable UUID branchId,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
         return ResponseEntity.ok(menuItemSaleLastTimestampService.saleTimestampGetByBranch(branchId));
     }
 
@@ -36,7 +38,7 @@ public class MenuItemSaleLastTimestampController {
             @RequestBody @Valid MenuItemSaleLastTimestampUpsertDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         return ResponseEntity.ok(menuItemSaleLastTimestampService.saleTimestampUpsert(branchId, dto));
     }
 

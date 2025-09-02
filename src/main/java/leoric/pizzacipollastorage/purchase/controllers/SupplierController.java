@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.*;
+
 @RestController
 @RequestMapping("/api/suppliers")
 @RequiredArgsConstructor
@@ -23,6 +25,9 @@ public class SupplierController {
     private final SupplierService supplierService;
     private final BranchServiceAccess branchServiceAccess;
 
+    // =========================
+    // Endpoints s @PreAuthorize (jen MANAGER + ADMIN)
+    // =========================
     @PostMapping("/{branchId}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
     public ResponseEntity<SupplierResponseDto> supplierCreate(
@@ -30,7 +35,7 @@ public class SupplierController {
             @RequestBody SupplierCreateDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         return ResponseEntity.ok(supplierService.supplierCreate(branchId, dto));
     }
 
@@ -41,27 +46,8 @@ public class SupplierController {
             @RequestBody List<SupplierCreateDto> dtos,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         return ResponseEntity.ok(supplierService.supplierCreateBulk(branchId, dtos));
-    }
-
-    @GetMapping("/{branchId}")
-    public ResponseEntity<List<SupplierResponseDto>> supplierGetAll(
-            @PathVariable UUID branchId,
-            @AuthenticationPrincipal User currentUser
-    ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
-        return ResponseEntity.ok(supplierService.supplierGetAll(branchId));
-    }
-
-    @GetMapping("/{branchId}/{supplierId}")
-    public ResponseEntity<SupplierResponseDto> supplierGetById(
-            @PathVariable UUID branchId,
-            @PathVariable UUID supplierId,
-            @AuthenticationPrincipal User currentUser
-    ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
-        return ResponseEntity.ok(supplierService.supplierGetById(branchId, supplierId));
     }
 
     @PutMapping("/{branchId}/{supplierId}")
@@ -72,7 +58,7 @@ public class SupplierController {
             @RequestBody @Valid SupplierCreateDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         return ResponseEntity.ok(supplierService.supplierUpdate(branchId, supplierId, dto));
     }
 
@@ -83,8 +69,30 @@ public class SupplierController {
             @PathVariable UUID supplierId,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasAccess(branchId, currentUser);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
         supplierService.supplierDelete(branchId, supplierId);
         return ResponseEntity.noContent().build();
+    }
+
+    // =========================
+    // Endpointy bez @PreAuthorize (BRANCH_MANAGER + ADMIN + BRANCH_EMPLOYEE)
+    // =========================
+    @GetMapping("/{branchId}")
+    public ResponseEntity<List<SupplierResponseDto>> supplierGetAll(
+            @PathVariable UUID branchId,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
+        return ResponseEntity.ok(supplierService.supplierGetAll(branchId));
+    }
+
+    @GetMapping("/{branchId}/{supplierId}")
+    public ResponseEntity<SupplierResponseDto> supplierGetById(
+            @PathVariable UUID branchId,
+            @PathVariable UUID supplierId,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
+        return ResponseEntity.ok(supplierService.supplierGetById(branchId, supplierId));
     }
 }
