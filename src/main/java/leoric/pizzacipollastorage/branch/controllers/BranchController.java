@@ -8,6 +8,7 @@ import leoric.pizzacipollastorage.branch.dtos.BranchCreateDto;
 import leoric.pizzacipollastorage.branch.dtos.BranchResponseDto;
 import leoric.pizzacipollastorage.branch.services.interfaces.BranchAccessRequestService;
 import leoric.pizzacipollastorage.branch.services.interfaces.BranchService;
+import leoric.pizzacipollastorage.branch.services.interfaces.BranchServiceAccess;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -20,12 +21,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.ADMIN;
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.BRANCH_MANAGER;
+
+// TODO ZKONTROLOVAT LOGIKU VZHLEDEM K USER BRANCH ROLE
 @RestController
 @RequestMapping("/api/branches")
 @RequiredArgsConstructor
 public class BranchController {
 
     private final BranchService branchService;
+    private final BranchServiceAccess branchServiceAccess;
     private final BranchAccessRequestService branchAccessRequestService;
 
     @PostMapping
@@ -66,6 +72,8 @@ public class BranchController {
             @ParameterObject
             @Parameter(required = false) Pageable pageable
     ) {
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+
         return ResponseEntity.ok(
                 branchAccessRequestService.getAllAccessRequestsByBranch(branchId, currentUser, search, pageable)
         );
@@ -91,7 +99,6 @@ public class BranchController {
     ) {
         return ResponseEntity.ok(branchAccessRequestService.getAllAccessRequestsMine(currentUser, search, pageable));
     }
-
 
     @PostMapping("/access-requests/{id}/approve")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")

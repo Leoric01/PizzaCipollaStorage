@@ -1,7 +1,11 @@
 package leoric.pizzacipollastorage.branch.services;
 
 import jakarta.persistence.EntityNotFoundException;
+import leoric.pizzacipollastorage.auth.models.Role;
 import leoric.pizzacipollastorage.auth.models.User;
+import leoric.pizzacipollastorage.auth.models.UserBranchRole;
+import leoric.pizzacipollastorage.auth.repositories.RoleRepository;
+import leoric.pizzacipollastorage.auth.repositories.UserBranchRoleRepository;
 import leoric.pizzacipollastorage.auth.repositories.UserRepository;
 import leoric.pizzacipollastorage.branch.BranchAccessRequestMapper;
 import leoric.pizzacipollastorage.branch.dtos.BranchAccessRequestCreateDto;
@@ -25,10 +29,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.BRANCH_EMPLOYEE;
+
 @Service
 @RequiredArgsConstructor
 public class BranchAccessRequestServiceImpl implements BranchAccessRequestService {
 
+    private final RoleRepository roleRepository;
+    private final UserBranchRoleRepository userBranchRoleRepository;
     private final UserRepository userRepository;
     private final BranchAccessRequestRepository accessRequestRepository;
     private final BranchRepository branchRepository;
@@ -173,6 +181,15 @@ public class BranchAccessRequestServiceImpl implements BranchAccessRequestServic
         branch.getUsers().add(targetUser);
         targetUser.getBranches().add(branch);
         userRepository.save(targetUser);
+        Role employeeRole = roleRepository.findByName(BRANCH_EMPLOYEE)
+                .orElseThrow(() -> new EntityNotFoundException("Role " + BRANCH_EMPLOYEE + " not found"));
+
+        UserBranchRole ubr = UserBranchRole.builder()
+                .user(targetUser)
+                .branch(branch)
+                .role(employeeRole)
+                .build();
+        userBranchRoleRepository.save(ubr);
 
         return branchAccessRequestMapper.toDto(request);
     }

@@ -6,13 +6,16 @@ import leoric.pizzacipollastorage.handler.exceptions.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import static leoric.pizzacipollastorage.handler.BusinessErrorCodes.ENTITY_NOT_FOUND;
@@ -21,6 +24,14 @@ import static org.springframework.http.HttpStatus.*;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Map<String, String>> handleAccessDenied(AccessDeniedException ex) {
+        Map<String, String> body = new HashMap<>();
+        body.put("error", "Access Denied");
+        body.put("businessErrorDescription", "You do not have permission to perform this action");
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(body);
+    }
 
     @ExceptionHandler(IngredientInUseException.class)
     public ResponseEntity<ExceptionResponse> handleIngredientInUseException(IngredientInUseException ex) {
@@ -46,7 +57,6 @@ public class GlobalExceptionHandler {
                         .error(ex.getMessage())
                         .build());
     }
-
 
     @ExceptionHandler(EmailAlreadyInUseException.class)
     public ResponseEntity<ExceptionResponse> handleEmailAlreadyInUseException(EmailAlreadyInUseException ex) {
