@@ -16,6 +16,7 @@ import leoric.pizzacipollastorage.branch.models.constants.BranchAccessRequestSta
 import leoric.pizzacipollastorage.branch.repositories.BranchAccessRequestRepository;
 import leoric.pizzacipollastorage.branch.repositories.BranchRepository;
 import leoric.pizzacipollastorage.branch.services.interfaces.BranchAccessRequestService;
+import leoric.pizzacipollastorage.branch.services.interfaces.BranchServiceAccess;
 import leoric.pizzacipollastorage.handler.BusinessErrorCodes;
 import leoric.pizzacipollastorage.handler.exceptions.BusinessException;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.BRANCH_EMPLOYEE;
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.*;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +41,7 @@ public class BranchAccessRequestServiceImpl implements BranchAccessRequestServic
     private final UserRepository userRepository;
     private final BranchAccessRequestRepository accessRequestRepository;
     private final BranchRepository branchRepository;
-
+    private final BranchServiceAccess branchServiceAccess;
     private final BranchAccessRequestMapper branchAccessRequestMapper;
 
     @Override
@@ -164,6 +165,7 @@ public class BranchAccessRequestServiceImpl implements BranchAccessRequestServic
                 .orElseThrow(() -> new EntityNotFoundException("Access request not found"));
 
         Branch branch = request.getBranch();
+        branchServiceAccess.assertHasRoleOnBranch(branch.getId(), currentUser, "BRANCH_MANAGER;BRANCH_ADMIN");
 
         if (!branch.getCreatedByManager().getId().equals(currentUser.getId())) {
             throw new BusinessException(BusinessErrorCodes.NOT_AUTHORIZED_FOR_BRANCH);
@@ -202,9 +204,7 @@ public class BranchAccessRequestServiceImpl implements BranchAccessRequestServic
 
         Branch branch = request.getBranch();
 
-        if (!branch.getCreatedByManager().getId().equals(currentUser.getId())) {
-            throw new BusinessException(BusinessErrorCodes.NOT_AUTHORIZED_FOR_BRANCH);
-        }
+        branchServiceAccess.assertHasRoleOnBranch(branch.getId(), currentUser, BRANCH_MANAGER + ";" + ADMIN);
 
         if (request.getBranchAccessRequestStatus() != BranchAccessRequestStatus.PENDING) {
             throw new BusinessException(BusinessErrorCodes.REQUEST_ALREADY_RESOLVED);
