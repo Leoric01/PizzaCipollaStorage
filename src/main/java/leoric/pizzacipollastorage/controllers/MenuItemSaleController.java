@@ -1,5 +1,6 @@
 package leoric.pizzacipollastorage.controllers;
 
+import leoric.pizzacipollastorage.DTOs.MenuItemSale.MenuItemSaleBulkCreateDto;
 import leoric.pizzacipollastorage.DTOs.MenuItemSale.MenuItemSaleCreateDto;
 import leoric.pizzacipollastorage.DTOs.MenuItemSale.MenuItemSaleResponseDto;
 import leoric.pizzacipollastorage.auth.models.User;
@@ -38,11 +39,11 @@ public class MenuItemSaleController {
     @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN', 'EMPLOYEE')")
     public ResponseEntity<List<MenuItemSaleResponseDto>> saleCreateBulk(
             @PathVariable UUID branchId,
-            @RequestBody List<MenuItemSaleCreateDto> menuItemSaleCreateDtoList,
+            @RequestBody MenuItemSaleBulkCreateDto menuItemSaleBulkCreateDto,
             @AuthenticationPrincipal User currentUser
     ) {
         branchServiceAccess.assertHasAccess(branchId, currentUser);
-        List<MenuItemSaleResponseDto> responses = menuItemSaleService.createSaleBulk(branchId, menuItemSaleCreateDtoList);
+        List<MenuItemSaleResponseDto> responses = menuItemSaleService.createSaleBulk(branchId, menuItemSaleBulkCreateDto);
         return ResponseEntity.ok(responses);
     }
 

@@ -27,10 +27,9 @@ import java.util.UUID;
 @RequestMapping("/api/menuitems-sales/map")
 @RequiredArgsConstructor
 public class MenuItemSaleMapperController {
+
     private final BranchServiceAccess branchServiceAccess;
     private final MenuItemService menuItemService;
-
-    // get req: arr nazvu ze speedla -> resp: objekt kde bude speedlo nazev: menuItemId
 
     @PostMapping("/{branchId}/map-third-party-names")
     public ResponseEntity<Map<String, UUID>> menuItemMapThirdPartyNames(

@@ -1,7 +1,11 @@
 package leoric.pizzacipollastorage.branch.services;
 
 import jakarta.persistence.EntityNotFoundException;
+import leoric.pizzacipollastorage.auth.models.Role;
 import leoric.pizzacipollastorage.auth.models.User;
+import leoric.pizzacipollastorage.auth.models.UserBranchRole;
+import leoric.pizzacipollastorage.auth.repositories.RoleRepository;
+import leoric.pizzacipollastorage.auth.repositories.UserBranchRoleRepository;
 import leoric.pizzacipollastorage.auth.repositories.UserRepository;
 import leoric.pizzacipollastorage.branch.BranchMapper;
 import leoric.pizzacipollastorage.branch.dtos.BranchCreateDto;
@@ -27,7 +31,9 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class BranchServiceImpl implements BranchService {
 
+    private final RoleRepository roleRepository;
     private final UserRepository userRepository;
+    private final UserBranchRoleRepository userBranchRoleRepository;
     private final BranchRepository branchRepository;
     private final BranchMapper branchMapper;
 
@@ -54,9 +60,19 @@ public class BranchServiceImpl implements BranchService {
             branch.setUsers(new ArrayList<>());
         }
 
+        Role managerRole = roleRepository.findByName("BRANCH_MANAGER")
+                .orElseThrow(() -> new EntityNotFoundException("Role BRANCH_MANAGER not found"));
+
         branch.setCreatedByManager(currentUser);
         branch.getUsers().add(currentUser);
         currentUser.getBranches().add(branch);
+
+        UserBranchRole ubr = UserBranchRole.builder()
+                .user(currentUser)
+                .branch(branch)
+                .role(managerRole)
+                .build();
+        userBranchRoleRepository.save(ubr);
 
         branchRepository.save(branch);
         userRepository.save(currentUser);

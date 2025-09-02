@@ -2,19 +2,18 @@ package leoric.pizzacipollastorage.services;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import leoric.pizzacipollastorage.DTOs.MenuItemSale.MenuItemSaleBulkCreateDto;
 import leoric.pizzacipollastorage.DTOs.MenuItemSale.MenuItemSaleCreateDto;
 import leoric.pizzacipollastorage.DTOs.MenuItemSale.MenuItemSaleResponseDto;
 import leoric.pizzacipollastorage.branch.models.Branch;
 import leoric.pizzacipollastorage.branch.repositories.BranchRepository;
 import leoric.pizzacipollastorage.inventory.models.InventorySnapshot;
 import leoric.pizzacipollastorage.inventory.repositories.InventorySnapshotRepository;
-import leoric.pizzacipollastorage.models.Ingredient;
-import leoric.pizzacipollastorage.models.MenuItem;
-import leoric.pizzacipollastorage.models.MenuItemSale;
-import leoric.pizzacipollastorage.models.RecipeIngredient;
+import leoric.pizzacipollastorage.models.*;
 import leoric.pizzacipollastorage.models.enums.DishSize;
 import leoric.pizzacipollastorage.models.enums.SnapshotType;
 import leoric.pizzacipollastorage.repositories.MenuItemRepository;
+import leoric.pizzacipollastorage.repositories.MenuItemSaleLastTimestampRepository;
 import leoric.pizzacipollastorage.repositories.MenuitemSaleRepository;
 import leoric.pizzacipollastorage.repositories.RecipeIngredientRepository;
 import leoric.pizzacipollastorage.services.interfaces.MenuItemSaleService;
@@ -35,6 +34,7 @@ public class MenuItemSaleServiceImpl implements MenuItemSaleService {
     private final RecipeIngredientRepository recipeIngredientRepository;
     private final InventorySnapshotRepository inventorySnapshotRepository;
     private final BranchRepository branchRepository;
+    private final MenuItemSaleLastTimestampRepository menuItemSaleLastTimestampRepository;
 
     @Override
     @Transactional
@@ -107,10 +107,32 @@ public class MenuItemSaleServiceImpl implements MenuItemSaleService {
 
     @Override
     @Transactional
-    public List<MenuItemSaleResponseDto> createSaleBulk(UUID branchId, List<MenuItemSaleCreateDto> dtos) {
-
-        return dtos.stream()
-                .map(dto -> createSale(branchId, dto))
+    public List<MenuItemSaleResponseDto> createSaleBulk(UUID branchId, MenuItemSaleBulkCreateDto dto) {
+        List<MenuItemSaleResponseDto> responses = dto.getItems().stream()
+                .map(item -> {
+                    MenuItemSaleCreateDto singleDto = new MenuItemSaleCreateDto();
+                    singleDto.setMenuItemId(item.getMenuItemId());
+                    singleDto.setDishSize(item.getDishSize());
+                    singleDto.setQuantitySold(item.getQuantitySold());
+                    singleDto.setThirdPartyName(item.getThirdPartyName());
+                    singleDto.setCookName(dto.getCookName());
+                    singleDto.setLastSaleTimestamp(dto.getLastSaleTimestamp());
+                    return createSale(branchId, singleDto);
+                })
                 .collect(Collectors.toList());
+
+        Branch branch = branchRepository.findById(branchId)
+                .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
+
+        MenuItemSaleLastTimestamp entity = menuItemSaleLastTimestampRepository.findByBranchId(branchId)
+                .orElseGet(() -> MenuItemSaleLastTimestamp.builder()
+                        .branch(branch)
+                        .build()
+                );
+
+        entity.setLastSaleTimestamp(dto.getLastSaleTimestamp());
+        menuItemSaleLastTimestampRepository.save(entity);
+
+        return responses;
     }
 }

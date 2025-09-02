@@ -21,6 +21,19 @@ public class BranchServiceAccessImpl implements BranchServiceAccess {
     private final UserBranchRoleRepository userBranchRoleRepository;
 
     @Override
+    public void assertHasRoleOnBranch(UUID branchId, User user, String allowedRoles) {
+        String[] rolesArray = allowedRoles.split(";");
+        for (String role : rolesArray) {
+            if (userBranchRoleRepository.existsByUserIdAndBranchIdAndRoleName(user.getId(), branchId, role.trim())) {
+                return;
+            }
+        }
+        throw new NotAuthorizedForBranchException(
+                "Uživatel nemá žádnou z povolených rolí [" + allowedRoles + "] pro tuto pobočku."
+        );
+    }
+
+    @Override
     public Branch verifyAccess(UUID branchId, User user) {
         Branch branch = branchRepository.findById(branchId)
                 .orElseThrow(() -> new EntityNotFoundException("Pobočka nebyla nalezena."));
@@ -52,14 +65,6 @@ public class BranchServiceAccessImpl implements BranchServiceAccess {
     public boolean hasAnyRoleOnBranch(UUID branchId, UUID userId, List<String> roleNames) {
         return userBranchRoleRepository.findByUserIdAndBranchId(userId, branchId).stream()
                 .anyMatch(ubr -> roleNames.contains(ubr.getRole().getName()));
-    }
-
-    @Override
-    public void assertHasRoleOnBranch(UUID branchId, User user, String roleName) {
-        boolean hasRole = userBranchRoleRepository.existsByUserIdAndBranchIdAndRoleName(user.getId(), branchId, roleName);
-        if (!hasRole) {
-            throw new NotAuthorizedForBranchException("Uživatel nemá požadovanou roli na této pobočce.");
-        }
     }
 
 }

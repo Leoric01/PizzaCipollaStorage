@@ -62,7 +62,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setRoles(List.of(userRole));
 
         userRepository.save(user);
-        sendValidationEmail(user);
+        // TODO ZAPNOUT V PROD
+//        sendValidationEmail(user);
     }
 
     @Override

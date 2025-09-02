@@ -19,5 +19,5 @@ public interface BranchServiceAccess {
 
     boolean hasAnyRoleOnBranch(UUID branchId, UUID userId, List<String> roleNames);
 
-    void assertHasRoleOnBranch(UUID branchId, User user, String roleName);
+    void assertHasRoleOnBranch(UUID branchId, User user, String allowedRoles);
 }
