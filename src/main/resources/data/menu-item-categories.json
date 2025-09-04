@@ -1,0 +1,41 @@
+[
+  {
+    "name": "PIZZA"
+  },
+  {
+    "name": "PASTA"
+  },
+  {
+    "name": "GNOCCHI"
+  },
+  {
+    "name": "PATATE"
+  },
+  {
+    "name": "DRINK"
+  },
+  {
+    "name": "DESSERT"
+  },
+  {
+    "name": "SAUCE"
+  },
+  {
+    "name": "OTHER"
+  },
+  {
+    "name": "ALCOHOL"
+  },
+  {
+    "name": "STARTER"
+  },
+  {
+    "name": "SIDE"
+  },
+  {
+    "name": "SPECIAL"
+  },
+  {
+    "name": "VEGAN"
+  }
+]

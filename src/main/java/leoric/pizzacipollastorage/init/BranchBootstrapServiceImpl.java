@@ -51,7 +51,7 @@ public class BranchBootstrapServiceImpl implements BranchBootstrapService {
         Map<String, UUID> categoryNameToId = new HashMap<>();
         Map<String, UUID> ingredientNameToId = new HashMap<>();
 
-        // 1. Product Categories
+        // 1. Product Categories (Ponecháno pro případné budoucí použití)
         if (defaultData.getProductCategories() != null && !defaultData.getProductCategories().isEmpty()) {
             List<ProductCategoryResponseDto> created = productCategoryService.bulkAddProductCategories(
                     branchId,
@@ -59,6 +59,16 @@ public class BranchBootstrapServiceImpl implements BranchBootstrapService {
                     currentUser
             );
             created.forEach(cat -> categoryNameToId.put(cat.getName().trim().toUpperCase(), cat.getId()));
+        }
+
+        // 1.5. MenuItem Categories (NOVÝ KROK)
+        Map<String, UUID> menuItemCategoryNameToId = new HashMap<>();
+        if (defaultData.getMenuItemCategories() != null && !defaultData.getMenuItemCategories().isEmpty()) {
+            List<MenuItemCategoryResponseDto> created = menuItemCategoryService.menuItemCategoryAddBulk(
+                    branchId,
+                    defaultData.getMenuItemCategories()
+            );
+            created.forEach(cat -> menuItemCategoryNameToId.put(cat.getName().trim().toUpperCase(), cat.getId()));
         }
 
         // 2. Ingredients
@@ -87,18 +97,8 @@ public class BranchBootstrapServiceImpl implements BranchBootstrapService {
                 UUID categoryId = null;
                 if (mi.getMenuItemCategory() != null && mi.getMenuItemCategory().getName() != null) {
                     String categoryNameKey = mi.getMenuItemCategory().getName().trim().toUpperCase();
-                    // zkontrolovat, jestli kategorie už existuje
-                    Optional<MenuItemCategoryResponseDto> existingCategory = categoryNameToId.containsKey(categoryNameKey)
-                            ? Optional.ofNullable(null) // pokud potřebuješ jen ID, můžeme to vynechat
-                            : Optional.empty();
-
-                    // vytvořit novou kategorii, pokud neexistuje
-                    if (!categoryNameToId.containsKey(categoryNameKey)) {
-                        MenuItemCategoryCreateDto newCategoryDto = mi.getMenuItemCategory();
-                        MenuItemCategoryResponseDto createdCategory = menuItemCategoryService.menuItemCategoryAdd(branchId, newCategoryDto);
-                        categoryNameToId.put(categoryNameKey, createdCategory.getId());
-                    }
-                    categoryId = categoryNameToId.get(categoryNameKey);
+                    // Není třeba ověřovat existenci a vytvářet, protože už jsme je vytvořili v kroku 1.5
+                    categoryId = menuItemCategoryNameToId.get(categoryNameKey);
                 }
 
                 // 3b. Ingredience
@@ -196,6 +196,12 @@ public class BranchBootstrapServiceImpl implements BranchBootstrapService {
                 List<ProductCategoryCreateDto> productCategories = objectMapper.readValue(is, new TypeReference<>() {
                 });
                 builder.productCategories(productCategories);
+            }
+
+            try (InputStream is = getClass().getResourceAsStream("/data/menu-item-categories.json")) {
+                List<MenuItemCategoryCreateDto> menuItemCategories = objectMapper.readValue(is, new TypeReference<>() {
+                });
+                builder.menuItemCategories(menuItemCategories);
             }
 
             // Load Ingredients from the new file
