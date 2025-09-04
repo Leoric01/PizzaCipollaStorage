@@ -19,7 +19,6 @@ public class BranchDefaultDataDto {
     private List<MenuItemCategoryCreateDto> menuItemCategories;
     private List<MenuItemBootstrapDto> menuItems;
     private List<SupplierBootstrapDto> suppliers;
-    //    private List<InventorySnapshotBootstrapDto> inventorySnapshots;
     private List<PurchaseInvoiceBootstrapDto> purchaseInvoices;
 
 }

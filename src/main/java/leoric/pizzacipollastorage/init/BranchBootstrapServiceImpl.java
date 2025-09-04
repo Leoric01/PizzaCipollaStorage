@@ -51,7 +51,7 @@ public class BranchBootstrapServiceImpl implements BranchBootstrapService {
         Map<String, UUID> categoryNameToId = new HashMap<>();
         Map<String, UUID> ingredientNameToId = new HashMap<>();
 
-        // 1. Product Categories (Ponecháno pro případné budoucí použití)
+        // 1. Product Categories
         if (defaultData.getProductCategories() != null && !defaultData.getProductCategories().isEmpty()) {
             List<ProductCategoryResponseDto> created = productCategoryService.bulkAddProductCategories(
                     branchId,
@@ -61,7 +61,7 @@ public class BranchBootstrapServiceImpl implements BranchBootstrapService {
             created.forEach(cat -> categoryNameToId.put(cat.getName().trim().toUpperCase(), cat.getId()));
         }
 
-        // 1.5. MenuItem Categories (NOVÝ KROK)
+        // 1.5. MenuItem Categories
         Map<String, UUID> menuItemCategoryNameToId = new HashMap<>();
         if (defaultData.getMenuItemCategories() != null && !defaultData.getMenuItemCategories().isEmpty()) {
             List<MenuItemCategoryResponseDto> created = menuItemCategoryService.menuItemCategoryAddBulk(
