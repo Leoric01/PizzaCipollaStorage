@@ -1,0 +1,2142 @@
+[
+  {
+    "name": "Margherita",
+    "description": "Pizza s mozzarellou a rajčatovou omáčkou",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 91
+      },
+      {
+        "ingredientName": "Bazalka",
+        "quantity": 5
+      }
+    ]
+  },
+  {
+    "name": "Quattro Formaggi",
+    "description": "Pizza se čtyřmi druhy sýra a smetanou",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Smetana",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Mascarpone",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Gorgonzola",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Parmezán",
+        "quantity": 20
+      }
+    ]
+  },
+  {
+    "name": "Margherita Bufala",
+    "description": "Pizza s buvolí mozzarellou a rajčatovou omáčkou",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Mozzarella di bufala",
+        "quantity": 110
+      },
+      {
+        "ingredientName": "Bazalka",
+        "quantity": 5
+      }
+    ]
+  },
+  {
+    "name": "Ai Formaggi",
+    "description": "Pizza s mozzarellou, uzeným eidamem a gorgonzolou",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Uzený eidam",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Gorgonzola",
+        "quantity": 50
+      }
+    ]
+  },
+  {
+    "name": "Funghi",
+    "description": "Pizza se žampiony a mozzarellou",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 110
+      },
+      {
+        "ingredientName": "Žampiony",
+        "quantity": 90
+      }
+    ]
+  },
+  {
+    "name": "Santoška",
+    "description": "Pizza s uzeným eidamem, camembertem, rajčaty a olivami",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Uzený eidam",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Camembert",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Rajčata",
+        "quantity": 60
+      },
+      {
+        "ingredientName": "Olivy zelené",
+        "quantity": 30
+      }
+    ]
+  },
+  {
+    "name": "Spinaci",
+    "description": "Pizza se špenátem, mozzarellou a vejcem",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 110
+      },
+      {
+        "ingredientName": "Špenát",
+        "quantity": 60
+      },
+      {
+        "ingredientName": "Vejce",
+        "quantity": 50
+      }
+    ]
+  },
+  {
+    "name": "Bandiera",
+    "description": "Pizza se smetanou, mozzarellou, rajčaty, rukolou a česnekem",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Smetana",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 110
+      },
+      {
+        "ingredientName": "Rajčata",
+        "quantity": 60
+      },
+      {
+        "ingredientName": "Rukola",
+        "quantity": 15
+      },
+      {
+        "ingredientName": "Česnek",
+        "quantity": 5
+      }
+    ]
+  },
+  {
+    "name": "Vesuvio",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou a šunkou",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 110
+      },
+      {
+        "ingredientName": "Šunka",
+        "quantity": 100
+      }
+    ]
+  },
+  {
+    "name": "Capricciosa",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, šunkou a žampiony",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 110
+      },
+      {
+        "ingredientName": "Šunka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Žampiony",
+        "quantity": 90
+      }
+    ]
+  },
+  {
+    "name": "Hawaii",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, šunkou a ananasem",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 110
+      },
+      {
+        "ingredientName": "Šunka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Ananas",
+        "quantity": 70
+      }
+    ]
+  },
+  {
+    "name": "Al Capone",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, šunkou, salámem a paprikou",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 110
+      },
+      {
+        "ingredientName": "Šunka",
+        "quantity": 60
+      },
+      {
+        "ingredientName": "Salám",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Paprika",
+        "quantity": 50
+      }
+    ]
+  },
+  {
+    "name": "Diavola",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, šunkou, žampiony a jalapeňos",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 110
+      },
+      {
+        "ingredientName": "Šunka",
+        "quantity": 60
+      },
+      {
+        "ingredientName": "Žampiony",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Jalapeňos",
+        "quantity": 30
+      }
+    ]
+  },
+  {
+    "name": "Alla Crema",
+    "description": "Pizza se smetanou, mozzarellou, šunkou a parmezánem",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Smetana",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 110
+      },
+      {
+        "ingredientName": "Šunka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Parmezán",
+        "quantity": 20
+      }
+    ]
+  },
+  {
+    "name": "Salame",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou a salámem",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 110
+      },
+      {
+        "ingredientName": "Salám",
+        "quantity": 60
+      }
+    ]
+  },
+  {
+    "name": "Piccante",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, salámem, paprikou, vejcem a jalapeňos",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 110
+      },
+      {
+        "ingredientName": "Salám",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Paprika",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Vejce",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Jalapeňos",
+        "quantity": 30
+      }
+    ]
+  },
+  {
+    "name": "Mascarpone",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, mascarpone, salámem a jalapeňos",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 110
+      },
+      {
+        "ingredientName": "Mascarpone",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Salám",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Jalapeňos",
+        "quantity": 30
+      }
+    ]
+  },
+  {
+    "name": "Pancetta",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou a pancettou",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 110
+      },
+      {
+        "ingredientName": "Pancetta",
+        "quantity": 60
+      }
+    ]
+  },
+  {
+    "name": "Spinaci Pancetta",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, pancettou, špenátem a vejcem",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 110
+      },
+      {
+        "ingredientName": "Pancetta",
+        "quantity": 60
+      },
+      {
+        "ingredientName": "Špenát",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Vejce",
+        "quantity": 50
+      }
+    ]
+  },
+  {
+    "name": "Gorgonzola",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, pancettou a gorgonzolou",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 110
+      },
+      {
+        "ingredientName": "Pancetta",
+        "quantity": 60
+      },
+      {
+        "ingredientName": "Gorgonzola",
+        "quantity": 40
+      }
+    ]
+  },
+  {
+    "name": "Mexicana",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, pancettou, fazolkami, cibulí a jalapeňos",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 110
+      },
+      {
+        "ingredientName": "Pancetta",
+        "quantity": 60
+      },
+      {
+        "ingredientName": "Fazolky",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Červená cibule",
+        "quantity": 30
+      },
+      {
+        "ingredientName": "Jalapeňos",
+        "quantity": 30
+      }
+    ]
+  },
+  {
+    "name": "Don Corleone",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, šunkou, salámem, pancettou a žampiony",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 110
+      },
+      {
+        "ingredientName": "Šunka",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Salám",
+        "quantity": 40
+      },
+      {
+        "ingredientName": "Pancetta",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Žampiony",
+        "quantity": 70
+      }
+    ]
+  },
+  {
+    "name": "Bestiale",
+    "description": "Pizza s hořčicí, mozzarellou, uzeným eidamem, pancettou, salámem, camembertem, cibulí a pepřem",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Hořčice",
+        "quantity": 20
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 100
+      },
+      {
+        "ingredientName": "Uzený eidam",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Pancetta",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Salám",
+        "quantity": 40
+      },
+      {
+        "ingredientName": "Camembert",
+        "quantity": 40
+      },
+      {
+        "ingredientName": "Červená cibule",
+        "quantity": 30
+      },
+      {
+        "ingredientName": "Drcený pepř",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "name": "Papa Cipolla",
+    "description": "Pizza se smetanou, mozzarellou, pancettou, cibulí, pórkem, parmskou šunkou a vejcem",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Smetana",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 100
+      },
+      {
+        "ingredientName": "Pancetta",
+        "quantity": 60
+      },
+      {
+        "ingredientName": "Červená cibule",
+        "quantity": 30
+      },
+      {
+        "ingredientName": "Pórek",
+        "quantity": 30
+      },
+      {
+        "ingredientName": "Parmská šunka",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Vejce",
+        "quantity": 50
+      }
+    ]
+  },
+  {
+    "name": "Prosciutto Crudo",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, parmskou šunkou a rukolou",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 100
+      },
+      {
+        "ingredientName": "Parmská šunka",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Rukola",
+        "quantity": 15
+      }
+    ]
+  },
+  {
+    "name": "Marco Polo",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, grilovanými kuřecími prsy, rajčaty a parmezánem",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 110
+      },
+      {
+        "ingredientName": "Grilovaná kuřecí prsa",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Rajčata",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Parmezán",
+        "quantity": 20
+      }
+    ]
+  },
+  {
+    "name": "Broccoli Pollo",
+    "description": "Pizza se smetanou, mozzarellou, brokolicí, grilovanými kuřecími prsy a parmezánem",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Smetana",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 100
+      },
+      {
+        "ingredientName": "Brokolice",
+        "quantity": 70
+      },
+      {
+        "ingredientName": "Grilovaná kuřecí prsa",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Parmezán",
+        "quantity": 20
+      }
+    ]
+  },
+  {
+    "name": "Pollo",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou a grilovanými kuřecími prsy",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 110
+      },
+      {
+        "ingredientName": "Grilovaná kuřecí prsa",
+        "quantity": 80
+      }
+    ]
+  },
+  {
+    "name": "Spinaci Pollo",
+    "description": "Pizza se smetanou, mozzarellou, špenátem, grilovanými kuřecími prsy a pepřem",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Smetana",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 100
+      },
+      {
+        "ingredientName": "Špenát",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Grilovaná kuřecí prsa",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Drcený pepř",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "name": "Siciliana Tonno",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, tuňákem a červenou cibulí",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 110
+      },
+      {
+        "ingredientName": "Tuňák",
+        "quantity": 70
+      },
+      {
+        "ingredientName": "Červená cibule",
+        "quantity": 30
+      }
+    ]
+  },
+  {
+    "name": "Napoletana",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, ančovičkami, rajčaty a černými olivami",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 100
+      },
+      {
+        "ingredientName": "Ančovičky",
+        "quantity": 30
+      },
+      {
+        "ingredientName": "Rajčata",
+        "quantity": 40
+      },
+      {
+        "ingredientName": "Olivy černé",
+        "quantity": 20
+      }
+    ]
+  },
+  {
+    "name": "Carpaccio",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, carpacciem z pravé svíčkové, rukolou, parmezánem a pestem",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 80
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 100
+      },
+      {
+        "ingredientName": "Carpaccio z pravé svíčkové",
+        "quantity": 60
+      },
+      {
+        "ingredientName": "Rukola",
+        "quantity": 15
+      },
+      {
+        "ingredientName": "Parmezán",
+        "quantity": 20
+      },
+      {
+        "ingredientName": "Pesto alla genovese",
+        "quantity": 10
+      }
+    ]
+  },
+  {
+    "name": "Dolce Banana",
+    "description": "Sladká pizza se smetanou, mascarpone, nutellou, banánem a vanilkovým cukrem",
+    "size": "M",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 250
+      },
+      {
+        "ingredientName": "Smetana",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Mascarpone",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Nutella",
+        "quantity": 50
+      },
+      {
+        "ingredientName": "Banán",
+        "quantity": 70
+      },
+      {
+        "ingredientName": "Vanilkový cukr",
+        "quantity": 5
+      }
+    ]
+  },
+  {
+    "name": "Margherita",
+    "description": "Pizza s mozzarellou a rajčatovou omáčkou",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 154.7
+      },
+      {
+        "ingredientName": "Bazalka",
+        "quantity": 8.5
+      }
+    ]
+  },
+  {
+    "name": "Quattro Formaggi",
+    "description": "Pizza se čtyřmi druhy sýra a smetanou",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Smetana",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Mascarpone",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Gorgonzola",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Parmezán",
+        "quantity": 34
+      }
+    ]
+  },
+  {
+    "name": "Margherita Bufala",
+    "description": "Pizza s buvolí mozzarellou a rajčatovou omáčkou",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Mozzarella di bufala",
+        "quantity": 187
+      },
+      {
+        "ingredientName": "Bazalka",
+        "quantity": 8.5
+      }
+    ]
+  },
+  {
+    "name": "Ai Formaggi",
+    "description": "Pizza s mozzarellou, uzeným eidamem a gorgonzolou",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Uzený eidam",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Gorgonzola",
+        "quantity": 85
+      }
+    ]
+  },
+  {
+    "name": "Funghi",
+    "description": "Pizza se žampiony a mozzarellou",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 187
+      },
+      {
+        "ingredientName": "Žampiony",
+        "quantity": 153
+      }
+    ]
+  },
+  {
+    "name": "Santoška",
+    "description": "Pizza s uzeným eidamem, camembertem, rajčaty a olivami",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Uzený eidam",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Camembert",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Rajčata",
+        "quantity": 102
+      },
+      {
+        "ingredientName": "Olivy zelené",
+        "quantity": 51
+      }
+    ]
+  },
+  {
+    "name": "Spinaci",
+    "description": "Pizza se špenátem, mozzarellou a vejcem",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 187
+      },
+      {
+        "ingredientName": "Špenát",
+        "quantity": 102
+      },
+      {
+        "ingredientName": "Vejce",
+        "quantity": 85
+      }
+    ]
+  },
+  {
+    "name": "Bandiera",
+    "description": "Pizza se smetanou, mozzarellou, rajčaty, rukolou a česnekem",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Smetana",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 187
+      },
+      {
+        "ingredientName": "Rajčata",
+        "quantity": 102
+      },
+      {
+        "ingredientName": "Rukola",
+        "quantity": 25.5
+      },
+      {
+        "ingredientName": "Česnek",
+        "quantity": 8.5
+      }
+    ]
+  },
+  {
+    "name": "Vesuvio",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou a šunkou",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 187
+      },
+      {
+        "ingredientName": "Šunka",
+        "quantity": 170
+      }
+    ]
+  },
+  {
+    "name": "Capricciosa",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, šunkou a žampiony",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 187
+      },
+      {
+        "ingredientName": "Šunka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Žampiony",
+        "quantity": 153
+      }
+    ]
+  },
+  {
+    "name": "Hawaii",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, šunkou a ananasem",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 187
+      },
+      {
+        "ingredientName": "Šunka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Ananas",
+        "quantity": 119
+      }
+    ]
+  },
+  {
+    "name": "Al Capone",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, šunkou, salámem a paprikou",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 187
+      },
+      {
+        "ingredientName": "Šunka",
+        "quantity": 102
+      },
+      {
+        "ingredientName": "Salám",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Paprika",
+        "quantity": 85
+      }
+    ]
+  },
+  {
+    "name": "Diavola",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, šunkou, žampiony a jalapeňos",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 187
+      },
+      {
+        "ingredientName": "Šunka",
+        "quantity": 102
+      },
+      {
+        "ingredientName": "Žampiony",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Jalapeňos",
+        "quantity": 51
+      }
+    ]
+  },
+  {
+    "name": "Alla Crema",
+    "description": "Pizza se smetanou, mozzarellou, šunkou a parmezánem",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Smetana",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 187
+      },
+      {
+        "ingredientName": "Šunka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Parmezán",
+        "quantity": 34
+      }
+    ]
+  },
+  {
+    "name": "Salame",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou a salámem",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 187
+      },
+      {
+        "ingredientName": "Salám",
+        "quantity": 102
+      }
+    ]
+  },
+  {
+    "name": "Piccante",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, salámem, paprikou, vejcem a jalapeňos",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 187
+      },
+      {
+        "ingredientName": "Salám",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Paprika",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Vejce",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Jalapeňos",
+        "quantity": 51
+      }
+    ]
+  },
+  {
+    "name": "Mascarpone",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, mascarpone, salámem a jalapeňos",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 187
+      },
+      {
+        "ingredientName": "Mascarpone",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Salám",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Jalapeňos",
+        "quantity": 51
+      }
+    ]
+  },
+  {
+    "name": "Pancetta",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou a pancettou",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 187
+      },
+      {
+        "ingredientName": "Pancetta",
+        "quantity": 102
+      }
+    ]
+  },
+  {
+    "name": "Spinaci Pancetta",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, pancettou, špenátem a vejcem",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 187
+      },
+      {
+        "ingredientName": "Pancetta",
+        "quantity": 102
+      },
+      {
+        "ingredientName": "Špenát",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Vejce",
+        "quantity": 85
+      }
+    ]
+  },
+  {
+    "name": "Gorgonzola",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, pancettou a gorgonzolou",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 187
+      },
+      {
+        "ingredientName": "Pancetta",
+        "quantity": 102
+      },
+      {
+        "ingredientName": "Gorgonzola",
+        "quantity": 68
+      }
+    ]
+  },
+  {
+    "name": "Mexicana",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, pancettou, fazolkami, cibulí a jalapeňos",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 187
+      },
+      {
+        "ingredientName": "Pancetta",
+        "quantity": 102
+      },
+      {
+        "ingredientName": "Fazolky",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Červená cibule",
+        "quantity": 51
+      },
+      {
+        "ingredientName": "Jalapeňos",
+        "quantity": 51
+      }
+    ]
+  },
+  {
+    "name": "Don Corleone",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, šunkou, salámem, pancettou a žampiony",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 187
+      },
+      {
+        "ingredientName": "Šunka",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Salám",
+        "quantity": 68
+      },
+      {
+        "ingredientName": "Pancetta",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Žampiony",
+        "quantity": 119
+      }
+    ]
+  },
+  {
+    "name": "Bestiale",
+    "description": "Pizza s hořčicí, mozzarellou, uzeným eidamem, pancettou, salámem, camembertem, cibulí a pepřem",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Hořčice",
+        "quantity": 34
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 170
+      },
+      {
+        "ingredientName": "Uzený eidam",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Pancetta",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Salám",
+        "quantity": 68
+      },
+      {
+        "ingredientName": "Camembert",
+        "quantity": 68
+      },
+      {
+        "ingredientName": "Červená cibule",
+        "quantity": 51
+      },
+      {
+        "ingredientName": "Drcený pepř",
+        "quantity": 1.7
+      }
+    ]
+  },
+  {
+    "name": "Papa Cipolla",
+    "description": "Pizza se smetanou, mozzarellou, pancettou, cibulí, pórkem, parmskou šunkou a vejcem",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Smetana",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 170
+      },
+      {
+        "ingredientName": "Pancetta",
+        "quantity": 102
+      },
+      {
+        "ingredientName": "Červená cibule",
+        "quantity": 51
+      },
+      {
+        "ingredientName": "Pórek",
+        "quantity": 51
+      },
+      {
+        "ingredientName": "Parmská šunka",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Vejce",
+        "quantity": 85
+      }
+    ]
+  },
+  {
+    "name": "Prosciutto Crudo",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, parmskou šunkou a rukolou",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 170
+      },
+      {
+        "ingredientName": "Parmská šunka",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Rukola",
+        "quantity": 25.5
+      }
+    ]
+  },
+  {
+    "name": "Marco Polo",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, grilovanými kuřecími prsy, rajčaty a parmezánem",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 187
+      },
+      {
+        "ingredientName": "Grilovaná kuřecí prsa",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Rajčata",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Parmezán",
+        "quantity": 34
+      }
+    ]
+  },
+  {
+    "name": "Broccoli Pollo",
+    "description": "Pizza se smetanou, mozzarellou, brokolicí, grilovanými kuřecími prsy a parmezánem",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Smetana",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 170
+      },
+      {
+        "ingredientName": "Brokolice",
+        "quantity": 119
+      },
+      {
+        "ingredientName": "Grilovaná kuřecí prsa",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Parmezán",
+        "quantity": 34
+      }
+    ]
+  },
+  {
+    "name": "Pollo",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou a grilovanými kuřecími prsy",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 187
+      },
+      {
+        "ingredientName": "Grilovaná kuřecí prsa",
+        "quantity": 136
+      }
+    ]
+  },
+  {
+    "name": "Spinaci Pollo",
+    "description": "Pizza se smetanou, mozzarellou, špenátem, grilovanými kuřecími prsy a pepřem",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Smetana",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 170
+      },
+      {
+        "ingredientName": "Špenát",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Grilovaná kuřecí prsa",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Drcený pepř",
+        "quantity": 1.7
+      }
+    ]
+  },
+  {
+    "name": "Siciliana Tonno",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, tuňákem a červenou cibulí",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 187
+      },
+      {
+        "ingredientName": "Tuňák",
+        "quantity": 119
+      },
+      {
+        "ingredientName": "Červená cibule",
+        "quantity": 51
+      }
+    ]
+  },
+  {
+    "name": "Napoletana",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, ančovičkami, rajčaty a černými olivami",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 170
+      },
+      {
+        "ingredientName": "Ančovičky",
+        "quantity": 51
+      },
+      {
+        "ingredientName": "Rajčata",
+        "quantity": 68
+      },
+      {
+        "ingredientName": "Olivy černé",
+        "quantity": 34
+      }
+    ]
+  },
+  {
+    "name": "Carpaccio",
+    "description": "Pizza s rajčatovou omáčkou, mozzarellou, carpacciem z pravé svíčkové, rukolou, parmezánem a pestem",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 136
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 170
+      },
+      {
+        "ingredientName": "Carpaccio z pravé svíčkové",
+        "quantity": 102
+      },
+      {
+        "ingredientName": "Rukola",
+        "quantity": 25.5
+      },
+      {
+        "ingredientName": "Parmezán",
+        "quantity": 34
+      },
+      {
+        "ingredientName": "Pesto alla genovese",
+        "quantity": 17
+      }
+    ]
+  },
+  {
+    "name": "Dolce Banana",
+    "description": "Sladká pizza se smetanou, mascarpone, nutellou, banánem a vanilkovým cukrem",
+    "size": "L",
+    "menuItemCategory": {
+      "name": "PIZZA"
+    },
+    "ingredients": [
+      {
+        "ingredientName": "Mouka",
+        "quantity": 425
+      },
+      {
+        "ingredientName": "Smetana",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Mascarpone",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Nutella",
+        "quantity": 85
+      },
+      {
+        "ingredientName": "Banán",
+        "quantity": 119
+      },
+      {
+        "ingredientName": "Vanilkový cukr",
+        "quantity": 8.5
+      }
+    ]
+  }
+]

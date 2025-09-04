@@ -1,0 +1,26 @@
+[
+  {
+    "invoiceNumber": "INV-0001",
+    "supplierName": "Zelenina s.r.o.",
+    "issuedDate": "01/09/2025",
+    "receivedDate": "01/09/2025",
+    "note": "Počáteční naskladnění",
+    "items": [
+      {
+        "ingredientName": "Mozzarella",
+        "quantity": 5000,
+        "unitPriceWithoutTax": 10.0
+      },
+      {
+        "ingredientName": "Rajčatová omáčka",
+        "quantity": 5000,
+        "unitPriceWithoutTax": 5.0
+      },
+      {
+        "ingredientName": "Pepsi",
+        "quantity": 20000,
+        "unitPriceWithoutTax": 2.0
+      }
+    ]
+  }
+]

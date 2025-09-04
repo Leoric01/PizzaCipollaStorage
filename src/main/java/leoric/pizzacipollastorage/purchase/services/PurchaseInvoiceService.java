@@ -1,5 +1,6 @@
 package leoric.pizzacipollastorage.purchase.services;
 
+import leoric.pizzacipollastorage.auth.models.User;
 import leoric.pizzacipollastorage.purchase.dtos.PurchaseInvoice.PurchaseInvoiceCreateDto;
 import leoric.pizzacipollastorage.purchase.dtos.PurchaseInvoice.PurchaseInvoiceResponseDto;
 import org.springframework.data.domain.Page;
@@ -24,4 +25,6 @@ public interface PurchaseInvoiceService {
     PurchaseInvoiceResponseDto update(UUID branchId, UUID invoiceId, PurchaseInvoiceCreateDto dto);
 
     void delete(UUID branchId, UUID invoiceId);
+
+    List<PurchaseInvoiceResponseDto> createInvoicesBulk(UUID branchId, List<PurchaseInvoiceCreateDto> invoiceDtos, User currentUser);
 }

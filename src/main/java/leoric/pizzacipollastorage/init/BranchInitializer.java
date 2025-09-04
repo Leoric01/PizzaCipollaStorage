@@ -1,8 +1,6 @@
 package leoric.pizzacipollastorage.init;
 
-import leoric.pizzacipollastorage.branch.models.Branch;
 import leoric.pizzacipollastorage.branch.repositories.BranchRepository;
-import leoric.pizzacipollastorage.utils.CustomUtilityString;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -19,21 +17,21 @@ public class BranchInitializer {
 //        createIfNotExists("PPC Smíchov", "U Nikolajky 1097/3, Praha", "+420 720 696 999");
 //    }
 
-    private void createIfNotExists(String name, String address, String contact) {
-        String normalizedInput = CustomUtilityString.normalize(name);
-
-        boolean exists = branchRepository.findAll().stream()
-                .map(Branch::getName)
-                .map(CustomUtilityString::normalize)
-                .anyMatch(existing -> existing.equals(normalizedInput));
-
-        if (!exists) {
-            Branch branch = Branch.builder()
-                    .name(name)
-                    .address(address)
-                    .contactInfo(contact)
-                    .build();
-            branchRepository.save(branch);
-        }
-    }
+//    private void createIfNotExists(String name, String address, String contact) {
+//        String normalizedInput = CustomUtilityString.normalize(name);
+//
+//        boolean exists = branchRepository.findAll().stream()
+//                .map(Branch::getName)
+//                .map(CustomUtilityString::normalize)
+//                .anyMatch(existing -> existing.equals(normalizedInput));
+//
+//        if (!exists) {
+//            Branch branch = Branch.builder()
+//                    .name(name)
+//                    .address(address)
+//                    .contactInfo(contact)
+//                    .build();
+//            branchRepository.save(branch);
+//        }
+//    }
 }

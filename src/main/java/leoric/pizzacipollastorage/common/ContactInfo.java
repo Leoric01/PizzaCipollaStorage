@@ -10,6 +10,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class ContactInfo {
-    private String email;
+    private String contactEmail;
     private String phoneNumber;
 }

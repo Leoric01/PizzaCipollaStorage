@@ -1,8 +1,11 @@
 package leoric.pizzacipollastorage.branch.dtos;
 
+import leoric.pizzacipollastorage.common.Address;
+import leoric.pizzacipollastorage.common.ContactInfo;
+
 public record BranchCreateDto(
         String name,
-        String address,
-        String contactInfo
+        Address address,
+        ContactInfo contactInfo
 ) {
 }

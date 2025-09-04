@@ -186,14 +186,25 @@ public class MenuItemServiceImpl implements MenuItemService {
             menuItem.setDishSize(dto.getSize());
             menuItem.setBranch(branch);
 
+            MenuItemCategory category = null;
             if (dto.getMenuItemCategoryId() != null) {
-                MenuItemCategory category = menuItemCategoryRepository.findById(dto.getMenuItemCategoryId())
+                category = menuItemCategoryRepository.findById(dto.getMenuItemCategoryId())
                         .orElseThrow(() -> new EntityNotFoundException("Category not found"));
-                if (!category.getBranch().getId().equals(branchId)) {
-                    throw new BusinessException(BusinessErrorCodes.NOT_AUTHORIZED_FOR_BRANCH);
+            } else if (dto.getMenuItemCategory() != null && dto.getMenuItemCategory().getName() != null) {
+                Optional<MenuItemCategory> existing = menuItemCategoryRepository
+                        .findByNameIgnoreCaseAndBranchId(dto.getMenuItemCategory().getName().trim(), branchId);
+
+                if (existing.isPresent()) {
+                    category = existing.get();
+                } else {
+                    MenuItemCategory newCategory = new MenuItemCategory();
+                    newCategory.setName(dto.getMenuItemCategory().getName().trim());
+                    newCategory.setBranch(branch);
+                    category = menuItemCategoryRepository.save(newCategory);
                 }
-                menuItem.setCategory(category);
             }
+
+            menuItem.setCategory(category);
 
             List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 

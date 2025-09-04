@@ -3,12 +3,10 @@ package leoric.pizzacipollastorage.branch.dtos;
 import leoric.pizzacipollastorage.common.Address;
 import leoric.pizzacipollastorage.common.ContactInfo;
 
-import java.util.UUID;
-
-public record BranchResponseDto(
-        UUID id,
+public record BranchCreateWithDataDto(
         String name,
         Address address,
-        ContactInfo contactInfo
+        ContactInfo contactInfo,
+        Boolean withDefaultData
 ) {
 }

@@ -1,5 +1,6 @@
-package leoric.pizzacipollastorage.DTOs.MenuItem;
+package leoric.pizzacipollastorage.init.dto;
 
+import leoric.pizzacipollastorage.DTOs.MenuItem.MenuItemCategoryCreateDto;
 import leoric.pizzacipollastorage.models.enums.DishSize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,28 +8,24 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.UUID;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class MenuItemFullCreateDto {
+public class MenuItemBootstrapDto {
     private String name;
     private String description;
     private DishSize size;
-    private UUID menuItemCategoryId;
-
     private MenuItemCategoryCreateDto menuItemCategory;
-
-    private List<RecipeIngredientSimpleDto> ingredients;
+    private List<RecipeIngredientBootstrapDto> ingredients;
 
     @Data
-    @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class RecipeIngredientSimpleDto {
-        private UUID ingredientId;
+    @Builder
+    public static class RecipeIngredientBootstrapDto {
+        private String ingredientName;
         private Float quantity;
     }
 }

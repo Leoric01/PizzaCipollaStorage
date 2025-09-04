@@ -1,0 +1,562 @@
+[
+  {
+    "name": "Mozzarella",
+    "unit": "g",
+    "lossCleaningFactor": 0.0,
+    "lossUsageFactor": 0.0,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 5000,
+    "warningStockLevel": 1000,
+    "minimumStockLevel": 500
+  },
+  {
+    "name": "Rajčatová omáčka",
+    "unit": "g",
+    "lossCleaningFactor": 0.0,
+    "lossUsageFactor": 0.0,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 5000,
+    "warningStockLevel": 1000,
+    "minimumStockLevel": 500
+  },
+  {
+    "name": "Pepsi",
+    "unit": "ml",
+    "lossCleaningFactor": 0.0,
+    "lossUsageFactor": 0.0,
+    "productCategoryName": "NAPOJE",
+    "preferredFullStockLevel": 20000,
+    "warningStockLevel": 3000,
+    "minimumStockLevel": 1000
+  },
+  {
+    "name": "Pepsi Max",
+    "unit": "ml",
+    "lossCleaningFactor": 0.0,
+    "lossUsageFactor": 0.0,
+    "productCategoryName": "NAPOJE",
+    "preferredFullStockLevel": 15000,
+    "warningStockLevel": 2500,
+    "minimumStockLevel": 1000
+  },
+  {
+    "name": "Mirinda",
+    "unit": "ml",
+    "lossCleaningFactor": 0.0,
+    "lossUsageFactor": 0.0,
+    "productCategoryName": "NAPOJE",
+    "preferredFullStockLevel": 15000,
+    "warningStockLevel": 2500,
+    "minimumStockLevel": 1000
+  },
+  {
+    "name": "7Up",
+    "unit": "ml",
+    "lossCleaningFactor": 0.0,
+    "lossUsageFactor": 0.0,
+    "productCategoryName": "NAPOJE",
+    "preferredFullStockLevel": 15000,
+    "warningStockLevel": 2500,
+    "minimumStockLevel": 1000
+  },
+  {
+    "name": "Mattoni - neperlivá",
+    "unit": "ml",
+    "lossCleaningFactor": 0.0,
+    "lossUsageFactor": 0.0,
+    "productCategoryName": "NAPOJE",
+    "preferredFullStockLevel": 15000,
+    "warningStockLevel": 2500,
+    "minimumStockLevel": 1000
+  },
+  {
+    "name": "Mattoni - jemně perlivá",
+    "unit": "ml",
+    "lossCleaningFactor": 0.0,
+    "lossUsageFactor": 0.0,
+    "productCategoryName": "NAPOJE",
+    "preferredFullStockLevel": 15000,
+    "warningStockLevel": 2500,
+    "minimumStockLevel": 1000
+  },
+  {
+    "name": "Mattoni - perlivá",
+    "unit": "ml",
+    "lossCleaningFactor": 0.0,
+    "lossUsageFactor": 0.0,
+    "productCategoryName": "NAPOJE",
+    "preferredFullStockLevel": 15000,
+    "warningStockLevel": 2500,
+    "minimumStockLevel": 1000
+  },
+  {
+    "name": "RedBull",
+    "unit": "ml",
+    "lossCleaningFactor": 0.0,
+    "lossUsageFactor": 0.0,
+    "productCategoryName": "NAPOJE",
+    "preferredFullStockLevel": 15000,
+    "warningStockLevel": 2500,
+    "minimumStockLevel": 1000
+  },
+  {
+    "name": "Víno - bílé",
+    "unit": "ml",
+    "lossCleaningFactor": 0.0,
+    "lossUsageFactor": 0.0,
+    "productCategoryName": "ALKOHOL",
+    "preferredFullStockLevel": 15000,
+    "warningStockLevel": 2500,
+    "minimumStockLevel": 1000
+  },
+  {
+    "name": "Víno - červené",
+    "unit": "ml",
+    "lossCleaningFactor": 0.0,
+    "lossUsageFactor": 0.0,
+    "productCategoryName": "NAPOJE",
+    "preferredFullStockLevel": 15000,
+    "warningStockLevel": 2500,
+    "minimumStockLevel": 1000
+  },
+  {
+    "name": "Prosecco - bílé",
+    "unit": "ml",
+    "lossCleaningFactor": 0.0,
+    "lossUsageFactor": 0.0,
+    "productCategoryName": "NAPOJE",
+    "preferredFullStockLevel": 15000,
+    "warningStockLevel": 2500,
+    "minimumStockLevel": 1000
+  },
+  {
+    "name": "Mouka",
+    "unit": "g",
+    "lossCleaningFactor": 0.04,
+    "lossUsageFactor": 0.04,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 10000,
+    "warningStockLevel": 2000,
+    "minimumStockLevel": 1000
+  },
+  {
+    "name": "Sugo",
+    "unit": "g",
+    "lossCleaningFactor": 0.04,
+    "lossUsageFactor": 0.04,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 5000,
+    "warningStockLevel": 1000,
+    "minimumStockLevel": 500
+  },
+  {
+    "name": "Ančovičky",
+    "unit": "g",
+    "lossCleaningFactor": 0.04,
+    "lossUsageFactor": 0.04,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 1000,
+    "warningStockLevel": 200,
+    "minimumStockLevel": 100
+  },
+  {
+    "name": "Hořčice",
+    "unit": "g",
+    "lossCleaningFactor": 0.04,
+    "lossUsageFactor": 0.04,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 2000,
+    "warningStockLevel": 500,
+    "minimumStockLevel": 200
+  },
+  {
+    "name": "Parmezán",
+    "unit": "g",
+    "lossCleaningFactor": 0.09,
+    "lossUsageFactor": 0.07,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 1500,
+    "warningStockLevel": 300,
+    "minimumStockLevel": 150
+  },
+  {
+    "name": "Jalapeňos",
+    "unit": "g",
+    "lossCleaningFactor": 0.02,
+    "lossUsageFactor": 0.07,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 1000,
+    "warningStockLevel": 200,
+    "minimumStockLevel": 100
+  },
+  {
+    "name": "Kukuřice",
+    "unit": "g",
+    "lossCleaningFactor": 0.01,
+    "lossUsageFactor": 0.04,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 2000,
+    "warningStockLevel": 500,
+    "minimumStockLevel": 200
+  },
+  {
+    "name": "Rukola",
+    "unit": "g",
+    "lossCleaningFactor": 0.0,
+    "lossUsageFactor": 0.04,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 500,
+    "warningStockLevel": 100,
+    "minimumStockLevel": 50
+  },
+  {
+    "name": "Pesto alla genovese",
+    "unit": "g",
+    "lossCleaningFactor": 0.03,
+    "lossUsageFactor": 0.06,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 1000,
+    "warningStockLevel": 200,
+    "minimumStockLevel": 100
+  },
+  {
+    "name": "Červená cibule",
+    "unit": "g",
+    "lossCleaningFactor": 0.03,
+    "lossUsageFactor": 0.03,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 2000,
+    "warningStockLevel": 500,
+    "minimumStockLevel": 200
+  },
+  {
+    "name": "Česnek",
+    "unit": "g",
+    "lossCleaningFactor": 0.01,
+    "lossUsageFactor": 0.06,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 1000,
+    "warningStockLevel": 200,
+    "minimumStockLevel": 100
+  },
+  {
+    "name": "Pórek",
+    "unit": "g",
+    "lossCleaningFactor": 0.02,
+    "lossUsageFactor": 0.05,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 1500,
+    "warningStockLevel": 300,
+    "minimumStockLevel": 150
+  },
+  {
+    "name": "Brokolice",
+    "unit": "g",
+    "lossCleaningFactor": 0.09,
+    "lossUsageFactor": 0.05,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 1000,
+    "warningStockLevel": 200,
+    "minimumStockLevel": 100
+  },
+  {
+    "name": "Smetana",
+    "unit": "l",
+    "lossCleaningFactor": 0.08,
+    "lossUsageFactor": 0.09,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 500,
+    "warningStockLevel": 100,
+    "minimumStockLevel": 50
+  },
+  {
+    "name": "Vejce",
+    "unit": "ks",
+    "lossCleaningFactor": 0.06,
+    "lossUsageFactor": 0.06,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 300,
+    "warningStockLevel": 50,
+    "minimumStockLevel": 20
+  },
+  {
+    "name": "Fazolky",
+    "unit": "g",
+    "lossCleaningFactor": 0.06,
+    "lossUsageFactor": 0.06,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 1000,
+    "warningStockLevel": 200,
+    "minimumStockLevel": 100
+  },
+  {
+    "name": "Olivy černé",
+    "unit": "g",
+    "lossCleaningFactor": 0.02,
+    "lossUsageFactor": 0.07,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 500,
+    "warningStockLevel": 100,
+    "minimumStockLevel": 50
+  },
+  {
+    "name": "Olivy zelené",
+    "unit": "g",
+    "lossCleaningFactor": 0.06,
+    "lossUsageFactor": 0.07,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 500,
+    "warningStockLevel": 100,
+    "minimumStockLevel": 50
+  },
+  {
+    "name": "Olivy mix",
+    "unit": "g",
+    "lossCleaningFactor": 0.01,
+    "lossUsageFactor": 0.05,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 500,
+    "warningStockLevel": 100,
+    "minimumStockLevel": 50
+  },
+  {
+    "name": "Žampiony",
+    "unit": "g",
+    "lossCleaningFactor": 0.0,
+    "lossUsageFactor": 0.07,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 1000,
+    "warningStockLevel": 200,
+    "minimumStockLevel": 100
+  },
+  {
+    "name": "Rajčata",
+    "unit": "g",
+    "lossCleaningFactor": 0.01,
+    "lossUsageFactor": 0.05,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 2000,
+    "warningStockLevel": 400,
+    "minimumStockLevel": 200
+  },
+  {
+    "name": "Paprika",
+    "unit": "g",
+    "lossCleaningFactor": 0.05,
+    "lossUsageFactor": 0.07,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 1500,
+    "warningStockLevel": 300,
+    "minimumStockLevel": 150
+  },
+  {
+    "name": "Salám",
+    "unit": "g",
+    "lossCleaningFactor": 0.09,
+    "lossUsageFactor": 0.01,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 1000,
+    "warningStockLevel": 200,
+    "minimumStockLevel": 100
+  },
+  {
+    "name": "Pancetta",
+    "unit": "g",
+    "lossCleaningFactor": 0.04,
+    "lossUsageFactor": 0.04,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 800,
+    "warningStockLevel": 200,
+    "minimumStockLevel": 100
+  },
+  {
+    "name": "Šunka",
+    "unit": "g",
+    "lossCleaningFactor": 0.02,
+    "lossUsageFactor": 0.0,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 1000,
+    "warningStockLevel": 200,
+    "minimumStockLevel": 100
+  },
+  {
+    "name": "Grilovaná kuřecí prsa",
+    "unit": "g",
+    "lossCleaningFactor": 0.05,
+    "lossUsageFactor": 0.02,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 1000,
+    "warningStockLevel": 200,
+    "minimumStockLevel": 100
+  },
+  {
+    "name": "Ananas",
+    "unit": "g",
+    "lossCleaningFactor": 0.08,
+    "lossUsageFactor": 0.09,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 800,
+    "warningStockLevel": 200,
+    "minimumStockLevel": 100
+  },
+  {
+    "name": "Camembert",
+    "unit": "g",
+    "lossCleaningFactor": 0.09,
+    "lossUsageFactor": 0.04,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 500,
+    "warningStockLevel": 100,
+    "minimumStockLevel": 50
+  },
+  {
+    "name": "Uzený eidam",
+    "unit": "g",
+    "lossCleaningFactor": 0.0,
+    "lossUsageFactor": 0.05,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 500,
+    "warningStockLevel": 100,
+    "minimumStockLevel": 50
+  },
+  {
+    "name": "Mascarpone",
+    "unit": "g",
+    "lossCleaningFactor": 0.04,
+    "lossUsageFactor": 0.08,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 400,
+    "warningStockLevel": 100,
+    "minimumStockLevel": 50
+  },
+  {
+    "name": "Gorgonzola",
+    "unit": "g",
+    "lossCleaningFactor": 0.04,
+    "lossUsageFactor": 0.02,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 400,
+    "warningStockLevel": 100,
+    "minimumStockLevel": 50
+  },
+  {
+    "name": "Špenát",
+    "unit": "g",
+    "lossCleaningFactor": 0.08,
+    "lossUsageFactor": 0.01,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 800,
+    "warningStockLevel": 200,
+    "minimumStockLevel": 100
+  },
+  {
+    "name": "Tuňák",
+    "unit": "g",
+    "lossCleaningFactor": 0.04,
+    "lossUsageFactor": 0.1,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 500,
+    "warningStockLevel": 100,
+    "minimumStockLevel": 50
+  },
+  {
+    "name": "Plody moře",
+    "unit": "g",
+    "lossCleaningFactor": 0.09,
+    "lossUsageFactor": 0.05,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 500,
+    "warningStockLevel": 100,
+    "minimumStockLevel": 50
+  },
+  {
+    "name": "Bazalka",
+    "unit": "g",
+    "lossCleaningFactor": 0.08,
+    "lossUsageFactor": 0.04,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 200,
+    "warningStockLevel": 50,
+    "minimumStockLevel": 20
+  },
+  {
+    "name": "Chili",
+    "unit": "g",
+    "lossCleaningFactor": 0.1,
+    "lossUsageFactor": 0.02,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 200,
+    "warningStockLevel": 50,
+    "minimumStockLevel": 20
+  },
+  {
+    "name": "Nutella",
+    "unit": "g",
+    "lossCleaningFactor": 0.02,
+    "lossUsageFactor": 0.09,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 500,
+    "warningStockLevel": 100,
+    "minimumStockLevel": 50
+  },
+  {
+    "name": "Mozzarella di bufala",
+    "unit": "ks",
+    "lossCleaningFactor": 0.08,
+    "lossUsageFactor": 0.02,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 200,
+    "warningStockLevel": 50,
+    "minimumStockLevel": 20
+  },
+  {
+    "name": "Parmská šunka",
+    "unit": "g",
+    "lossCleaningFactor": 0.04,
+    "lossUsageFactor": 0.09,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 500,
+    "warningStockLevel": 100,
+    "minimumStockLevel": 50
+  },
+  {
+    "name": "Drcený pepř",
+    "unit": "g",
+    "lossCleaningFactor": 0.04,
+    "lossUsageFactor": 0.09,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 100,
+    "warningStockLevel": 20,
+    "minimumStockLevel": 10
+  },
+  {
+    "name": "Banán",
+    "unit": "ks",
+    "lossCleaningFactor": 0.04,
+    "lossUsageFactor": 0.09,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 100,
+    "warningStockLevel": 20,
+    "minimumStockLevel": 10
+  },
+  {
+    "name": "Vanilkový cukr",
+    "unit": "ks",
+    "lossCleaningFactor": 0.0,
+    "lossUsageFactor": 0.0,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 50,
+    "warningStockLevel": 10,
+    "minimumStockLevel": 5
+  },
+  {
+    "name": "Carpaccio z pravé svíčkové",
+    "unit": "ks",
+    "lossCleaningFactor": 0.0,
+    "lossUsageFactor": 0.0,
+    "productCategoryName": "POTRAVINY",
+    "preferredFullStockLevel": 50,
+    "warningStockLevel": 10,
+    "minimumStockLevel": 5
+  }
+]

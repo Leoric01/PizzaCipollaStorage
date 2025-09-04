@@ -2,6 +2,8 @@ package leoric.pizzacipollastorage.auth.models;
 
 import jakarta.persistence.*;
 import leoric.pizzacipollastorage.branch.models.Branch;
+import leoric.pizzacipollastorage.common.Address;
+import leoric.pizzacipollastorage.common.ContactInfo;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.data.annotation.CreatedDate;
@@ -19,13 +21,13 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Entity
+@Table(name = "users")
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "users")
-@Entity
 @EntityListeners(AuditingEntityListener.class)
 public class User implements UserDetails, Principal {
 
@@ -40,21 +42,26 @@ public class User implements UserDetails, Principal {
 
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
-    private String firstName;
 
+    private String firstName;
     private String lastName;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
     private String password;
 
     private boolean accountLocked;
-
     private boolean enabled;
 
+    @Embedded
+    private ContactInfo contactInfo;
+
+    @Embedded
+    private Address address;
+
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<Role> roles;
+    private List<Role> roles = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -62,7 +69,7 @@ public class User implements UserDetails, Principal {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "branch_id")
     )
-    private List<Branch> branches;
+    private List<Branch> branches = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserBranchRole> userBranchRoles = new ArrayList<>();
@@ -120,27 +127,12 @@ public class User implements UserDetails, Principal {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User)) return false;
-        User user = (User) o;
-        return id != null && id.equals(user.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return id != null ? id.hashCode() : 0;
-    }
-
-    @Override
     public String toString() {
         return "User{" +
                "id=" + id +
                ", fullName='" + getFullname() + '\'' +
                ", email='" + email + '\'' +
-               ", roles=" + roles.stream()
-                       .map(Role::getName)
-                       .toList() +
+               ", roles=" + roles.stream().map(Role::getName).toList() +
                ", branchesCount=" + (branches != null ? branches.size() : 0) +
                '}';
     }
@@ -153,5 +145,18 @@ public class User implements UserDetails, Principal {
         return userBranchRoles.stream()
                 .anyMatch(ubr -> ubr.getBranch().getId().equals(branchId) &&
                                  ubr.getRole().getName().equalsIgnoreCase(roleName));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return id != null && id.equals(user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }

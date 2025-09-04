@@ -2,6 +2,7 @@ package leoric.pizzacipollastorage.branch.services.interfaces;
 
 import leoric.pizzacipollastorage.auth.models.User;
 import leoric.pizzacipollastorage.branch.dtos.BranchCreateDto;
+import leoric.pizzacipollastorage.branch.dtos.BranchCreateWithDataDto;
 import leoric.pizzacipollastorage.branch.dtos.BranchResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,4 +25,6 @@ public interface BranchService {
     BranchResponseDto getBranchByName(String name);
 
     Page<BranchResponseDto> getBranchesForUser(User user, String search, Pageable pageable);
+
+    BranchResponseDto createBranchWithData(BranchCreateWithDataDto dto, User currentUser);
 }

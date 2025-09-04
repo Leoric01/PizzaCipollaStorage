@@ -1,6 +1,7 @@
 package leoric.pizzacipollastorage.branch;
 
 import leoric.pizzacipollastorage.branch.dtos.BranchCreateDto;
+import leoric.pizzacipollastorage.branch.dtos.BranchCreateWithDataDto;
 import leoric.pizzacipollastorage.branch.dtos.BranchResponseDto;
 import leoric.pizzacipollastorage.branch.models.Branch;
 import org.mapstruct.BeanMapping;
@@ -14,6 +15,8 @@ import java.util.UUID;
 @Mapper(componentModel = "spring")
 public interface BranchMapper {
     Branch toEntity(BranchCreateDto dto);
+
+    Branch toEntityWithData(BranchCreateWithDataDto dto);
     BranchResponseDto toDto(Branch branch);
     List<BranchResponseDto> toDtoList(List<Branch> branches);
 

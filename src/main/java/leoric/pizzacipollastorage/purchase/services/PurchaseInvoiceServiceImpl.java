@@ -1,6 +1,7 @@
 package leoric.pizzacipollastorage.purchase.services;
 
 import jakarta.persistence.EntityNotFoundException;
+import leoric.pizzacipollastorage.auth.models.User;
 import leoric.pizzacipollastorage.branch.models.Branch;
 import leoric.pizzacipollastorage.branch.repositories.BranchRepository;
 import leoric.pizzacipollastorage.inventory.models.InventorySnapshot;
@@ -183,6 +184,16 @@ public class PurchaseInvoiceServiceImpl implements PurchaseInvoiceService {
         // Smazat položky a fakturu
         purchaseInvoiceItemRepository.deleteAll(invoice.getItems());
         purchaseInvoiceRepository.delete(invoice);
+    }
+
+    @Override
+    @Transactional
+    public List<PurchaseInvoiceResponseDto> createInvoicesBulk(UUID branchId, List<PurchaseInvoiceCreateDto> dtos, User currentUser) {
+        List<PurchaseInvoiceResponseDto> results = new ArrayList<>();
+        for (PurchaseInvoiceCreateDto dto : dtos) {
+            results.add(createInvoice(branchId, dto));
+        }
+        return results;
     }
 
     @Override

@@ -2,10 +2,7 @@ package leoric.pizzacipollastorage.branch.controllers;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import leoric.pizzacipollastorage.auth.models.User;
-import leoric.pizzacipollastorage.branch.dtos.BranchAccessRequestCreateDto;
-import leoric.pizzacipollastorage.branch.dtos.BranchAccessRequestResponseDto;
-import leoric.pizzacipollastorage.branch.dtos.BranchCreateDto;
-import leoric.pizzacipollastorage.branch.dtos.BranchResponseDto;
+import leoric.pizzacipollastorage.branch.dtos.*;
 import leoric.pizzacipollastorage.branch.services.interfaces.BranchAccessRequestService;
 import leoric.pizzacipollastorage.branch.services.interfaces.BranchService;
 import leoric.pizzacipollastorage.branch.services.interfaces.BranchServiceAccess;
@@ -36,8 +33,8 @@ public class BranchController {
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
-    public ResponseEntity<BranchResponseDto> branchCreate(@RequestBody BranchCreateDto dto, @AuthenticationPrincipal User currentUser) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(branchService.createBranch(dto, currentUser));
+    public ResponseEntity<BranchResponseDto> branchCreate(@RequestBody BranchCreateWithDataDto dto, @AuthenticationPrincipal User currentUser) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(branchService.createBranchWithData(dto, currentUser));
     }
 
     @PostMapping("/access-request")

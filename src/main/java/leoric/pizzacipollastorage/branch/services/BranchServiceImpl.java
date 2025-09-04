@@ -9,11 +9,13 @@ import leoric.pizzacipollastorage.auth.repositories.UserBranchRoleRepository;
 import leoric.pizzacipollastorage.auth.repositories.UserRepository;
 import leoric.pizzacipollastorage.branch.BranchMapper;
 import leoric.pizzacipollastorage.branch.dtos.BranchCreateDto;
+import leoric.pizzacipollastorage.branch.dtos.BranchCreateWithDataDto;
 import leoric.pizzacipollastorage.branch.dtos.BranchResponseDto;
 import leoric.pizzacipollastorage.branch.models.Branch;
 import leoric.pizzacipollastorage.branch.repositories.BranchRepository;
 import leoric.pizzacipollastorage.branch.services.interfaces.BranchService;
 import leoric.pizzacipollastorage.handler.exceptions.NotAuthorizedForBranchException;
+import leoric.pizzacipollastorage.init.BranchBootstrapService;
 import leoric.pizzacipollastorage.utils.CustomUtilityString;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -36,6 +38,52 @@ public class BranchServiceImpl implements BranchService {
     private final UserBranchRoleRepository userBranchRoleRepository;
     private final BranchRepository branchRepository;
     private final BranchMapper branchMapper;
+    private final BranchBootstrapService branchBootstrapService;
+
+    @Override
+    public BranchResponseDto createBranchWithData(BranchCreateWithDataDto dto, User currentUser) {
+        if (currentUser.getBranches() == null) {
+            currentUser.setBranches(new ArrayList<>());
+        }
+
+        boolean branchExists = currentUser.getBranches().stream()
+                .anyMatch(b -> b.getName() != null && b.getName().equalsIgnoreCase(dto.name()));
+
+        if (branchExists) {
+            throw new IllegalArgumentException("Už máte pobočku se jménem '" + dto.name() + "'");
+        }
+
+        Branch branch = branchMapper.toEntityWithData(dto);
+
+        if (branch.getUsers() == null) {
+            branch.setUsers(new ArrayList<>());
+        }
+
+        branch.setCreatedByManager(currentUser);
+        branch.getUsers().add(currentUser);
+        currentUser.getBranches().add(branch);
+        branchRepository.save(branch);
+
+        Role managerRole = roleRepository.findByName("BRANCH_MANAGER")
+                .orElseThrow(() -> new EntityNotFoundException("Role BRANCH_MANAGER not found"));
+
+        UserBranchRole ubr = UserBranchRole.builder()
+                .user(currentUser)
+                .branch(branch)
+                .role(managerRole)
+                .build();
+        userBranchRoleRepository.save(ubr);
+
+        userRepository.save(currentUser);
+
+        BranchResponseDto dtoResponse = branchMapper.toDto(branch);
+
+        if (dto.withDefaultData()) {
+            branchBootstrapService.bootstrapBranch(branch.getId(), currentUser);
+        }
+
+        return dtoResponse;
+    }
 
     @Override
     @Transactional
