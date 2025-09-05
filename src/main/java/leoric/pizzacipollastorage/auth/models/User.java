@@ -61,6 +61,7 @@ public class User implements UserDetails, Principal {
     private Address address;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @Builder.Default
     private List<Role> roles = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)

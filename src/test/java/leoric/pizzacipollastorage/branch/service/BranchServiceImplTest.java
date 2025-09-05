@@ -9,6 +9,7 @@ import leoric.pizzacipollastorage.auth.repositories.UserRepository;
 import leoric.pizzacipollastorage.branch.BranchMapper;
 import leoric.pizzacipollastorage.branch.dtos.BranchCreateDto;
 import leoric.pizzacipollastorage.branch.dtos.BranchResponseDto;
+import leoric.pizzacipollastorage.branch.dtos.BranchResponseWithUserRolesDto;
 import leoric.pizzacipollastorage.branch.models.Branch;
 import leoric.pizzacipollastorage.branch.repositories.BranchRepository;
 import leoric.pizzacipollastorage.branch.services.BranchServiceImpl;
@@ -31,10 +32,17 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class BranchServiceImplTest {
+
+    private final static String ADMIN = "ADMIN";
+    private final static String MANAGER = "MANAGER";
+    private final static String EMPLOYEE = "EMPLOYEE";
+    private final static String BRANCH_MANAGER = "BRANCH_MANAGER";
+    private final static String BRANCH_EMPLOYEE = "BRANCH_EMPLOYEE";
 
     @Mock
     private BranchRepository branchRepository;
@@ -130,7 +138,6 @@ class BranchServiceImplTest {
         verify(userRepository).save(currentUser);
     }
 
-
     @Test
     void deleteBranch_shouldThrow_whenBranchNotFound() {
         UUID branchId = UUID.randomUUID();
@@ -195,7 +202,6 @@ class BranchServiceImplTest {
         verify(branchRepository).save(branch);
     }
 
-
     @Test
     void deleteBranch_shouldDelete_whenUserAuthorized() {
         Branch branch = Branch.builder().users(new ArrayList<>()).build();
@@ -220,7 +226,7 @@ class BranchServiceImplTest {
             return new BranchResponseDto(UUID.randomUUID(), b.getName(), null, null);
         });
 
-        Page<BranchResponseDto> result = branchService.getAllBranches(null, pageable);
+        Page<BranchResponseWithUserRolesDto> result = branchService.getAllBranches(null, pageable, currentUser);
 
         assertEquals(2, result.getContent().size());
     }
@@ -232,17 +238,25 @@ class BranchServiceImplTest {
                 Branch.builder().name("B1").build(),
                 Branch.builder().name("B2").build()
         );
-        Page<Branch> page = new PageImpl<>(branches, pageable, branches.size());
 
         when(branchRepository.findByNameContainingIgnoreCase("B1", pageable)).thenReturn(
                 new PageImpl<>(List.of(branches.get(0)), pageable, 1)
         );
-        when(branchMapper.toDto(any())).thenAnswer(invocation -> {
-            Branch b = invocation.getArgument(0);
-            return new BranchResponseDto(UUID.randomUUID(), b.getName(), null, null);
-        });
 
-        Page<BranchResponseDto> result = branchService.getAllBranches("B1", pageable);
+        when(branchMapper.toDtoWithUserRoles(any(Branch.class), eq(currentUser)))
+                .thenAnswer(invocation -> {
+                    Branch b = invocation.getArgument(0);
+                    return new BranchResponseWithUserRolesDto(
+                            UUID.randomUUID(),
+                            b.getName(),
+                            null,
+                            null,
+                            List.of("MANAGER")
+                    );
+                });
+
+        Page<BranchResponseWithUserRolesDto> result =
+                branchService.getAllBranches("B1", pageable, currentUser);
 
         assertEquals(1, result.getContent().size());
         assertEquals("B1", result.getContent().get(0).name());
@@ -291,14 +305,26 @@ class BranchServiceImplTest {
         currentUser.setBranches(new ArrayList<>(List.of(b1, b2)));
 
         Pageable pageable = Pageable.ofSize(10);
-        when(branchMapper.toDtoList(any())).thenAnswer(invocation -> {
-            List<Branch> list = invocation.getArgument(0);
-            return list.stream()
-                    .map(b -> new BranchResponseDto(UUID.randomUUID(), b.getName(), null, null))
-                    .toList();
-        });
+        Page<Branch> page = new PageImpl<>(List.of(b1, b2), pageable, 2);
 
-        Page<BranchResponseDto> result = branchService.getBranchesForUser(currentUser, null, pageable);
+        when(branchRepository.findByUsersContaining(currentUser, pageable))
+                .thenReturn(page);
+
+        when(branchMapper.toDtoWithUserRoles(any(Branch.class), eq(currentUser)))
+                .thenAnswer(invocation -> {
+                    Branch b = invocation.getArgument(0);
+                    return new BranchResponseWithUserRolesDto(
+                            UUID.randomUUID(),
+                            b.getName(),
+                            null,
+                            null,
+                            List.of("MANAGER")
+                    );
+                });
+
+        Page<BranchResponseWithUserRolesDto> result =
+                branchService.getBranchesForUser(currentUser, null, pageable);
+
         assertEquals(2, result.getContent().size());
     }
 
@@ -309,14 +335,26 @@ class BranchServiceImplTest {
         currentUser.setBranches(new ArrayList<>(List.of(b1, b2)));
 
         Pageable pageable = Pageable.ofSize(10);
-        when(branchMapper.toDtoList(any())).thenAnswer(invocation -> {
-            List<Branch> list = invocation.getArgument(0);
-            return list.stream()
-                    .map(b -> new BranchResponseDto(UUID.randomUUID(), b.getName(), null, null))
-                    .toList();
-        });
+        Page<Branch> page = new PageImpl<>(List.of(b2), pageable, 1);
 
-        Page<BranchResponseDto> result = branchService.getBranchesForUser(currentUser, "B2", pageable);
+        when(branchRepository.findByUsersContainingAndNameContainingIgnoreCase(currentUser, "B2", pageable))
+                .thenReturn(page);
+
+        when(branchMapper.toDtoWithUserRoles(any(Branch.class), eq(currentUser)))
+                .thenAnswer(invocation -> {
+                    Branch b = invocation.getArgument(0);
+                    return new BranchResponseWithUserRolesDto(
+                            UUID.randomUUID(),
+                            b.getName(),
+                            null,
+                            null,
+                            List.of("MANAGER")
+                    );
+                });
+
+        Page<BranchResponseWithUserRolesDto> result =
+                branchService.getBranchesForUser(currentUser, "B2", pageable);
+
         assertEquals(1, result.getContent().size());
         assertEquals("B2", result.getContent().get(0).name());
     }

@@ -23,6 +23,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 class BranchServiceAccessImplTest {
+    private final static String ADMIN = "ADMIN";
+    private final static String MANAGER = "MANAGER";
+    private final static String EMPLOYEE = "EMPLOYEE";
+    private final static String BRANCH_MANAGER = "BRANCH_MANAGER";
+    private final static String BRANCH_EMPLOYEE = "BRANCH_EMPLOYEE";
+
     @Mock
     private BranchRepository branchRepository;
 
@@ -38,17 +44,20 @@ class BranchServiceAccessImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        user = User.builder().id(UUID.randomUUID()).build();
+        user = User.builder()
+                .id(UUID.randomUUID())
+                .roles(new ArrayList<>())
+                .build();
         branchId = UUID.randomUUID();
     }
 
     @Test
     void assertHasRoleOnBranch_shouldPass_whenUserHasRole() {
-        when(userBranchRoleRepository.existsByUserIdAndBranchIdAndRoleName(user.getId(), branchId, "MANAGER"))
+        when(userBranchRoleRepository.existsByUserIdAndBranchIdAndRoleName(user.getId(), branchId, BRANCH_MANAGER))
                 .thenReturn(true);
 
         assertDoesNotThrow(() ->
-                branchServiceAccess.assertHasRoleOnBranch(branchId, user, "MANAGER")
+                branchServiceAccess.assertHasRoleOnBranch(branchId, user, BRANCH_MANAGER)
         );
     }
 
@@ -58,7 +67,7 @@ class BranchServiceAccessImplTest {
                 .thenReturn(false);
 
         NotAuthorizedForBranchException ex = assertThrows(NotAuthorizedForBranchException.class, () ->
-                branchServiceAccess.assertHasRoleOnBranch(branchId, user, "MANAGER;ADMIN")
+                branchServiceAccess.assertHasRoleOnBranch(branchId, user, BRANCH_MANAGER)
         );
 
         assertTrue(ex.getMessage().contains("Uživatel nemá žádnou z povolených rolí"));
@@ -67,13 +76,13 @@ class BranchServiceAccessImplTest {
     @Test
     void assertHasRoleOnBranch_shouldPass_whenUserHasOneOfMultipleRoles() {
 
-        when(userBranchRoleRepository.existsByUserIdAndBranchIdAndRoleName(user.getId(), branchId, "MANAGER"))
+        when(userBranchRoleRepository.existsByUserIdAndBranchIdAndRoleName(user.getId(), branchId, BRANCH_EMPLOYEE))
                 .thenReturn(false);
-        when(userBranchRoleRepository.existsByUserIdAndBranchIdAndRoleName(user.getId(), branchId, "ADMIN"))
+        when(userBranchRoleRepository.existsByUserIdAndBranchIdAndRoleName(user.getId(), branchId, BRANCH_MANAGER))
                 .thenReturn(true);
 
         assertDoesNotThrow(() ->
-                branchServiceAccess.assertHasRoleOnBranch(branchId, user, "MANAGER;ADMIN")
+                branchServiceAccess.assertHasRoleOnBranch(branchId, user, BRANCH_MANAGER + ";" + BRANCH_EMPLOYEE)
         );
     }
 
