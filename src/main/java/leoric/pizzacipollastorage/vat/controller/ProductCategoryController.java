@@ -21,7 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.*;
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.BRANCH_EMPLOYEE;
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.BRANCH_MANAGER;
 
 @RestController
 @RequestMapping("/api/product-categories")
@@ -41,7 +42,7 @@ public class ProductCategoryController {
             @RequestBody ProductCategoryCreateDto dto,
             @AuthenticationPrincipal User currentUser) {
 
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
 
         ProductCategoryResponseDto created = productCategoryService.addProductCategory(branchId, dto, currentUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
@@ -54,7 +55,7 @@ public class ProductCategoryController {
             @RequestBody @Valid ProductCategoryCreateBulkDto bulkDto,
             @AuthenticationPrincipal User currentUser) {
 
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
 
         List<ProductCategoryResponseDto> created = productCategoryService.bulkAddProductCategories(
                 branchId,
@@ -73,7 +74,7 @@ public class ProductCategoryController {
             @RequestBody @Valid ProductCategoryCreateDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
         return ResponseEntity.ok(productCategoryService.editProductCategory(productCategoryId, dto, currentUser));
     }
 
@@ -84,7 +85,7 @@ public class ProductCategoryController {
             @PathVariable UUID productCategoryId,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
         productCategoryService.deleteProductCategory(productCategoryId, currentUser);
         return ResponseEntity.noContent().build();
     }
@@ -100,7 +101,7 @@ public class ProductCategoryController {
             @ParameterObject
             @Parameter(required = false) Pageable pageable
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + BRANCH_EMPLOYEE);
         return ResponseEntity.ok(productCategoryService.getAllCategories(branchId, search, pageable));
     }
 
@@ -110,7 +111,7 @@ public class ProductCategoryController {
             @PathVariable UUID productCategoryId,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + BRANCH_EMPLOYEE);
         return ResponseEntity.ok(productCategoryService.getProductCategoryById(productCategoryId));
     }
 }

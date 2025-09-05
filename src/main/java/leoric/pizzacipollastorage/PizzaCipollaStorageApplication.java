@@ -15,8 +15,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 public class PizzaCipollaStorageApplication {
 
 	public final static String ADMIN = "ADMIN";
-	private final static String MANAGER = "MANAGER";
-	private final static String EMPLOYEE = "EMPLOYEE";
+	public final static String MANAGER = "MANAGER";
+	public final static String EMPLOYEE = "EMPLOYEE";
 	public final static String BRANCH_MANAGER = "BRANCH_MANAGER";
 	public final static String BRANCH_EMPLOYEE = "BRANCH_EMPLOYEE";
 

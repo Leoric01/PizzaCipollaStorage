@@ -5,6 +5,7 @@ import leoric.pizzacipollastorage.DTOs.MenuItem.*;
 import leoric.pizzacipollastorage.DTOs.MenuItemSale.MenuItemMapNameResponseDto;
 import leoric.pizzacipollastorage.DTOs.MenuItemSale.MenuItemNameWithSizesDto;
 import leoric.pizzacipollastorage.DTOs.MenuItemSale.MenuItemSizeDto;
+import leoric.pizzacipollastorage.DTOs.MenuItemSale.ThirdPartyNameMappingResponseDto;
 import leoric.pizzacipollastorage.branch.models.Branch;
 import leoric.pizzacipollastorage.branch.repositories.BranchRepository;
 import leoric.pizzacipollastorage.handler.BusinessErrorCodes;
@@ -13,15 +14,9 @@ import leoric.pizzacipollastorage.handler.exceptions.MissingQuantityException;
 import leoric.pizzacipollastorage.handler.exceptions.NotAuthorizedForBranchException;
 import leoric.pizzacipollastorage.mapstruct.MenuItemMapper;
 import leoric.pizzacipollastorage.mapstruct.RecipeIngredientMapper;
-import leoric.pizzacipollastorage.models.Ingredient;
-import leoric.pizzacipollastorage.models.MenuItem;
-import leoric.pizzacipollastorage.models.MenuItemCategory;
-import leoric.pizzacipollastorage.models.RecipeIngredient;
+import leoric.pizzacipollastorage.models.*;
 import leoric.pizzacipollastorage.models.enums.DishSize;
-import leoric.pizzacipollastorage.repositories.IngredientRepository;
-import leoric.pizzacipollastorage.repositories.MenuItemCategoryRepository;
-import leoric.pizzacipollastorage.repositories.MenuItemRepository;
-import leoric.pizzacipollastorage.repositories.RecipeIngredientRepository;
+import leoric.pizzacipollastorage.repositories.*;
 import leoric.pizzacipollastorage.services.interfaces.IngredientAliasService;
 import leoric.pizzacipollastorage.services.interfaces.MenuItemService;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +38,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     private final RecipeIngredientRepository recipeIngredientRepository;
     private final RecipeIngredientMapper recipeIngredientMapper;
     private final MenuItemCategoryRepository menuItemCategoryRepository;
+    private final IgnoredThirdPartyNameRepository ignoredThirdPartyNameRepository;
 
     private final IngredientAliasService ingredientAliasService;
 
@@ -106,17 +102,32 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     @Transactional(readOnly = true)
-    public Map<String, UUID> mapThirdPartyNames(UUID branchId, List<String> thirdPartyNames) {
+    public ThirdPartyNameMappingResponseDto mapThirdPartyNames(UUID branchId, List<String> thirdPartyNames) {
         List<MenuItem> items = menuItemRepository.findByBranchIdAndThirdPartyNamesIn(branchId, thirdPartyNames);
-        Map<String, UUID> result = new HashMap<>();
+        List<IgnoredThirdPartyName> ignored = ignoredThirdPartyNameRepository.findByBranchId(branchId);
+
+        Set<String> ignoredNames = ignored.stream()
+                .map(IgnoredThirdPartyName::getName)
+                .collect(Collectors.toSet());
+
+        Map<String, UUID> mapped = new HashMap<>();
         for (MenuItem item : items) {
             for (String tpName : item.getThirdPartyNames()) {
                 if (thirdPartyNames.contains(tpName)) {
-                    result.put(tpName, item.getId());
+                    mapped.put(tpName, item.getId());
                 }
             }
         }
-        return result;
+
+        List<String> unmapped = thirdPartyNames.stream()
+                .filter(name -> !mapped.containsKey(name) && !ignoredNames.contains(name))
+                .toList();
+
+        List<String> ignoredList = thirdPartyNames.stream()
+                .filter(ignoredNames::contains)
+                .toList();
+
+        return new ThirdPartyNameMappingResponseDto(mapped, unmapped, ignoredList);
     }
 
     @Override

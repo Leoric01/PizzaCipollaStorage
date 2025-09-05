@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.*;
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.BRANCH_EMPLOYEE;
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.BRANCH_MANAGER;
 
 @RestController
 @RequestMapping("/api/suppliers")
@@ -35,7 +36,7 @@ public class SupplierController {
             @RequestBody SupplierCreateDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
         return ResponseEntity.ok(supplierService.supplierCreate(branchId, dto));
     }
 
@@ -46,7 +47,7 @@ public class SupplierController {
             @RequestBody List<SupplierCreateDto> dtos,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
         return ResponseEntity.ok(supplierService.supplierCreateBulk(branchId, dtos));
     }
 
@@ -58,7 +59,7 @@ public class SupplierController {
             @RequestBody @Valid SupplierCreateDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
         return ResponseEntity.ok(supplierService.supplierUpdate(branchId, supplierId, dto));
     }
 
@@ -69,7 +70,7 @@ public class SupplierController {
             @PathVariable UUID supplierId,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
         supplierService.supplierDelete(branchId, supplierId);
         return ResponseEntity.noContent().build();
     }
@@ -82,7 +83,7 @@ public class SupplierController {
             @PathVariable UUID branchId,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + BRANCH_EMPLOYEE);
         return ResponseEntity.ok(supplierService.supplierGetAll(branchId));
     }
 
@@ -92,7 +93,7 @@ public class SupplierController {
             @PathVariable UUID supplierId,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + BRANCH_EMPLOYEE);
         return ResponseEntity.ok(supplierService.supplierGetById(branchId, supplierId));
     }
 }

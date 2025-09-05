@@ -15,6 +15,7 @@ public class InventorySnapshotResponseDto {
     private String note;
     private Float expectedQuantity;
     private Float discrepancy;
+    private Float lastDiscrepancy;
     private IngredientResponseDto ingredient;
     private SnapshotType type;
 }

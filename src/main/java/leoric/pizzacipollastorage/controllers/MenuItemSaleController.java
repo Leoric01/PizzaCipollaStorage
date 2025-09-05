@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.*;
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.BRANCH_EMPLOYEE;
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.BRANCH_MANAGER;
 
 @RestController
 @RequestMapping("/api/menuitems-sales")
@@ -33,7 +34,7 @@ public class MenuItemSaleController {
             @RequestBody MenuItemSaleCreateDto menuItemSaleCreateDto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + BRANCH_EMPLOYEE);
         MenuItemSaleResponseDto response = menuItemSaleService.createSale(branchId, menuItemSaleCreateDto);
         return ResponseEntity.ok(response);
     }
@@ -45,7 +46,7 @@ public class MenuItemSaleController {
             @RequestBody MenuItemSaleBulkCreateDto menuItemSaleBulkCreateDto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + BRANCH_EMPLOYEE);
         List<MenuItemSaleResponseDto> responses = menuItemSaleService.createSaleBulk(branchId, menuItemSaleBulkCreateDto);
         return ResponseEntity.ok(responses);
     }

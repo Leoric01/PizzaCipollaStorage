@@ -3,12 +3,12 @@ package leoric.pizzacipollastorage.services.interfaces;
 import leoric.pizzacipollastorage.DTOs.MenuItem.*;
 import leoric.pizzacipollastorage.DTOs.MenuItemSale.MenuItemMapNameResponseDto;
 import leoric.pizzacipollastorage.DTOs.MenuItemSale.MenuItemNameWithSizesDto;
+import leoric.pizzacipollastorage.DTOs.MenuItemSale.ThirdPartyNameMappingResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -54,5 +54,5 @@ public interface MenuItemService {
 
     List<MenuItemResponseDto> duplicateMenuItemsDifferentDishSizes(UUID branchId, MenuItemDuplicateDifferentDishSizesRequestDto requestDto);
 
-    Map<String, UUID> mapThirdPartyNames(UUID branchId, List<String> thirdPartyNames);
+    ThirdPartyNameMappingResponseDto mapThirdPartyNames(UUID branchId, List<String> thirdPartyNames);
 }

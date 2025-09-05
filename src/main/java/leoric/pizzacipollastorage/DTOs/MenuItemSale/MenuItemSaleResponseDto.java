@@ -15,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class MenuItemSaleResponseDto {
     private UUID id;
-    private String menuItem;
+    private String menuItemName;
     private DishSize dishSize;
     private Float quantitySold;
     private String cookName;

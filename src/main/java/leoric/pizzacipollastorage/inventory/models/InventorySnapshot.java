@@ -33,6 +33,7 @@ public class InventorySnapshot {
 
     private Float measuredQuantity;
     private Float expectedQuantity;
+    private Float lastDiscrepancy;
 
     private String note;
 
@@ -49,5 +50,22 @@ public class InventorySnapshot {
     public Float getDiscrepancy() {
         if (type != SnapshotType.INVENTORY || expectedQuantity == null) return null;
         return measuredQuantity - expectedQuantity;
+    }
+
+    @Override
+    public String toString() {
+        return "InventorySnapshot{" +
+               "id=" + id +
+               ", ingredient=" + (ingredient != null ? ingredient.getName() : null) +
+               ", timestamp=" + timestamp +
+               ", measuredQuantity=" + measuredQuantity +
+               ", expectedQuantity=" + expectedQuantity +
+               ", discrepancy=" + getDiscrepancy() +
+               ", lastDiscrepancy=" + lastDiscrepancy +
+               ", branchId=" + (branch != null ? branch.getId() : null) +
+               ", type=" + type +
+               ", form=" + form +
+               ", note='" + note + '\'' +
+               '}';
     }
 }

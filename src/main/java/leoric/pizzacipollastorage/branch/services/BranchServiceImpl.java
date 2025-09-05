@@ -11,6 +11,7 @@ import leoric.pizzacipollastorage.branch.BranchMapper;
 import leoric.pizzacipollastorage.branch.dtos.BranchCreateDto;
 import leoric.pizzacipollastorage.branch.dtos.BranchCreateWithDataDto;
 import leoric.pizzacipollastorage.branch.dtos.BranchResponseDto;
+import leoric.pizzacipollastorage.branch.dtos.BranchResponseWithUserRolesDto;
 import leoric.pizzacipollastorage.branch.models.Branch;
 import leoric.pizzacipollastorage.branch.repositories.BranchRepository;
 import leoric.pizzacipollastorage.branch.services.interfaces.BranchService;
@@ -19,7 +20,6 @@ import leoric.pizzacipollastorage.init.BranchBootstrapService;
 import leoric.pizzacipollastorage.utils.CustomUtilityString;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +27,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
+
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.ADMIN;
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.BRANCH_MANAGER;
 
 @Service
 @RequiredArgsConstructor
@@ -64,8 +66,8 @@ public class BranchServiceImpl implements BranchService {
         currentUser.getBranches().add(branch);
         branchRepository.save(branch);
 
-        Role managerRole = roleRepository.findByName("BRANCH_MANAGER")
-                .orElseThrow(() -> new EntityNotFoundException("Role BRANCH_MANAGER not found"));
+        Role managerRole = roleRepository.findByName(BRANCH_MANAGER)
+                .orElseThrow(() -> new EntityNotFoundException("Role " + BRANCH_MANAGER + " not found, contact admin"));
 
         UserBranchRole ubr = UserBranchRole.builder()
                 .user(currentUser)
@@ -83,6 +85,58 @@ public class BranchServiceImpl implements BranchService {
         }
 
         return dtoResponse;
+    }
+
+    @Override
+    @Transactional
+    public void leaveBranchAccess(UUID branchId, User user) {
+        Branch branch = branchRepository.findById(branchId)
+                .orElseThrow(() -> new EntityNotFoundException("Branch not found: " + branchId));
+
+        List<UserBranchRole> toRemove = user.getUserBranchRoles().stream()
+                .filter(ubr -> ubr.getBranch().getId().equals(branchId))
+                .toList();
+
+        if (!toRemove.isEmpty()) {
+            user.getUserBranchRoles().removeAll(toRemove);
+            branch.getUserBranchRoles().removeAll(toRemove);
+        }
+
+        user.getBranches().remove(branch);
+        branch.getUsers().remove(user);
+
+        userRepository.save(user);
+        branchRepository.save(branch);
+    }
+
+    @Override
+    @Transactional
+    public void branchAccessKickUserById(UUID branchId, User currentUser, UUID targetUserId) {
+        Branch branch = branchRepository.findById(branchId)
+                .orElseThrow(() -> new EntityNotFoundException("Branch not found: " + branchId));
+
+        User targetUser = userRepository.findById(targetUserId)
+                .orElseThrow(() -> new EntityNotFoundException("Target user not found: " + targetUserId));
+
+        if (currentUser.getId().equals(targetUserId)) {
+            throw new IllegalArgumentException("A user cannot kick themselves from a branch.");
+        }
+
+        List<UserBranchRole> rolesToRemove = targetUser.getUserBranchRoles().stream()
+                .filter(ubr -> ubr.getBranch().getId().equals(branchId))
+                .toList();
+
+        if (!rolesToRemove.isEmpty()) {
+            targetUser.getUserBranchRoles().removeAll(rolesToRemove);
+            branch.getUserBranchRoles().removeAll(rolesToRemove);
+            userBranchRoleRepository.deleteAll(rolesToRemove);
+        }
+
+        targetUser.getBranches().remove(branch);
+        branch.getUsers().remove(targetUser);
+
+        userRepository.save(targetUser);
+        branchRepository.save(branch);
     }
 
     @Override
@@ -113,8 +167,8 @@ public class BranchServiceImpl implements BranchService {
         currentUser.getBranches().add(branch);
         branchRepository.save(branch);
 
-        Role managerRole = roleRepository.findByName("BRANCH_MANAGER")
-                .orElseThrow(() -> new EntityNotFoundException("Role BRANCH_MANAGER not found"));
+        Role managerRole = roleRepository.findByName(BRANCH_MANAGER)
+                .orElseThrow(() -> new EntityNotFoundException("Role " + BRANCH_MANAGER + " not found, contact admin"));
 
         UserBranchRole ubr = UserBranchRole.builder()
                 .user(currentUser)
@@ -138,7 +192,7 @@ public class BranchServiceImpl implements BranchService {
         Branch branch = branchRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Branch not found with id: " + id));
 
-        if (!currentUser.hasRole("ADMIN") && !branch.getUsers().contains(currentUser)) {
+        if (!currentUser.hasRole(ADMIN) && !branch.getUsers().contains(currentUser)) {
             throw new NotAuthorizedForBranchException("You are not allowed to delete this branch");
         }
 
@@ -150,7 +204,7 @@ public class BranchServiceImpl implements BranchService {
         Branch branch = branchRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Branch not found: id = " + id));
 
-        if (!currentUser.hasRole("ADMIN") && !branch.getUsers().contains(currentUser)) {
+        if (!currentUser.hasRole(ADMIN) && !branch.getUsers().contains(currentUser)) {
             throw new NotAuthorizedForBranchException("You are not allowed to edit this branch");
         }
 
@@ -159,20 +213,6 @@ public class BranchServiceImpl implements BranchService {
         branch.setContactInfo(dto.contactInfo());
 
         return branchMapper.toDto(branchRepository.save(branch));
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Page<BranchResponseDto> getAllBranches(String search, Pageable pageable) {
-        Page<Branch> page;
-
-        if (search != null && !search.isBlank()) {
-            page = branchRepository.findByNameContainingIgnoreCase(search, pageable);
-        } else {
-            page = branchRepository.findAll(pageable);
-        }
-
-        return page.map(branchMapper::toDto);
     }
 
     @Override
@@ -194,23 +234,29 @@ public class BranchServiceImpl implements BranchService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<BranchResponseDto> getBranchesForUser(User user, String search, Pageable pageable) {
-        List<Branch> branches = user.getBranches();
-
-        Stream<Branch> stream = branches.stream();
+    public Page<BranchResponseWithUserRolesDto> getAllBranches(String search, Pageable pageable, User currentUser) {
+        Page<Branch> page;
 
         if (search != null && !search.isBlank()) {
-            String lowerSearch = search.toLowerCase();
-            stream = stream.filter(branch -> branch.getName() != null &&
-                    branch.getName().toLowerCase().contains(lowerSearch));
+            page = branchRepository.findByNameContainingIgnoreCase(search, pageable);
+        } else {
+            page = branchRepository.findAll(pageable);
         }
 
-        List<Branch> filtered = stream.toList();
+        return page.map(branch -> branchMapper.toDtoWithUserRoles(branch, currentUser));
+    }
 
-        int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), filtered.size());
-        List<Branch> pageContent = start > end ? List.of() : filtered.subList(start, end);
+    @Override
+    @Transactional(readOnly = true)
+    public Page<BranchResponseWithUserRolesDto> getBranchesForUser(User user, String search, Pageable pageable) {
+        Page<Branch> page;
 
-        return new PageImpl<>(branchMapper.toDtoList(pageContent), pageable, filtered.size());
+        if (search != null && !search.isBlank()) {
+            page = branchRepository.findByUsersContainingAndNameContainingIgnoreCase(user, search, pageable);
+        } else {
+            page = branchRepository.findByUsersContaining(user, pageable);
+        }
+
+        return page.map(branch -> branchMapper.toDtoWithUserRoles(branch, user));
     }
 }

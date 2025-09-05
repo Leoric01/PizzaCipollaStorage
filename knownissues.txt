@@ -1,5 +1,6 @@
 # FE
-menuitemsale
+
+
 prejmenovany kontrakty supplier
 
 # BE
@@ -13,9 +14,3 @@ pagination
 
 
 seznam zmen
-branch/access-request/mine - pagination
-branch/mine - pagination
-authentication all users - pagination
-inventory get current - pagination
-purchaseInvoice - pagination
-productCategory - pagination

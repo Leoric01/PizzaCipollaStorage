@@ -30,7 +30,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.*;
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.BRANCH_EMPLOYEE;
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.BRANCH_MANAGER;
 
 @Service
 @RequiredArgsConstructor
@@ -48,12 +49,8 @@ public class BranchAccessRequestServiceImpl implements BranchAccessRequestServic
     @Transactional
     public BranchAccessRequestResponseDto createRequest(BranchAccessRequestCreateDto dto, User currentUser) {
         Branch branch = branchRepository.findById(dto.branchId())
-                .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
-        System.out.println("Branch: " + branch.getName());
-        List<Branch> branches = currentUser.getBranches();
-        for (Branch b : branches) {
-            System.out.println(b.toString());
-        }
+                .orElseThrow(() -> new EntityNotFoundException("Branch not found by id: " + dto.branchId()));
+
         if (branch.getUsers().contains(currentUser)) {
             throw new BusinessException(BusinessErrorCodes.BRANCH_ALREADY_ACCESSIBLE);
         }
@@ -165,7 +162,7 @@ public class BranchAccessRequestServiceImpl implements BranchAccessRequestServic
                 .orElseThrow(() -> new EntityNotFoundException("Access request not found"));
 
         Branch branch = request.getBranch();
-        branchServiceAccess.assertHasRoleOnBranch(branch.getId(), currentUser, "BRANCH_MANAGER;BRANCH_ADMIN");
+        branchServiceAccess.assertHasRoleOnBranch(branch.getId(), currentUser, BRANCH_MANAGER);
 
         if (!branch.getCreatedByManager().getId().equals(currentUser.getId())) {
             throw new BusinessException(BusinessErrorCodes.NOT_AUTHORIZED_FOR_BRANCH);
@@ -184,7 +181,7 @@ public class BranchAccessRequestServiceImpl implements BranchAccessRequestServic
         targetUser.getBranches().add(branch);
         userRepository.save(targetUser);
         Role employeeRole = roleRepository.findByName(BRANCH_EMPLOYEE)
-                .orElseThrow(() -> new EntityNotFoundException("Role " + BRANCH_EMPLOYEE + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Role " + BRANCH_EMPLOYEE + " not found, please contact admin"));
 
         UserBranchRole ubr = UserBranchRole.builder()
                 .user(targetUser)
@@ -204,7 +201,7 @@ public class BranchAccessRequestServiceImpl implements BranchAccessRequestServic
 
         Branch branch = request.getBranch();
 
-        branchServiceAccess.assertHasRoleOnBranch(branch.getId(), currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        branchServiceAccess.assertHasRoleOnBranch(branch.getId(), currentUser, BRANCH_MANAGER);
 
         if (request.getBranchAccessRequestStatus() != BranchAccessRequestStatus.PENDING) {
             throw new BusinessException(BusinessErrorCodes.REQUEST_ALREADY_RESOLVED);

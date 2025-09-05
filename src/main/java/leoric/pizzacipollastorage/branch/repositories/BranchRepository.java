@@ -20,4 +20,8 @@ public interface BranchRepository extends JpaRepository<Branch, UUID> {
     boolean existsByIdAndUsersContaining(UUID id, User user);
 
     Page<Branch> findByNameContainingIgnoreCase(String search, Pageable pageable);
+
+    Page<Branch> findByUsersContainingAndNameContainingIgnoreCase(User user, String search, Pageable pageable);
+
+    Page<Branch> findByUsersContaining(User user, Pageable pageable);
 }

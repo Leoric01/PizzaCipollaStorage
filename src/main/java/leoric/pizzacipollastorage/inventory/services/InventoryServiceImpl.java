@@ -2,7 +2,6 @@ package leoric.pizzacipollastorage.inventory.services;
 
 import jakarta.persistence.EntityNotFoundException;
 import leoric.pizzacipollastorage.branch.models.Branch;
-import leoric.pizzacipollastorage.branch.repositories.BranchRepository;
 import leoric.pizzacipollastorage.inventory.InventorySnapshotMapper;
 import leoric.pizzacipollastorage.inventory.dtos.Inventory.InventorySnapshotCreateDto;
 import leoric.pizzacipollastorage.inventory.dtos.Inventory.InventorySnapshotResponseDto;
@@ -12,29 +11,28 @@ import leoric.pizzacipollastorage.models.Ingredient;
 import leoric.pizzacipollastorage.models.enums.IngredientState;
 import leoric.pizzacipollastorage.models.enums.SnapshotType;
 import leoric.pizzacipollastorage.repositories.IngredientRepository;
+import leoric.pizzacipollastorage.utils.CustomUtilityString;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class InventoryServiceImpl implements InventoryService {
 
-    private final InventorySnapshotRepository snapshotRepository;
+    private final InventorySnapshotRepository inventorySnapshotRepository;
     private final IngredientRepository ingredientRepository;
     private final InventorySnapshotMapper inventorySnapshotMapper;
     private final InventoryStatusHelperService inventoryStatusHelperService;
-    private final BranchRepository branchRepository;
 
     @Override
     public void addToInventory(UUID branchId, UUID ingredientId, float addedQuantity) {
@@ -61,7 +59,7 @@ public class InventoryServiceImpl implements InventoryService {
                 .type(SnapshotType.STOCK_IN)
                 .build();
 
-        snapshotRepository.save(snapshot);
+        inventorySnapshotRepository.save(snapshot);
     }
 
     @Override
@@ -70,7 +68,7 @@ public class InventoryServiceImpl implements InventoryService {
                 .filter(i -> i.getBranch().getId().equals(branchId))
                 .orElseThrow(() -> new EntityNotFoundException("Ingredient not found in this branch"));
 
-        Branch branch = ingredient.getBranch(); // nebo branchRepository.getReferenceById(branchId)
+        Branch branch = ingredient.getBranch();
 
         Float measured = dto.getMeasuredQuantity();
         IngredientState form = dto.getForm() != null ? dto.getForm() : IngredientState.RAW;
@@ -83,7 +81,7 @@ public class InventoryServiceImpl implements InventoryService {
             measured = measured / (1 - lossFactor);
         }
 
-        InventorySnapshot lastSnapshot = snapshotRepository
+        InventorySnapshot lastSnapshot = inventorySnapshotRepository
                 .findTopByIngredientAndBranchOrderByTimestampDesc(ingredient, branch)
                 .orElse(null);
 
@@ -96,6 +94,8 @@ public class InventoryServiceImpl implements InventoryService {
         Float discrepancy = oldExpected != null ? measured - oldExpected : null;
 
         LocalDateTime now = LocalDateTime.now();
+        String baseNote = "Poslední měření proběhlo " + now;
+        String discrepancyNote = discrepancy != null ? String.format(" | Odchylka: %.2f", discrepancy) : "";
 
         InventorySnapshot snapshot = InventorySnapshot.builder()
                 .ingredient(ingredient)
@@ -103,46 +103,91 @@ public class InventoryServiceImpl implements InventoryService {
                 .timestamp(now)
                 .measuredQuantity(measured)
                 .expectedQuantity(measured)
-                .note(dto.getNote() != null
-                        ? dto.getNote() + (discrepancy != null ? String.format(" | Discrepancy: %.2f", discrepancy) : "")
-                        : (discrepancy != null ? String.format("Discrepancy: %.2f", discrepancy) : "Manual measurement"))
+                .lastDiscrepancy(discrepancy)
+                .note(baseNote + discrepancyNote)
                 .type(SnapshotType.INVENTORY)
                 .build();
 
-        InventorySnapshot saved = snapshotRepository.save(snapshot);
+        InventorySnapshot saved = inventorySnapshotRepository.save(snapshot);
+
         return inventorySnapshotMapper.toDto(saved);
     }
 
-
     @Override
     @Transactional(readOnly = true)
-    public Page<InventorySnapshotResponseDto> getCurrentInventoryStatus(UUID branchId, String search, Pageable pageable) {
-        Page<Ingredient> ingredientPage;
+    public Page<InventorySnapshotResponseDto> getCurrentInventoryStatusByStream(UUID branchId, String search, Pageable pageable) {
+        List<InventorySnapshot> allSnapshots = inventorySnapshotRepository.findByBranchId(branchId);
 
-        if (search != null && !search.isBlank()) {
-            ingredientPage = ingredientRepository.findByBranchIdAndNameContainingIgnoreCase(branchId, search, pageable);
-        } else {
-            ingredientPage = ingredientRepository.findByBranchId(branchId, pageable);
-        }
+        Map<UUID, Optional<InventorySnapshot>> latestSnapshotsByIngredient = allSnapshots.stream()
+                .filter(snapshot -> search == null ||
+                                    CustomUtilityString.normalize(snapshot.getIngredient().getName())
+                                            .contains(CustomUtilityString.normalize(search)))
+                .collect(Collectors.groupingBy(
+                        snapshot -> snapshot.getIngredient().getId(),
+                        Collectors.maxBy(Comparator.comparing(InventorySnapshot::getTimestamp))
+                ));
 
-        return ingredientPage.map(ingredient -> {
-            Optional<InventorySnapshot> snapshotOpt =
-                    snapshotRepository.findTopByIngredientAndBranchOrderByTimestampDesc(ingredient, ingredient.getBranch());
+        List<InventorySnapshot> latestSnapshots = latestSnapshotsByIngredient.values().stream()
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
 
-            InventorySnapshot snapshot = snapshotOpt.orElseGet(() ->
-                    InventorySnapshot.builder()
-                            .ingredient(ingredient)
-                            .branch(ingredient.getBranch())
-                            .timestamp(LocalDateTime.now())
-                            .measuredQuantity(0f)
-                            .expectedQuantity(null)
-                            .note("No snapshot available")
-                            .type(SnapshotType.INVENTORY)
-                            .build()
-            );
+        Comparator<InventorySnapshot> comparator = pageable.getSort().stream()
+                .map(order -> {
+                    Comparator<InventorySnapshot> cmp;
+                    switch (order.getProperty()) {
+                        // SAME AS DEFAULT
+//                        case "ingredientName" ->
+//                                cmp = Comparator.comparing(
+//                                        s -> CustomUtilityString.normalize(s.getIngredient().getName()),
+//                                        Comparator.nullsLast(String::compareTo)
+//                                );
+                        case "timestamp" -> cmp = Comparator.comparing(
+                                InventorySnapshot::getTimestamp,
+                                Comparator.nullsLast(Comparator.naturalOrder())
+                        );
+                        case "measuredQuantity" -> cmp = Comparator.comparing(
+                                InventorySnapshot::getMeasuredQuantity,
+                                Comparator.nullsLast(Comparator.naturalOrder())
+                        );
+                        case "expectedQuantity" -> cmp = Comparator.comparing(
+                                InventorySnapshot::getExpectedQuantity,
+                                Comparator.nullsLast(Comparator.naturalOrder())
+                        );
+                        case "lastDiscrepancy" -> cmp = Comparator.comparing(
+                                InventorySnapshot::getLastDiscrepancy,
+                                Comparator.nullsLast(Comparator.naturalOrder())
+                        );
+                        case "type" -> cmp = Comparator.comparing(
+                                s -> CustomUtilityString.normalize(s.getType().name()),
+                                Comparator.nullsLast(String::compareTo)
+                        );
+                        case "note" -> cmp = Comparator.comparing(
+                                s -> CustomUtilityString.normalize(s.getNote()),
+                                Comparator.nullsLast(String::compareTo)
+                        );
+                        default -> cmp = Comparator.comparing(
+                                s -> CustomUtilityString.normalize(s.getIngredient().getName()),
+                                Comparator.nullsLast(String::compareTo)
+                        );
+                    }
+                    return order.isAscending() ? cmp : cmp.reversed();
+                })
+                .reduce(Comparator::thenComparing)
+                .orElse(Comparator.comparing(
+                        s -> CustomUtilityString.normalize(s.getIngredient().getName()),
+                        Comparator.nullsLast(String::compareTo)
+                ));
 
-            return inventorySnapshotMapper.toDto(snapshot);
-        });
+        latestSnapshots.sort(comparator);
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), latestSnapshots.size());
+        List<InventorySnapshotResponseDto> pagedDtoList = latestSnapshots.subList(start, end).stream()
+                .map(inventorySnapshotMapper::toDto)
+                .toList();
+
+        return new PageImpl<>(pagedDtoList, pageable, latestSnapshots.size());
     }
 
     @Override
@@ -151,6 +196,9 @@ public class InventoryServiceImpl implements InventoryService {
 
         for (InventorySnapshotCreateDto dto : dtos) {
             try {
+                if (dto.getIngredientId() == null) {
+                    continue;
+                }
                 results.add(createSnapshot(branchId, dto));
             } catch (EntityNotFoundException e) {
                 log.error("Ingredient not found for ID: {}", dto.getIngredientId(), e);

@@ -23,7 +23,7 @@
       },
       {
         "ingredientName": "Bazalka",
-        "quantity": 200,
+        "quantity": 400,
         "unitPriceWithoutTax": 0.0
       },
       {
@@ -33,12 +33,12 @@
       },
       {
         "ingredientName": "Mascarpone",
-        "quantity": 2000,
+        "quantity": 2400,
         "unitPriceWithoutTax": 0.0
       },
       {
         "ingredientName": "Gorgonzola",
-        "quantity": 2000,
+        "quantity": 2400,
         "unitPriceWithoutTax": 0.0
       },
       {
@@ -48,37 +48,37 @@
       },
       {
         "ingredientName": "Mozzarella di bufala",
-        "quantity": 5000,
+        "quantity": 5200,
         "unitPriceWithoutTax": 0.0
       },
       {
         "ingredientName": "Uzený eidam",
-        "quantity": 3000,
+        "quantity": 3500,
         "unitPriceWithoutTax": 0.0
       },
       {
         "ingredientName": "Žampiony",
-        "quantity": 10000,
+        "quantity": 11000,
         "unitPriceWithoutTax": 0.0
       },
       {
         "ingredientName": "Camembert",
-        "quantity": 2000,
+        "quantity": 2500,
         "unitPriceWithoutTax": 0.0
       },
       {
         "ingredientName": "Rajčata",
-        "quantity": 5000,
+        "quantity": 7000,
         "unitPriceWithoutTax": 0.0
       },
       {
         "ingredientName": "Olivy zelené",
-        "quantity": 1000,
+        "quantity": 1500,
         "unitPriceWithoutTax": 0.0
       },
       {
         "ingredientName": "Špenát",
-        "quantity": 5000,
+        "quantity": 5800,
         "unitPriceWithoutTax": 0.0
       },
       {
@@ -98,36 +98,21 @@
       },
       {
         "ingredientName": "Šunka",
-        "quantity": 5000,
+        "quantity": 6000,
         "unitPriceWithoutTax": 0.0
       },
       {
         "ingredientName": "Ananas",
-        "quantity": 2000,
+        "quantity": 800,
         "unitPriceWithoutTax": 0.0
       },
       {
         "ingredientName": "Salám",
-        "quantity": 5000,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Paprika",
-        "quantity": 5000,
+        "quantity": 6000,
         "unitPriceWithoutTax": 0.0
       },
       {
         "ingredientName": "Jalapeňos",
-        "quantity": 2000,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Pancetta",
-        "quantity": 5000,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Fazolky",
         "quantity": 2000,
         "unitPriceWithoutTax": 0.0
       },
@@ -137,23 +122,13 @@
         "unitPriceWithoutTax": 0.0
       },
       {
-        "ingredientName": "Drcený pepř",
-        "quantity": 100,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
         "ingredientName": "Pórek",
         "quantity": 1000,
         "unitPriceWithoutTax": 0.0
       },
       {
         "ingredientName": "Parmská šunka",
-        "quantity": 2000,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Grilovaná kuřecí prsa",
-        "quantity": 5000,
+        "quantity": 2500,
         "unitPriceWithoutTax": 0.0
       },
       {
@@ -163,7 +138,7 @@
       },
       {
         "ingredientName": "Tuňák",
-        "quantity": 3000,
+        "quantity": 3500,
         "unitPriceWithoutTax": 0.0
       },
       {
@@ -173,12 +148,12 @@
       },
       {
         "ingredientName": "Olivy černé",
-        "quantity": 1000,
+        "quantity": 1500,
         "unitPriceWithoutTax": 0.0
       },
       {
         "ingredientName": "Carpaccio z pravé svíčkové",
-        "quantity": 1000,
+        "quantity": 1050,
         "unitPriceWithoutTax": 0.0
       },
       {
@@ -188,17 +163,17 @@
       },
       {
         "ingredientName": "Nutella",
-        "quantity": 2000,
+        "quantity": 2500,
         "unitPriceWithoutTax": 0.0
       },
       {
         "ingredientName": "Banán",
-        "quantity": 3000,
+        "quantity": 3100,
         "unitPriceWithoutTax": 0.0
       },
       {
         "ingredientName": "Vanilkový cukr",
-        "quantity": 200,
+        "quantity": 250,
         "unitPriceWithoutTax": 0.0
       },
       {
@@ -262,33 +237,8 @@
         "unitPriceWithoutTax": 0.0
       },
       {
-        "ingredientName": "Mouka",
-        "quantity": 10000,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
         "ingredientName": "Sugo",
         "quantity": 5000,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Ančovičky",
-        "quantity": 1000,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Hořčice",
-        "quantity": 2000,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Parmezán",
-        "quantity": 1500,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Jalapeňos",
-        "quantity": 1000,
         "unitPriceWithoutTax": 0.0
       },
       {
@@ -297,58 +247,8 @@
         "unitPriceWithoutTax": 0.0
       },
       {
-        "ingredientName": "Rukola",
-        "quantity": 500,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Pesto alla genovese",
-        "quantity": 1000,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Červená cibule",
-        "quantity": 2000,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Česnek",
-        "quantity": 1000,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Pórek",
-        "quantity": 1500,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Brokolice",
-        "quantity": 1000,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Smetana",
-        "quantity": 500,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Vejce",
-        "quantity": 300,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
         "ingredientName": "Fazolky",
         "quantity": 1000,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Olivy černé",
-        "quantity": 500,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Olivy zelené",
-        "quantity": 500,
         "unitPriceWithoutTax": 0.0
       },
       {
@@ -357,23 +257,8 @@
         "unitPriceWithoutTax": 0.0
       },
       {
-        "ingredientName": "Žampiony",
-        "quantity": 1000,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Rajčata",
-        "quantity": 2000,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
         "ingredientName": "Paprika",
         "quantity": 1500,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Salám",
-        "quantity": 1000,
         "unitPriceWithoutTax": 0.0
       },
       {
@@ -382,48 +267,8 @@
         "unitPriceWithoutTax": 0.0
       },
       {
-        "ingredientName": "Šunka",
-        "quantity": 1000,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
         "ingredientName": "Grilovaná kuřecí prsa",
         "quantity": 1000,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Ananas",
-        "quantity": 800,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Camembert",
-        "quantity": 500,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Uzený eidam",
-        "quantity": 500,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Mascarpone",
-        "quantity": 400,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Gorgonzola",
-        "quantity": 400,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Špenát",
-        "quantity": 800,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Tuňák",
-        "quantity": 500,
         "unitPriceWithoutTax": 0.0
       },
       {
@@ -432,48 +277,13 @@
         "unitPriceWithoutTax": 0.0
       },
       {
-        "ingredientName": "Bazalka",
-        "quantity": 200,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
         "ingredientName": "Chili",
         "quantity": 200,
         "unitPriceWithoutTax": 0.0
       },
       {
-        "ingredientName": "Nutella",
-        "quantity": 500,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Mozzarella di bufala",
-        "quantity": 200,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Parmská šunka",
-        "quantity": 500,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
         "ingredientName": "Drcený pepř",
         "quantity": 100,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Banán",
-        "quantity": 100,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Vanilkový cukr",
-        "quantity": 50,
-        "unitPriceWithoutTax": 0.0
-      },
-      {
-        "ingredientName": "Carpaccio z pravé svíčkové",
-        "quantity": 50,
         "unitPriceWithoutTax": 0.0
       }
     ]

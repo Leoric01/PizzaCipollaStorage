@@ -38,4 +38,17 @@ public class MenuItemSale {
     @ManyToOne(optional = false)
     @JoinColumn(name = "branch_id", nullable = false)
     private Branch branch;
+
+    @Override
+    public String toString() {
+        return "MenuItemSale{" +
+               "id=" + id +
+               ", menuItem=" + (menuItem != null ? menuItem.getName() : null) +
+               ", dishSize=" + dishSize +
+               ", quantitySold=" + quantitySold +
+               ", saleDate=" + saleDate +
+               ", cookName='" + cookName + '\'' +
+               ", branchId=" + (branch != null ? branch.getId() : null) +
+               '}';
+    }
 }

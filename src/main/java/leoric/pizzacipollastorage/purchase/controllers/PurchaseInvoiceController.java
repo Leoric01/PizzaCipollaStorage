@@ -18,7 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.*;
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.BRANCH_EMPLOYEE;
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.BRANCH_MANAGER;
 
 @RestController
 @RequestMapping("/api/purchase-invoices")
@@ -35,7 +36,7 @@ public class PurchaseInvoiceController {
             @RequestBody @Valid PurchaseInvoiceCreateDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
         return ResponseEntity.ok(purchaseInvoiceService.createInvoice(branchId, dto));
     }
 
@@ -46,7 +47,7 @@ public class PurchaseInvoiceController {
             @PathVariable UUID invoiceId,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
         purchaseInvoiceService.stockFromInvoice(branchId, invoiceId);
         return ResponseEntity.noContent().build();
     }
@@ -59,7 +60,7 @@ public class PurchaseInvoiceController {
             @RequestBody @Valid PurchaseInvoiceCreateDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
         return ResponseEntity.ok(purchaseInvoiceService.update(branchId, invoiceId, dto));
     }
 
@@ -70,7 +71,7 @@ public class PurchaseInvoiceController {
             @PathVariable UUID invoiceId,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
         purchaseInvoiceService.delete(branchId, invoiceId);
         return ResponseEntity.noContent().build();
     }
@@ -85,7 +86,7 @@ public class PurchaseInvoiceController {
         branchServiceAccess.assertHasRoleOnBranch(
                 branchId,
                 currentUser,
-                BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE
+                BRANCH_MANAGER + ";" + BRANCH_EMPLOYEE
         );
         return ResponseEntity.ok(purchaseInvoiceService.getAll(branchId, pageable));
     }
@@ -99,7 +100,7 @@ public class PurchaseInvoiceController {
         branchServiceAccess.assertHasRoleOnBranch(
                 branchId,
                 currentUser,
-                BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE
+                BRANCH_MANAGER + ";" + BRANCH_EMPLOYEE
         );
         return ResponseEntity.ok(purchaseInvoiceService.getById(branchId, invoiceId));
     }

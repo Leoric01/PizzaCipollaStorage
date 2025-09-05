@@ -5,6 +5,7 @@ import leoric.pizzacipollastorage.inventory.dtos.Inventory.InventorySnapshotResp
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,6 +19,10 @@ public interface InventoryService {
 
     List<InventorySnapshotResponseDto> createSnapshotBulk(UUID branchId, List<InventorySnapshotCreateDto> dtos);
 
-    Page<InventorySnapshotResponseDto> getCurrentInventoryStatus(UUID branchId, String search, Pageable pageable);
+    @Transactional(readOnly = true)
+    Page<InventorySnapshotResponseDto> getCurrentInventoryStatusByStream(UUID branchId, String search, Pageable pageable);
+
+//    Page<InventorySnapshotResponseDto> getCurrentInventoryStatus(UUID branchId, String search, Pageable pageable);
+//    Page<InventorySnapshotResponseDto> getCurrentInventoryStatus2(UUID branchId, String search, Pageable pageable);
 
 }

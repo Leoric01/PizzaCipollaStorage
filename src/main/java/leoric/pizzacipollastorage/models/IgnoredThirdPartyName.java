@@ -1,15 +1,13 @@
-package leoric.pizzacipollastorage.vat.models;
+package leoric.pizzacipollastorage.models;
 
 import jakarta.persistence.*;
 import leoric.pizzacipollastorage.branch.models.Branch;
-import leoric.pizzacipollastorage.models.Ingredient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -17,24 +15,17 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProductCategory {
+public class IgnoredThirdPartyName {
 
     @Id
     @UuidGenerator(style = UuidGenerator.Style.AUTO)
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
-    @Column(nullable = false)
-    private String name;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "vat_rate_id", nullable = false)
-    private VatRate vatRate;
-
-    @OneToMany(mappedBy = "productCategory")
-    private List<Ingredient> ingredients;
-
     @ManyToOne(optional = false)
     @JoinColumn(name = "branch_id", nullable = false)
     private Branch branch;
+
+    @Column(nullable = false)
+    private String name;
 }

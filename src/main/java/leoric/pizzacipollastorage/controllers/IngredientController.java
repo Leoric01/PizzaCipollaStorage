@@ -19,7 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.*;
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.BRANCH_EMPLOYEE;
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.BRANCH_MANAGER;
 
 @RestController
 @RequestMapping("/api/ingredient")
@@ -39,7 +40,7 @@ public class IngredientController {
             @ParameterObject
             @Parameter(required = false) Pageable pageable
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + BRANCH_EMPLOYEE);
         return ResponseEntity.ok(ingredientService.ingredientGetAll(branchId, search, pageable));
     }
 
@@ -48,7 +49,7 @@ public class IngredientController {
                                                                    @AuthenticationPrincipal User currentUser,
                                                                    @RequestParam UUID branchId
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + BRANCH_EMPLOYEE);
         return ResponseEntity.ok(ingredientService.ingredientGetById(ingredientId));
     }
 
@@ -62,7 +63,7 @@ public class IngredientController {
             @RequestBody @Valid IngredientCreateDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
         return ResponseEntity.ok(ingredientService.ingredientCreate(branchId, dto));
     }
 
@@ -73,7 +74,7 @@ public class IngredientController {
             @RequestBody @Valid List<IngredientCreateDto> dtos,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
         return ResponseEntity.ok(ingredientService.ingredientCreateBulk(branchId, dtos));
     }
 
@@ -85,7 +86,7 @@ public class IngredientController {
             @RequestBody @Valid IngredientCreateDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
         return ResponseEntity.ok(ingredientService.ingredientUpdate(branchId, ingredientId, dto));
     }
 
@@ -96,7 +97,7 @@ public class IngredientController {
             @PathVariable UUID ingredientId,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
         ingredientService.ingredientDeleteById(branchId, ingredientId);
         return ResponseEntity.noContent().build();
     }

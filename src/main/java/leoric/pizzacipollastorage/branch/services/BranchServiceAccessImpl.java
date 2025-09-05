@@ -1,7 +1,9 @@
 package leoric.pizzacipollastorage.branch.services;
 
 import jakarta.persistence.EntityNotFoundException;
+import leoric.pizzacipollastorage.auth.models.Role;
 import leoric.pizzacipollastorage.auth.models.User;
+import leoric.pizzacipollastorage.auth.models.UserBranchRole;
 import leoric.pizzacipollastorage.auth.repositories.UserBranchRoleRepository;
 import leoric.pizzacipollastorage.branch.models.Branch;
 import leoric.pizzacipollastorage.branch.repositories.BranchRepository;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.ADMIN;
+
 @Service
 @RequiredArgsConstructor
 public class BranchServiceAccessImpl implements BranchServiceAccess {
@@ -22,6 +26,10 @@ public class BranchServiceAccessImpl implements BranchServiceAccess {
 
     @Override
     public void assertHasRoleOnBranch(UUID branchId, User user, String allowedRoles) {
+        if (user.hasGlobalRole(ADMIN)) {
+            return;
+        }
+
         String[] rolesArray = allowedRoles.split(";");
         for (String role : rolesArray) {
             if (userBranchRoleRepository.existsByUserIdAndBranchIdAndRoleName(user.getId(), branchId, role.trim())) {
@@ -31,6 +39,22 @@ public class BranchServiceAccessImpl implements BranchServiceAccess {
         throw new NotAuthorizedForBranchException(
                 "Uživatel nemá žádnou z povolených rolí [" + allowedRoles + "] pro tuto pobočku."
         );
+    }
+
+    @Override
+    public List<Role> getRolesOnBranch(UUID branchId, UUID userId) {
+        return userBranchRoleRepository.findByUserIdAndBranchId(userId, branchId)
+                .stream()
+                .map(UserBranchRole::getRole)
+                .toList();
+    }
+
+    @Override
+    public List<String> getRoleNamesOnBranch(UUID branchId, UUID userId) {
+        return userBranchRoleRepository.findByUserIdAndBranchId(userId, branchId)
+                .stream()
+                .map(ubr -> ubr.getRole().getName())
+                .toList();
     }
 
     @Override

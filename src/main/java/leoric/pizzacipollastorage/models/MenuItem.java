@@ -50,4 +50,18 @@ public class MenuItem {
     )
     @Column(name = "third_party_name")
     private List<String> thirdPartyNames = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "MenuItem{" +
+               "id=" + id +
+               ", name='" + name + '\'' +
+               ", category=" + (category != null ? category.getName() : null) +
+               ", branchId=" + (branch != null ? branch.getId() : null) +
+               ", dishSize=" + dishSize +
+               ", thirdPartyNames=" + thirdPartyNames +
+               ", recipeIngredientsCount=" + (recipeIngredients != null ? recipeIngredients.size() : 0) +
+               '}';
+    }
+
 }

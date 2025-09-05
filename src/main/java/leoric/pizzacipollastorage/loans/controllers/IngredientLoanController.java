@@ -21,7 +21,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.*;
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.BRANCH_EMPLOYEE;
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.BRANCH_MANAGER;
 
 @RestController
 @RequestMapping("/api/loans")
@@ -42,7 +43,7 @@ public class IngredientLoanController {
             @RequestBody @Valid IngredientLoanCreateDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
         return ResponseEntity.status(HttpStatus.CREATED).body(ingredientLoanService.createLoan(branchId, dto));
     }
 
@@ -53,7 +54,7 @@ public class IngredientLoanController {
             @PathVariable UUID id,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
         return ResponseEntity.ok(ingredientLoanService.markLoanAsReturned(branchId, id));
     }
 
@@ -64,7 +65,7 @@ public class IngredientLoanController {
             @PathVariable UUID id,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
         return ResponseEntity.ok(ingredientLoanService.markLoanAsCancelled(branchId, id));
     }
 
@@ -76,7 +77,7 @@ public class IngredientLoanController {
             @RequestBody @Valid IngredientLoanPatchDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
         return ResponseEntity.ok(ingredientLoanService.patchLoan(branchId, id, dto));
     }
 
@@ -87,7 +88,7 @@ public class IngredientLoanController {
             @PathVariable UUID id,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
         ingredientLoanService.deleteLoan(branchId, id);
         return ResponseEntity.noContent().build();
     }
@@ -103,7 +104,7 @@ public class IngredientLoanController {
             @Parameter(required = false)
             @ParameterObject Pageable pageable
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + BRANCH_EMPLOYEE);
         return ResponseEntity.ok(ingredientLoanService.getAllLoans(branchId, search, pageable));
     }
 
@@ -113,7 +114,7 @@ public class IngredientLoanController {
             @PathVariable UUID id,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + BRANCH_EMPLOYEE);
         return ResponseEntity.ok(ingredientLoanService.getLoanById(branchId, id));
     }
 }

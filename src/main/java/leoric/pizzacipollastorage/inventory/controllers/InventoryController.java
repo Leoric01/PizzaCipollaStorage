@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.*;
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.BRANCH_EMPLOYEE;
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.BRANCH_MANAGER;
 
 @RestController
 @RequestMapping("/api/inventory")
@@ -33,7 +34,7 @@ public class InventoryController {
             @RequestBody InventorySnapshotCreateDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + BRANCH_EMPLOYEE);
         return ResponseEntity.ok(inventoryService.createSnapshot(branchId, dto));
     }
 
@@ -43,7 +44,7 @@ public class InventoryController {
             @RequestBody List<InventorySnapshotCreateDto> dtos,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + BRANCH_EMPLOYEE);
         return ResponseEntity.ok(inventoryService.createSnapshotBulk(branchId, dtos));
     }
 
@@ -56,7 +57,7 @@ public class InventoryController {
             @Parameter(required = false)
             Pageable pageable
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE);
-        return ResponseEntity.ok(inventoryService.getCurrentInventoryStatus(branchId, search, pageable));
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + BRANCH_EMPLOYEE);
+        return ResponseEntity.ok(inventoryService.getCurrentInventoryStatusByStream(branchId, search, pageable));
     }
 }

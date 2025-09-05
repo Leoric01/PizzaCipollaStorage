@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.ADMIN;
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.BRANCH_EMPLOYEE;
 import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.BRANCH_MANAGER;
 
 // TODO ZKONTROLOVAT LOGIKU VZHLEDEM K USER BRANCH ROLE
@@ -47,12 +47,13 @@ public class BranchController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<BranchResponseDto>> branchGetAll(
+    public ResponseEntity<Page<BranchResponseWithUserRolesDto>> branchGetAll(
             @RequestParam(required = false) String search,
             @ParameterObject
-            @Parameter(required = false) Pageable pageable
+            @Parameter(required = false) Pageable pageable,
+            @AuthenticationPrincipal User currentUser
     ) {
-        return ResponseEntity.ok(branchService.getAllBranches(search, pageable));
+        return ResponseEntity.ok(branchService.getAllBranches(search, pageable, currentUser));
     }
 
     @GetMapping("/by-name/{name}")
@@ -69,7 +70,7 @@ public class BranchController {
             @ParameterObject
             @Parameter(required = false) Pageable pageable
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
 
         return ResponseEntity.ok(
                 branchAccessRequestService.getAllAccessRequestsByBranch(branchId, currentUser, search, pageable)
@@ -124,7 +125,7 @@ public class BranchController {
     }
 
     @GetMapping("/mine")
-    public ResponseEntity<Page<BranchResponseDto>> branchGetMine(
+    public ResponseEntity<Page<BranchResponseWithUserRolesDto>> branchGetMine(
             @AuthenticationPrincipal User currentUser,
             @RequestParam(required = false) String search,
             @ParameterObject
@@ -138,10 +139,28 @@ public class BranchController {
         return ResponseEntity.ok(branchService.getBranchById(id));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{branchId}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
-    public ResponseEntity<Void> branchDeleteById(@PathVariable UUID id, @AuthenticationPrincipal User currentUser) {
-        branchService.deleteBranch(id, currentUser);
+    public ResponseEntity<Void> branchDeleteById(@PathVariable UUID branchId, @AuthenticationPrincipal User currentUser) {
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
+
+        branchService.deleteBranch(branchId, currentUser);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{branchId}/kick/{targetUserId}")
+    public ResponseEntity<Void> branchAccessKickUserById(@PathVariable UUID branchId, @AuthenticationPrincipal User currentUser, @PathVariable UUID targetUserId) {
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
+
+        branchService.branchAccessKickUserById(branchId, currentUser, targetUserId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{branchId}/leave-branch")
+    public ResponseEntity<Void> branchLeaveAccessById(@PathVariable UUID branchId, @AuthenticationPrincipal User currentUser) {
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + BRANCH_EMPLOYEE);
+
+        branchService.leaveBranchAccess(branchId, currentUser);
         return ResponseEntity.noContent().build();
     }
 

@@ -18,7 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.*;
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.BRANCH_EMPLOYEE;
+import static leoric.pizzacipollastorage.PizzaCipollaStorageApplication.BRANCH_MANAGER;
 
 @RestController
 @RequestMapping("/api/menu-item-category")
@@ -38,7 +39,7 @@ public class MenuItemCategoryController {
             @RequestBody MenuItemCategoryCreateDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
         return ResponseEntity.ok(menuItemCategoryService.menuItemCategoryAdd(branchId, dto));
     }
 
@@ -49,7 +50,7 @@ public class MenuItemCategoryController {
             @RequestBody List<MenuItemCategoryCreateDto> dtos,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
         return ResponseEntity.ok(menuItemCategoryService.menuItemCategoryAddBulk(branchId, dtos));
     }
 
@@ -61,7 +62,7 @@ public class MenuItemCategoryController {
             @RequestBody MenuItemCategoryCreateDto dto,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
         return ResponseEntity.ok(menuItemCategoryService.menuItemCategoryUpdate(branchId, menuItemCategoryId, dto));
     }
 
@@ -72,7 +73,7 @@ public class MenuItemCategoryController {
             @PathVariable UUID menuItemCategoryId,
             @AuthenticationPrincipal User currentUser
     ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER + ";" + ADMIN);
+        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
         menuItemCategoryService.menuItemCategoryDelete(branchId, menuItemCategoryId);
         return ResponseEntity.noContent().build();
     }
@@ -91,7 +92,7 @@ public class MenuItemCategoryController {
         branchServiceAccess.assertHasRoleOnBranch(
                 branchId,
                 currentUser,
-                BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE
+                BRANCH_MANAGER + ";" + BRANCH_EMPLOYEE
         );
         return ResponseEntity.ok(menuItemCategoryService.menuItemCategoryGetAll(branchId, search, pageable));
     }
@@ -105,7 +106,7 @@ public class MenuItemCategoryController {
         branchServiceAccess.assertHasRoleOnBranch(
                 branchId,
                 currentUser,
-                BRANCH_MANAGER + ";" + ADMIN + ";" + BRANCH_EMPLOYEE
+                BRANCH_MANAGER + ";" + BRANCH_EMPLOYEE
         );
         return ResponseEntity.ok(menuItemCategoryService.menuItemCategoryFindById(menuItemCategoryId));
     }
