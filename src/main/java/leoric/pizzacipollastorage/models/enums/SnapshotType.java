@@ -1,7 +1,7 @@
 package leoric.pizzacipollastorage.models.enums;
 
 public enum SnapshotType {
-    SYSTEM,      // automatický odečet nebo příjem
-    INVENTORY,    // ruční přeměření = inventura
+    SYSTEM,
+    INVENTORY,
     STOCK_IN
 }

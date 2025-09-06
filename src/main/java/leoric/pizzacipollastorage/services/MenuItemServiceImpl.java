@@ -153,29 +153,7 @@ public class MenuItemServiceImpl implements MenuItemService {
             menuItem.setCategory(category);
         }
 
-        List<RecipeIngredient> recipeIngredients = new ArrayList<>();
-
-        for (MenuItemFullCreateDto.RecipeIngredientSimpleDto ingDto : dto.getIngredients()) {
-            Ingredient ingredient = ingredientRepository.findById(ingDto.getIngredientId())
-                    .orElseThrow(() -> new EntityNotFoundException("Ingredient not found: " + ingDto.getIngredientId()));
-
-            if (!ingredient.getBranch().getId().equals(branchId)) {
-                throw new BusinessException(BusinessErrorCodes.INGREDIENT_NOT_IN_BRANCH);
-            }
-
-            if (ingDto.getQuantity() == null) {
-                throw new BusinessException(BusinessErrorCodes.MISSING_INGREDIENT_QUANTITY);
-            }
-
-            RecipeIngredient ri = new RecipeIngredient();
-            ri.setMenuItem(menuItem);
-            ri.setIngredient(ingredient);
-            ri.setQuantity(ingDto.getQuantity());
-
-            recipeIngredients.add(ri);
-        }
-
-        menuItem.setRecipeIngredients(recipeIngredients);
+        menuItem.setRecipeIngredients(buildRecipeIngredients(dto.getIngredients(), menuItem, branchId));
 
         MenuItem saved = menuItemRepository.save(menuItem);
         return menuItemMapper.toDto(saved);
@@ -184,7 +162,6 @@ public class MenuItemServiceImpl implements MenuItemService {
     @Override
     @Transactional
     public List<MenuItemResponseDto> createMenuItemsBulk(UUID branchId, List<MenuItemFullCreateDto> dtos) {
-
         Branch branch = branchRepository.findById(branchId)
                 .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
 
@@ -216,32 +193,8 @@ public class MenuItemServiceImpl implements MenuItemService {
             }
 
             menuItem.setCategory(category);
+            menuItem.setRecipeIngredients(buildRecipeIngredients(dto.getIngredients(), menuItem, branchId));
 
-            List<RecipeIngredient> recipeIngredients = new ArrayList<>();
-
-            if (dto.getIngredients() != null && !dto.getIngredients().isEmpty()) {
-                for (MenuItemFullCreateDto.RecipeIngredientSimpleDto ingDto : dto.getIngredients()) {
-                    Ingredient ingredient = ingredientRepository.findById(ingDto.getIngredientId())
-                            .orElseThrow(() -> new EntityNotFoundException("Ingredient not found: " + ingDto.getIngredientId()));
-
-                    if (!ingredient.getBranch().getId().equals(branchId)) {
-                        throw new BusinessException(BusinessErrorCodes.INGREDIENT_NOT_IN_BRANCH);
-                    }
-
-                    if (ingDto.getQuantity() == null) {
-                        throw new BusinessException(BusinessErrorCodes.MISSING_INGREDIENT_QUANTITY);
-                    }
-
-                    RecipeIngredient ri = new RecipeIngredient();
-                    ri.setMenuItem(menuItem);
-                    ri.setIngredient(ingredient);
-                    ri.setQuantity(ingDto.getQuantity());
-
-                    recipeIngredients.add(ri);
-                }
-            }
-
-            menuItem.setRecipeIngredients(recipeIngredients);
             menuItems.add(menuItem);
         }
 
@@ -296,7 +249,6 @@ public class MenuItemServiceImpl implements MenuItemService {
             menuItem.setCategory(category);
         }
 
-        // Clear recipeIngredients
         menuItem.getRecipeIngredients().clear();
 
         if (dto.getIngredients() != null && !dto.getIngredients().isEmpty()) {
@@ -505,6 +457,36 @@ public class MenuItemServiceImpl implements MenuItemService {
         }
 
         return menuItemMapper.toDtoList(menuItems);
+    }
+
+    private List<RecipeIngredient> buildRecipeIngredients(List<MenuItemFullCreateDto.RecipeIngredientSimpleDto> ingredients,
+                                                          MenuItem menuItem,
+                                                          UUID branchId) {
+        if (ingredients == null || ingredients.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+        for (MenuItemFullCreateDto.RecipeIngredientSimpleDto ingDto : ingredients) {
+            Ingredient ingredient = ingredientRepository.findById(ingDto.getIngredientId())
+                    .orElseThrow(() -> new EntityNotFoundException("Ingredient not found: " + ingDto.getIngredientId()));
+
+            if (!ingredient.getBranch().getId().equals(branchId)) {
+                throw new BusinessException(BusinessErrorCodes.INGREDIENT_NOT_IN_BRANCH);
+            }
+
+            if (ingDto.getQuantity() == null) {
+                throw new BusinessException(BusinessErrorCodes.MISSING_INGREDIENT_QUANTITY);
+            }
+
+            RecipeIngredient ri = new RecipeIngredient();
+            ri.setMenuItem(menuItem);
+            ri.setIngredient(ingredient);
+            ri.setQuantity(ingDto.getQuantity());
+
+            recipeIngredients.add(ri);
+        }
+        return recipeIngredients;
     }
 
     private float getScaleFactor(DishSize size) {

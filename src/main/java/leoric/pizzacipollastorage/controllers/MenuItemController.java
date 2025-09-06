@@ -130,15 +130,15 @@ public class MenuItemController {
         return ResponseEntity.ok(menuItemService.recipeIngredientAddToMenuItem(branchId, recipeIngredientCreateDto));
     }
 
-    @PostMapping("/recipes/bulk")
-    public ResponseEntity<List<RecipeIngredientShortDto>> recipeIngredientAddBulk(
-            @PathVariable UUID branchId,
-            @RequestBody RecipeCreateBulkDto recipeCreateBulkDto,
-            @AuthenticationPrincipal User currentUser
-    ) {
-        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
-        return ResponseEntity.ok(menuItemService.recipeIngredientAddToMenuItemBulk(branchId, recipeCreateBulkDto));
-    }
+//    @PostMapping("/recipes/bulk")
+//    public ResponseEntity<List<RecipeIngredientShortDto>> recipeIngredientAddBulk(
+//            @PathVariable UUID branchId,
+//            @RequestBody RecipeCreateBulkDto recipeCreateBulkDto,
+//            @AuthenticationPrincipal User currentUser
+//    ) {
+//        branchServiceAccess.assertHasRoleOnBranch(branchId, currentUser, BRANCH_MANAGER);
+//        return ResponseEntity.ok(menuItemService.recipeIngredientAddToMenuItemBulk(branchId, recipeCreateBulkDto));
+//    }
 
     @PatchMapping("/recipes/{recipeIngredientId}")
     public ResponseEntity<RecipeIngredientShortDto> recipeIngredientUpdate(

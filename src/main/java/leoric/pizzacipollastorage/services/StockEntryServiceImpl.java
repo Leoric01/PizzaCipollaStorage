@@ -59,7 +59,6 @@ public class StockEntryServiceImpl implements StockEntryService {
     @Override
     @Transactional
     public List<StockEntryResponseDto> createStockEntries(UUID branchId, List<StockEntryCreateDto> dtos) {
-        // Načti všechny potřebné ID
         List<UUID> ingredientIds = dtos.stream()
                 .map(StockEntryCreateDto::getIngredientId)
                 .toList();
@@ -67,14 +66,12 @@ public class StockEntryServiceImpl implements StockEntryService {
                 .map(StockEntryCreateDto::getSupplierId)
                 .toList();
 
-        // Načti hromadně ingredience a dodavatele
         Map<UUID, Ingredient> ingredientsMap = ingredientRepository.findAllById(ingredientIds).stream()
                 .collect(Collectors.toMap(Ingredient::getId, i -> i));
 
         Map<UUID, Supplier> suppliersMap = supplierRepository.findAllById(supplierIds).stream()
                 .collect(Collectors.toMap(Supplier::getId, s -> s));
 
-        // Validace, mapování DTO -> entity
         List<StockEntry> stockEntries = new ArrayList<>();
         for (StockEntryCreateDto dto : dtos) {
             Ingredient ingredient = ingredientsMap.get(dto.getIngredientId());
@@ -97,16 +94,13 @@ public class StockEntryServiceImpl implements StockEntryService {
             stockEntries.add(entry);
         }
 
-        // Ulož vše najednou
         List<StockEntry> savedEntries = stockEntryRepository.saveAll(stockEntries);
 
-        // Aktualizuj inventory pro každou položku
         for (int i = 0; i < savedEntries.size(); i++) {
             StockEntryCreateDto dto = dtos.get(i);
             inventoryService.addToInventory(branchId, dto.getIngredientId(), dto.getQuantityReceived());
         }
 
-        // Vrátit DTO výsledek
         return savedEntries.stream()
                 .map(stockEntryMapper::toDto)
                 .toList();
